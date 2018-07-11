@@ -1,6 +1,8 @@
 <template>
   <div id="header-container">
     <div class="container-fluid">
+
+      <!-- #### Desktop用 #### -->
       <div class="desktop">
         <div id="query-box">
           <form id="search">
@@ -16,44 +18,29 @@
           </div>
         </div>
       </div>
-      <div class="tablet">
-        <!--
-        <div id="query-box">
-          <form id="search">
-            <input name="query" id="searchQuery" v-model="searchQuery" placeholder="検索文字列">
-          </form>
-        </div>
-        <div class="table-row header"> 
-          <b-badge variant="secondary">{{sortKey}}</b-badge>
-          <b-dropdown id="ddown-buttons" text="" class="m-1">
-            <b-dropdown-item-button v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="[{ active: sortKey == val }, val]">
-              {{ val }}
-            </b-dropdown-item-button>
-          </b-dropdown>
-        </div> -->
 
-        <b-container class="bv-example-row">
+      <!-- #### tablet用 #### -->
+      <div class="tablet">
+        <b-container class="table-row header">
           <b-row>
             <b-col>
-              <input name="query" id="searchQuery" v-model="searchQuery" placeholder="検索文字列">
+              <input type="text" name="query" id="searchQuery" v-model="searchQuery" placeholder="フィルタ文字列">
             </b-col>
             <b-col>
-              <div class="sortKey">
-              {{sortKey}}
-              <span class="arrow" :class="sortOrders[sortKey] > 0 ? 'asc' : 'dsc'"></span>
-              </div>
-            </b-col>
-            <b-col>
-              <b-dropdown id="ddown-buttons" text="" class="m-1">
-                <b-dropdown-item-button v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="[{ active: sortKey == val }, val]">
+              <b-dropdown id="ddown-buttons" split right variant="primary" size="sm" class="m-1">
+                <template slot="button-content" class="m-1">
+                  {{sortKey}}
+                  <span class="arrow" :class="sortOrders[sortKey] > 0 ? 'asc' : 'dsc'"></span>
+                </template>
+                <b-dropdown-item-button v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="{ active: sortKey == val }" class="m-1">
                   {{ val }}
                 </b-dropdown-item-button>
               </b-dropdown>
             </b-col>
           </b-row>
         </b-container>
-
       </div>
+
       <div class="data-field">
         <div v-for="(entry,idx) in projects" v-bind:key=idx>
           <div class="table-row data">
@@ -93,7 +80,7 @@ export default {
     projects: function () {
       let ret = []
       let prjs = naim.getPorjects()
-      console.log(prjs)
+      // console.log(prjs)
       prjs.forEach(element => {
         // 調達先（複数指定可）の文字列生成
         let supplier = ''
@@ -148,7 +135,7 @@ export default {
   },
   methods: {
     sortBy: function (key) {
-      console.log('sortBy : ' + key)
+      console.log('sortBy : key=' + key)
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
     }
@@ -191,7 +178,7 @@ export default {
   }
 
   .data-field {
-    height: 550px;
+    height: 100vh;
     overflow-y: auto;
   }
   .wrapper.attributes.data {
@@ -267,8 +254,23 @@ export default {
       display: inline;
     }
 
+    .tablet input[type=text] {
+      float: left;
+      margin-top: 6px;
+      font-size: 14px;
+    }
+    .m-1 {
+      float: right;
+    }
+    .dropdown .dropdown-menu .dropdown-item:focus {
+      outline: none;
+      /*
+      background-color:rgba(255,255,255,1);
+      color:rgb(0,0,0,1);
+      */
+    }
     .data-field {
-      height: 340px;
+      height: 450px;
       overflow-y: auto;
     }
     .ReviewComment {
@@ -313,7 +315,7 @@ export default {
     border-right: 4px solid transparent;
     border-top: 4px solid #000;
   }
-  .sortKey .arrow {
+  .m-1 .arrow {
     opacity: 1;
   }
   div.active .arrow {
