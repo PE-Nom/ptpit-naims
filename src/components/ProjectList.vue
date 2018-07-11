@@ -24,15 +24,15 @@
         <b-container class="table-row header">
           <b-row>
             <b-col>
-              <input type="text" name="query" id="searchQuery" v-model="searchQuery" placeholder="フィルタ文字列">
+              <b-form-input class="mr-sm-2" type="text" id="searchQuery" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
             </b-col>
             <b-col>
-              <b-dropdown id="ddown-buttons" split right variant="primary" size="sm" class="m-1">
-                <template slot="button-content" class="m-1">
+              <b-dropdown id="ddown-buttons" split right variant="primary" size="sm" class="sorter">
+                <template slot="button-content" class="sorter">
                   {{sortKey}}
                   <span class="arrow" :class="sortOrders[sortKey] > 0 ? 'asc' : 'dsc'"></span>
                 </template>
-                <b-dropdown-item-button v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="{ active: sortKey == val }" class="m-1">
+                <b-dropdown-item-button v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="{ active: sortKey == val }" class="sorter">
                   {{ val }}
                 </b-dropdown-item-button>
               </b-dropdown>
@@ -254,19 +254,14 @@ export default {
       display: inline;
     }
 
-    .tablet input[type=text] {
-      float: left;
-      margin-top: 6px;
-      font-size: 14px;
-    }
-    .m-1 {
+    .sorter {
       float: right;
     }
     .dropdown .dropdown-menu .dropdown-item:focus {
       outline: none;
       /*
-      background-color:rgba(255,255,255,1);
-      color:rgb(0,0,0,1);
+      background-color: #eaeaea;
+      color: #1d1e1f;
       */
     }
     .data-field {
@@ -315,7 +310,7 @@ export default {
     border-right: 4px solid transparent;
     border-top: 4px solid #000;
   }
-  .m-1 .arrow {
+  .sorter .arrow {
     opacity: 1;
   }
   div.active .arrow {
