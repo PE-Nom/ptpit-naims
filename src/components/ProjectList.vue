@@ -23,7 +23,7 @@
       <div class="tablet">
         <b-container class="table-row header">
           <b-row>
-            <b-col>
+            <b-col cols="6">
               <b-form-input class="mr-sm-2" type="text" id="searchQuery" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
             </b-col>
             <b-col>
@@ -32,10 +32,13 @@
                   {{sortKey}}
                   <span class="arrow" :class="sortOrders[sortKey] > 0 ? 'asc' : 'dsc'"></span>
                 </template>
-                <b-dropdown-item-button v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="{ active: sortKey == val }" class="sorter">
+                <b-dropdown-item v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="[{ active: sortKey == val }, { focus: sortKey == val }]" class="sorter">
                   {{ val }}
-                </b-dropdown-item-button>
+                </b-dropdown-item>
               </b-dropdown>
+            </b-col>
+            <b-col>
+              <img :src="icon_new_project" class="new_project" width='30px' height='30px' @click="newProject"/>
             </b-col>
           </b-row>
         </b-container>
@@ -60,6 +63,7 @@
 
 <script>
 import naim from '../models/naim.js'
+import iconNew from '../assets/new.png'
 
 export default {
   data () {
@@ -70,6 +74,7 @@ export default {
     })
 
     return {
+      icon_new_project: iconNew,
       columns: columns,
       searchQuery: '',
       sortKey: 'ソートキー',
@@ -138,6 +143,9 @@ export default {
       console.log('sortBy : key=' + key)
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
+    },
+    newProject: function () {
+      console.log('new project')
     }
   },
   mounted () {
@@ -255,6 +263,9 @@ export default {
     }
 
     .sorter {
+      float: right;
+    }
+    .new_project {
       float: right;
     }
     .dropdown .dropdown-menu .dropdown-item:focus {
