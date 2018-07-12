@@ -1,5 +1,4 @@
 <template>
-  <div id="header-container">
     <div class="container-fluid">
 
       <!-- #### Desktop用 #### -->
@@ -23,7 +22,7 @@
       <div class="tablet">
         <b-container class="table-row header">
           <b-row>
-            <b-col cols="6">
+            <b-col cols="5">
               <b-form-input class="mr-sm-2" type="text" id="searchQuery" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
             </b-col>
             <b-col>
@@ -58,12 +57,12 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
 import naim from '../models/naim.js'
 import iconNew from '../assets/new.png'
+import router from '../router'
 
 export default {
   data () {
@@ -77,7 +76,7 @@ export default {
       icon_new_project: iconNew,
       columns: columns,
       searchQuery: '',
-      sortKey: 'ソートキー',
+      sortKey: 'キー',
       sortOrders: sortOrders
     }
   },
@@ -146,6 +145,7 @@ export default {
     },
     newProject: function () {
       console.log('new project')
+      router.push('/editproject')
     }
   },
   mounted () {

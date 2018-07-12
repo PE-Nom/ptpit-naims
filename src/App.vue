@@ -1,7 +1,7 @@
 <template>
   <div id="app">
 
-    <b-navbar toggleable="md" type="dark" variant="dark">
+    <b-navbar v-if="showNavbar" toggleable="md" type="dark" variant="dark">
       <b-navbar-brand to="/">NAIMS</b-navbar-brand>
       <b-nav-text class="tablet">{{currentPath}}／ユーザ：{{userName}}</b-nav-text>
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
@@ -61,6 +61,15 @@ export default {
         path = 'チケット'
       }
       return path
+    },
+    showNavbar: function () {
+      let show = true
+      if (this.$route.path !== '/' &&
+          this.$route.path !== '/projects' &&
+          this.$route.path !== '/tickets') {
+        show = false
+      }
+      return show
     }
   },
   async created () {
@@ -170,7 +179,7 @@ header span {
   font-weight: bold;
   display: none;
 }
-@media screen and (max-width: 768px)
+@media (max-width: 768px)
 {
   .desktop {
   font-size: 80%;
