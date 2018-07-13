@@ -3,7 +3,7 @@
 
     <b-navbar v-if="showNavbar" toggleable="md" type="dark" variant="dark">
       <b-navbar-brand to="/">NAIMS</b-navbar-brand>
-      <b-nav-text class="tablet">{{currentPath}}／ユーザ：{{userName}}</b-nav-text>
+      <b-nav-text v-if="tablet">{{currentPath}}／ユーザ：{{userName}}</b-nav-text>
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
@@ -13,7 +13,7 @@
           <b-nav-item href="#" @click.prevent="showLogoutDialog = (showLogoutDialog === false)" v-else>ログアウト</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
-      <b-nav-text class="desktop">{{currentPath}}／ユーザ：{{userName}}</b-nav-text>
+      <b-nav-text v-if="!tablet">{{currentPath}}／ユーザ：{{userName}}</b-nav-text>
     </b-navbar>
     <LoginDialog v-if="showLoginDialog" @cancelClose="cancelClose" @loginClose="loginClose">
       <h3 slot="header">ログイン</h3>
@@ -33,6 +33,7 @@ import LogoutDialog from '@/components/LogoutDialog.vue'
 import auth from './models/auth.js'
 import naim from './models/naim.js'
 import router from './router'
+import _ from 'lodash'
 
 export default {
   name: 'app',
@@ -49,7 +50,8 @@ export default {
       },
       showLoginDialog: false,
       showLogoutDialog: false,
-      userName: ''
+      userName: '',
+      tablet: false
     }
   },
   computed: {
@@ -73,9 +75,22 @@ export default {
     }
   },
   async created () {
+    this.tablet = window.innerWidth < 769
     await this.refreshActiveUser()
+    // インスタンスを作成した後、イベントリスナに登録
+    window.addEventListener('resize', this.setTabletMode, false)
+  },
+  beforeDestroy () {
+    // インスタンスを破棄する前に、イベントリスナから削除
+    window.removeEventListener('resize', this.setTabletMode, false)
   },
   methods: {
+    // 無くても良いが lodash の debounce で発火頻度を調整してあげるとエコ
+    setTabletMode: _.debounce(function () {
+      // data にリサイズ後のウィンドウ幅を代入
+      this.tablet = window.innerWidth < 769
+      console.log('setTabletMode : ' + this.tablet)
+    }, 300),
     loginClose: function (user) {
       console.log('## login@App.vue')
       console.log(user)
@@ -168,29 +183,4 @@ header span {
   box-sizing: border-box;
   padding-top: 16px;
 }
-
-.desktop {
-  font-size: 80%;
-  font-weight: bold;
-  display: block;
-}
-.tablet {
-  font-size: 80%;
-  font-weight: bold;
-  display: none;
-}
-@media (max-width: 768px)
-{
-  .desktop {
-  font-size: 80%;
-  font-weight: bold;
-    display: none;
-  }
-  .tablet {
-    font-size: 80%;
-    font-weight: bold;
-    display: block;
-  }
-}
-
 </style>

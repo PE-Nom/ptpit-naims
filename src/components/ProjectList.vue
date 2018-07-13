@@ -22,10 +22,10 @@
       <div class="tablet">
         <b-container class="table-row header">
           <b-row>
-            <b-col cols="5">
+            <b-col cols="6">
               <b-form-input class="mr-sm-2" type="text" id="searchQuery" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
             </b-col>
-            <b-col>
+            <b-col cols="4">
               <b-dropdown id="ddown-buttons" split right variant="primary" size="sm" class="sorter">
                 <template slot="button-content" class="sorter">
                   {{sortKey}}
@@ -36,7 +36,7 @@
                 </b-dropdown-item>
               </b-dropdown>
             </b-col>
-            <b-col>
+            <b-col cols="2">
               <img :src="icon_new_project" class="new_project" width='30px' height='30px' @click="newProject"/>
             </b-col>
           </b-row>
@@ -261,7 +261,6 @@ export default {
       font-weight: bold;
       display: inline;
     }
-
     .sorter {
       float: right;
     }

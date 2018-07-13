@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 // const BASE_URL = 'http://192.168.10.8:3001/' // @home
-const BASE_URL = 'http://192.168.10.9:3001/' // @home let's note
-// const BASE_URL = 'http://192.168.1.4:3001/' // @ Office
+// const BASE_URL = 'http://192.168.10.9:3001/' // @home let's note
+const BASE_URL = 'http://192.168.1.4:3001/' // @ Office
 
 export default {
   rmc: null,
