@@ -37,14 +37,14 @@
               </b-dropdown>
             </b-col>
             <b-col cols="2">
-              <img :src="icon_new_project" class="new_project" width='30px' height='30px' @click="newProject"/>
+              <img :src="icon_new_project" class="new_project" width='30px' height='30px' @click="editProject"/>
             </b-col>
           </b-row>
         </b-container>
       </div>
 
       <div class="data-field">
-        <div v-for="(entry,idx) in projects" v-bind:key=idx @click="newProject">
+        <div v-for="(entry,idx) in projects" v-bind:key=idx @click="editProject">
           <div class="table-row data">
             <div class="wrapper attributes data">
               <div v-for="(val, idx) in columns" v-bind:key=idx :class="[val]">
@@ -143,7 +143,7 @@ export default {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
-    newProject: function () {
+    editProject: function () {
       console.log('new project')
       router.push('/editproject')
     }
