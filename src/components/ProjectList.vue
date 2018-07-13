@@ -44,7 +44,7 @@
       </div>
 
       <div class="data-field">
-        <div v-for="(entry,idx) in projects" v-bind:key=idx>
+        <div v-for="(entry,idx) in projects" v-bind:key=idx @click="newProject">
           <div class="table-row data">
             <div class="wrapper attributes data">
               <div v-for="(val, idx) in columns" v-bind:key=idx :class="[val]">
