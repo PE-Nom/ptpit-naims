@@ -3,15 +3,19 @@ import redmine from './redmine.js'
 export default {
 
   projects: Array,
+  customeFileds: Array,
   issues: Array,
 
   initialize: async function (user) {
     redmine.configure(user)
     this.clearProjects()
     this.clearIssues()
+    this.clearCustomFileds()
     try {
       // Project List
       await this.retrievPojects()
+      // customfileds
+      await this.retrieveCustomFields()
       // Issues List
       await this.retrieveIssues()
     } catch (err) {
@@ -40,6 +44,34 @@ export default {
       throw err
     }
   },
+  createProject: async function (qstr) {
+    console.log(qstr)
+    try {
+      await redmine.createProject(qstr, res => {
+        console.log('==== Create Project @ naim ====')
+        console.log(res)
+      })
+    } catch (err) {
+      throw err
+    }
+  },
+
+  retrieveCustomFields: async function () {
+    try {
+      const customfileds = []
+      await redmine.customFields({}, res => {
+        console.log('==== CustomFields @ naim ====')
+        res.data.custom_fields.forEach(element => {
+          customfileds.push(element)
+          console.log(element)
+        })
+        // ここで customfields List を更新する。
+        this.customeFileds = customfileds
+      })
+    } catch (err) {
+      throw err
+    }
+  },
 
   retrieveIssues: async function () {
     try {
@@ -60,39 +92,22 @@ export default {
   },
 
   getPorjects: function () {
-    // projectのディープコピーを返す
-    /*
-    const prjs = []
-    this.projects.forEach(element => {
-      let jsstr = JSON.parse(element)
-      prjs.push(JSON.stringify(jsstr))
-    })
-    return prjs
-    */
-    // projectsのシャローコピーを返す
-    // return Object.assign({}, this.projects)
-
-    // projectsの参照をそのまま返す
     return this.projects
   },
-
   clearProjects: function () {
     this.projects = []
   },
 
-  getIssues: function () {
-    /*
-    const iss = []
-    this.issues.forEach(element => {
-      let jsstr = JSON.parse(element)
-      iss.push(jsstr)
-    })
-    return iss
-    */
-    // return Object.assign({}, this.issues)
-    return this.issues
+  getCustomeFileds: function () {
+    return this.customeFileds
+  },
+  clearCustomFileds: function () {
+    this.customeFileds = []
   },
 
+  getIssues: function () {
+    return this.issues
+  },
   clearIssues: function () {
     this.issues = []
   }
