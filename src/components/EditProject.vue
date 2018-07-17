@@ -145,6 +145,9 @@ export default {
     console.log(prjid)
     if (prjid !== -1) {
       let prj = naim.findProject(Number(prjid))
+      this.projectName = prj.name
+      this.projectIdentifier = prj.identidier
+      this.projectDescription = prj.description
       console.log(prj)
     }
   }
