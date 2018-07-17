@@ -1,32 +1,52 @@
 <template>
   <div class="content-fulied">
     <div class="wrapper attributes header">
-      <p @click="backword"> Projectlist </p>
+      <b-navbar v-if="showNavbar" toggleable="md" type="dark" variant="primary">
+        <b-navbar-brand to="/projects">&lt;&lt; Project List</b-navbar-brand>
+        <b-nav-text>プロジェクト登録／ユーザ：{{this.user.username}}</b-nav-text>
+      </b-navbar>
     </div>
-    <div class="banner-title">
+    <div class="edit-field">
       <div>
-        <h1>{{ msg }}</h1>
-        <p class="explanation">{{explanation}}</p>
-        <!--
-          Projectのオブジェクト
-            created_on: 
-            custom_fields: [
-                          {id: , name: , multiple: true, value: [ , ]},　....調達先（選択式で複数選択可能）
-                          {id: , name: , value: }                      ....顧客（選択式）
-                        ]
-            description: 説明
-            id: 
-            identifier: プロジェクト識別子（半角英数小文字）
-            name: タイトル
-            status: 
-            updated_on:
-
-          上記項目のうち、以下の項目を編集できるようにする。
-            custom_fields:　調達先（選択式で複数選択可能）、顧客（選択式）
-            description: 説明
-            name: タイトル
-            identifier: 識別子
-        -->
+        <div class="form-group row-top">
+          <div class="col-md-10">
+            <label for="inputName" class="control-label">タイトル</label>
+            <input type="text" class="form-control" id="inputName" placeholder="プロジェクト名" v-model="projectName">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-10">
+            <label for="inputIdentifier" class="control-label">識別子</label>
+            <input type="text" class="form-control" id="inputIdentifier" placeholder="プロジェクト識別子" v-model="projectIdentifier">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-10">
+            <label for="inputDescription" class="control-label">説明</label>
+            <textarea class="form-control" rows="3" id="inputDescription" v-model="projectDescription"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-10">
+            <label for="inputProjcetCutomer" class="control-label">依頼元</label>
+            <b-form-select v-model="projectCustomer" :options="customerOptions" class="mb-3">
+            </b-form-select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-10">
+            <label for="inputProjcetSupplier" class="control-label">調達先</label>
+            <b-form-select multiple :select-size="3" v-model="projectSuppliers" :options="supplierOptions" class="mb-3">
+            </b-form-select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-8">
+          </div>
+          <div class="col-md-2">
+            <button class="control-button" @click='createProject'>新規登録</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -35,13 +55,28 @@
 <script>
 import router from '../router'
 import naim from '../models/naim.js'
+import auth from '../models/auth.js'
 
 export default {
-//  name: 'TicketList',
   data () {
     return {
-      msg: 'NAIMS EditProject @ redmine',
-      explanation: 'Nonconforming And Incident Management System by Pitarpit Co.,Ltd.'
+      projectName: 'Project Name',
+      projectIdentifier: '',
+      projectDescription: '',
+      user: '',
+      customerOptions: [{value: '', text: ''}],
+      projectCustomer: '',
+      supplierOptions: [{value: '', text: ''}],
+      projectSuppliers: []
+    }
+  },
+  computed: {
+    showNavbar: function () {
+      let show = true
+      if (this.$route.path !== '/editproject') {
+        show = false
+      }
+      return show
     }
   },
   methods: {
@@ -50,34 +85,75 @@ export default {
     },
     createProject: async function () {
       try {
-        /*
-        let query = { 'project': {
-          identifier: 'eeeeff',
-          name: 'test-02',
-          description: 'test02'
-        }}
-        let qstr = JSON.stringify(query)
-        */
+        let sup = ''
+        this.projectSuppliers.forEach(function (value, index) {
+          if (index === 0) {
+            sup = '"' + value + '"'
+          } else {
+            sup += ', "' + value + '"'
+          }
+        })
         let qstr = '{ ' +
                       '"project": { ' +
-                        '"name": "test-002", ' +
-                        '"identifier": "eeffgghh002", ' +
-                        '"description": "test002" ' +
+                        '"name": "' + this.projectName + '", ' +
+                        '"identifier": "' + this.projectIdentifier + '", ' +
+                        '"description": "' + this.projectDescription + '", ' +
+                        '"is_public": "false", ' +
+                        '"custom_fields": [{ "id": 1, "name": "調達先", "multiple": "true", "value": [' + sup + ']},' +
+                                          '{ "id": 2, "name": "依頼元", "value": "' + this.projectCustomer + '"}]' +
                       '} ' +
                     '}'
+        console.log(qstr)
+        console.log(this.projectCustomer)
+        console.log(this.projectSuppliers)
         await naim.createProject(qstr)
       } catch (err) {
         console.log(err)
       }
+    },
+    convertOptions: function (values) {
+      let options = []
+      values.forEach(el => {
+        let option = {
+          value: el.value,
+          text: el.label
+        }
+        options.push(option)
+      })
+      return options
     }
   },
-  mounted () {
-    this.createProject()
+  created () {
+    console.log('EditProject mounted')
+    this.user = auth.getUser()
+    let customFields = naim.getCustomeFileds()
+    customFields.forEach(element => {
+      if (element.name === '依頼元') {
+        this.customerOptions = this.convertOptions(element.possible_values)
+        console.log(this.customerOptions)
+      } else if (element.name === '調達先') {
+        this.supplierOptions = this.convertOptions(element.possible_values)
+        console.log(this.supplierOptions)
+      }
+    })
   }
 }
 </script>
 
 <style>
+  .control-label {
+    float: left;
+  }
+  .control-button {
+    float: right;
+  }
+  .row-top {
+    margin-top: 1em;
+  }
+  .edit-field {
+    height: 450px;
+    overflow-y: auto;
+  }
   .banner-title {
     height: 90vh;
     display: flex;
