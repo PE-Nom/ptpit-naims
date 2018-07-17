@@ -45,7 +45,8 @@
             <p v-if=errorMessage class="message-field">{{errorMessage}}</p>
           </div>
           <div class="col-md-2">
-            <button class="control-button" @click='createProject'>新規登録</button>
+            <button class="control-button" v-if="this.new" @click='createProject'>新規登録</button>
+            <button class="control-button" v-else @click='updateProject'>更新</button>
           </div>
         </div>
       </div>
@@ -70,6 +71,7 @@ export default {
       projectCustomer: '',
       supplierOptions: [{value: '', text: ''}],
       projectSuppliers: [],
+      new: true,
       errorMessage: ''
     }
   },
@@ -103,15 +105,18 @@ export default {
                                           '{ "id": 2, "name": "依頼元", "value": "' + this.projectCustomer + '"}]' +
                       '} ' +
                     '}'
-        console.log(qstr)
-        console.log(this.projectCustomer)
-        console.log(this.projectSuppliers)
+        // console.log(qstr)
+        // console.log(this.projectCustomer)
+        // console.log(this.projectSuppliers)
         await naim.createProject(qstr)
         router.push('/projects')
       } catch (err) {
         console.log(err)
         this.errorMessage = err.toString()
       }
+    },
+    updateProject: function () {
+
     },
     convertOptions: function (values) {
       let options = []
@@ -144,10 +149,16 @@ export default {
     let prjid = editstate.currentProjectId
     console.log(prjid)
     if (prjid !== -1) {
+      this.new = false
       let prj = naim.findProject(Number(prjid))
       this.projectName = prj.name
       this.projectIdentifier = prj.identidier
       this.projectDescription = prj.description
+      this.projectCustomer = prj.custom_fields[1].value
+      this.projectSuppliers = []
+      prj.custom_fields[0].value.forEach(el => {
+        this.projectSuppliers.push(el)
+      })
       console.log(prj)
     }
   }
