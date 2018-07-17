@@ -55,6 +55,22 @@ export default {
       throw err
     }
   },
+  clearProjects: function () {
+    this.projects = []
+  },
+  getPorjects: function () {
+    return this.projects
+  },
+  findProject: function (id) {
+    console.log('findProject in naim')
+    let prj = null
+    this.projects.forEach(element => {
+      if (element.id === id) {
+        prj = element
+      }
+    })
+    return prj
+  },
 
   retrieveCustomFields: async function () {
     try {
@@ -89,13 +105,6 @@ export default {
     } catch (err) {
       throw err
     }
-  },
-
-  getPorjects: function () {
-    return this.projects
-  },
-  clearProjects: function () {
-    this.projects = []
   },
 
   getCustomeFileds: function () {

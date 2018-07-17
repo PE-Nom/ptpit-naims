@@ -141,7 +141,12 @@ export default {
   },
   mounted () {
     console.log('EditProject mounted')
-    console.log(editstate.currentProjectId)
+    let prjid = editstate.currentProjectId
+    console.log(prjid)
+    if (prjid !== -1) {
+      let prj = naim.findProject(Number(prjid))
+      console.log(prj)
+    }
   }
 }
 </script>
