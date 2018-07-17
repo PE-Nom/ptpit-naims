@@ -37,14 +37,14 @@
               </b-dropdown>
             </b-col>
             <b-col cols="2">
-              <img :src="icon_new_project" class="new_project" width='30px' height='30px' @click="editProject"/>
+              <img :src="icon_new_project" class="new_project" width='30px' height='30px' @click="createProject"/>
             </b-col>
           </b-row>
         </b-container>
       </div>
 
       <div class="data-field">
-        <div v-for="(entry,idx) in projects" v-bind:key=idx @click="editProject">
+        <div v-for="(entry,idx) in projects" v-bind:key=idx @click="editProject(entry)">
           <div class="table-row data">
             <div class="wrapper attributes data">
               <div v-for="(val, idx) in columns" v-bind:key=idx :class="[val]">
@@ -61,6 +61,7 @@
 
 <script>
 import naim from '../models/naim.js'
+import editstate from '../models/editState.js'
 import iconNew from '../assets/new.png'
 import router from '../router'
 
@@ -143,8 +144,15 @@ export default {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
-    editProject: function () {
-      console.log('new project')
+    editProject: function (prj) {
+      console.log('edit project')
+      console.log(prj)
+      editstate.currentProjectId = prj.id.slice(1)
+      router.push('/editproject')
+    },
+    createProject: function () {
+      console.log('create project')
+      editstate.currentProjectId = -1
       router.push('/editproject')
     },
     refreshProjectList: async function () {

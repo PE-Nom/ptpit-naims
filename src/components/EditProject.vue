@@ -57,6 +57,7 @@
 import router from '../router'
 import naim from '../models/naim.js'
 import auth from '../models/auth.js'
+import editstate from '../models/editState.js'
 
 export default {
   data () {
@@ -125,7 +126,7 @@ export default {
     }
   },
   created () {
-    console.log('EditProject mounted')
+    console.log('EditProject created')
     this.user = auth.getUser()
     let customFields = naim.getCustomeFileds()
     customFields.forEach(element => {
@@ -137,6 +138,10 @@ export default {
         console.log(this.supplierOptions)
       }
     })
+  },
+  mounted () {
+    console.log('EditProject mounted')
+    console.log(editstate.currentProjectId)
   }
 }
 </script>
