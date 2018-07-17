@@ -1,7 +1,7 @@
 <template>
   <div class="content-fulied">
     <div class="wrapper attributes header">
-      <b-navbar v-if="showNavbar" toggleable="md" type="dark" variant="primary">
+      <b-navbar v-if="showNavbar" toggleable="md" type="dark" variant="success">
         <b-navbar-brand to="/projects">&lt;&lt; Project List</b-navbar-brand>
         <b-nav-text>プロジェクト登録／ユーザ：{{this.user.username}}</b-nav-text>
       </b-navbar>
@@ -10,13 +10,13 @@
       <div>
         <div class="form-group row-top">
           <div class="col-md-10">
-            <label for="inputName" class="control-label">タイトル</label>
+            <label for="inputName" class="control-label">プロジェクト名</label>
             <input type="text" class="form-control" id="inputName" placeholder="プロジェクト名" v-model="projectName">
           </div>
         </div>
         <div class="form-group">
           <div class="col-md-10">
-            <label for="inputIdentifier" class="control-label">識別子</label>
+            <label for="inputIdentifier" class="control-label">プロジェクト識別子</label>
             <input type="text" class="form-control" id="inputIdentifier" placeholder="プロジェクト識別子" v-model="projectIdentifier">
           </div>
         </div>
@@ -42,6 +42,7 @@
         </div>
         <div class="form-group">
           <div class="col-md-8">
+            <p v-if=errorMessage class="message-field">{{errorMessage}}</p>
           </div>
           <div class="col-md-2">
             <button class="control-button" @click='createProject'>新規登録</button>
@@ -67,7 +68,8 @@ export default {
       customerOptions: [{value: '', text: ''}],
       projectCustomer: '',
       supplierOptions: [{value: '', text: ''}],
-      projectSuppliers: []
+      projectSuppliers: [],
+      errorMessage: ''
     }
   },
   computed: {
@@ -80,9 +82,6 @@ export default {
     }
   },
   methods: {
-    backword: function () {
-      router.push('/projects')
-    },
     createProject: async function () {
       try {
         let sup = ''
@@ -107,8 +106,10 @@ export default {
         console.log(this.projectCustomer)
         console.log(this.projectSuppliers)
         await naim.createProject(qstr)
+        router.push('/projects')
       } catch (err) {
         console.log(err)
+        this.errorMessage = err.toString()
       }
     },
     convertOptions: function (values) {

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
 
-    <b-navbar v-if="showNavbar" toggleable="md" type="dark" variant="primary">
+    <b-navbar v-if="showNavbar" toggleable="md" type="dark" variant="success">
       <b-navbar-brand to="/">NAIMS</b-navbar-brand>
       <b-nav-text v-if="tablet">{{currentPath}}／ユーザ：{{userName}}</b-nav-text>
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>

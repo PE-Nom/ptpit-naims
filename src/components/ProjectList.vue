@@ -5,7 +5,7 @@
       <div class="desktop">
         <div id="query-box">
           <form id="search">
-            <input name="query" id="searchQuery" v-model="searchQuery" placeholder="検索文字列">
+            <input name="query" id="searchQuery" v-model="searchQuery" placeholder="フィルタ文字列">
           </form>
         </div>
         <div class="table-row header">
@@ -26,7 +26,7 @@
               <b-form-input class="mr-sm-2" type="text" id="searchQuery" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
             </b-col>
             <b-col cols="4">
-              <b-dropdown id="ddown-buttons" split right variant="primary" size="sm" class="sorter">
+              <b-dropdown id="ddown-buttons" split right variant="success" size="sm" class="sorter">
                 <template slot="button-content" class="sorter">
                   {{sortKey}}
                   <span class="arrow" :class="sortOrders[sortKey] > 0 ? 'asc' : 'dsc'"></span>
@@ -67,7 +67,7 @@ import router from '../router'
 export default {
   data () {
     let sortOrders = {}
-    let columns = ['id', 'タイトル', '顧客', '調達先', '説明']
+    let columns = ['id', '名称', '顧客', '調達先', '説明']
     columns.forEach(function (key) {
       sortOrders[key] = 1
     })
@@ -107,7 +107,7 @@ export default {
         // Project List の表示オブジェクト生成
         let rec = '{' +
           ' "id" : "' + '#' + element.id + '"' +
-          ',"タイトル" : "' + element.name + '"' +
+          ',"名称" : "' + element.name + '"' +
           ',"顧客" : "' + customer + '"' +
           ',"調達先" : "' + supplier + '"' +
           ',"説明" : "' + desc + '"' +
@@ -146,10 +146,19 @@ export default {
     editProject: function () {
       console.log('new project')
       router.push('/editproject')
+    },
+    refreshProjectList: async function () {
+      try {
+        // Project List
+        await naim.retrievPojects()
+      } catch (err) {
+        console.log(err)
+      }
     }
   },
   mounted () {
     console.log('ProjectList.vue mounted')
+    this.refreshProjectList()
   }
 }
 </script>
@@ -200,7 +209,7 @@ export default {
     text-overflow: ellipsis;
     text-align: left;
   }
-  .タイトル {
+  .名称 {
     width: 300px;
     overflow: hidden;
     white-space: nowrap;
