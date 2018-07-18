@@ -292,7 +292,7 @@ export default {
       */
     }
     .data-field {
-      height: 450px;
+      height: 600px;
       overflow-y: auto;
     }
     .ReviewComment {

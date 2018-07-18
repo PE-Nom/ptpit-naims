@@ -45,9 +45,9 @@
             <p v-if=errorMessage class="message-field">{{errorMessage}}</p>
           </div>
           <div class="col-md-2">
-            <button class="control-button" v-if="this.new" @click='createProject'>新規登録</button>
-            <button class="control-button" v-if="!this.new" @click='updateProject'>更新</button>
-            <button class="control-button" v-if="!this.new" @click='deleteProject'>削除</button>
+            <b-button class="control-button create" variant="success" v-if="this.new" @click='createProject'>新規登録</b-button>
+            <b-button class="control-button update" variant="success" v-if="!this.new" @click='updateProject'>更新</b-button>
+            <b-button class="control-button delete" variant="success" v-if="!this.new" @click='deleteProject'>削除</b-button>
           </div>
         </div>
       </div>
@@ -198,8 +198,11 @@ export default {
   .row-top {
     margin-top: 1em;
   }
+  .update {
+    margin-left: 1em;
+  }
   .edit-field {
-    height: 450px;
+    height: 650px;
     overflow-y: auto;
   }
   .banner-title {
