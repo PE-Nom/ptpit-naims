@@ -30,14 +30,14 @@
         <div class="form-group">
           <div class="col-md-10">
             <label for="inputProjcetCutomer" class="control-label">依頼元</label>
-            <b-form-select v-model="projectCustomer" :options="customerOptions" class="mb-3">
+            <b-form-select v-model="projectCustomer" :options="customerOptions">
             </b-form-select>
           </div>
         </div>
         <div class="form-group">
           <div class="col-md-10">
             <label for="inputProjcetSupplier" class="control-label">調達先</label>
-            <b-form-select multiple :select-size="3" v-model="projectSuppliers" :options="supplierOptions" class="mb-3">
+            <b-form-select multiple :select-size="3" v-model="projectSuppliers" :options="supplierOptions">
             </b-form-select>
           </div>
         </div>
@@ -67,7 +67,7 @@ export default {
     return {
       currentPath: '',
       projectId: null,
-      projectName: 'Project Name',
+      projectName: '',
       projectIdentifier: '',
       projectDescription: '',
       user: '',
@@ -104,8 +104,8 @@ export default {
                       '"identifier": "' + this.projectIdentifier + '", ' +
                       '"description": "' + this.projectDescription + '", ' +
                       '"is_public": "false", ' +
-                      '"custom_fields": [{ "id": 1, "name": "調達先", "multiple": "true", "value": [' + sup + ']},' +
-                                        '{ "id": 2, "name": "依頼元", "value": "' + this.projectCustomer + '"}]' +
+                      '"custom_fields": [{ "id": 2, "name": "調達先", "multiple": "true", "value": [' + sup + ']},' +
+                                        '{ "id": 3, "name": "依頼元", "value": "' + this.projectCustomer + '"}]' +
                     '} ' +
                   '}'
       return qstr
@@ -202,6 +202,12 @@ export default {
   }
   .row-top {
     margin-top: 1em;
+  }
+  .control-label {
+    margin-bottom: 0.1em;
+  }
+  .form-group {
+    margin-bottom: 0.5em;
   }
   .update {
     margin-left: 1em;

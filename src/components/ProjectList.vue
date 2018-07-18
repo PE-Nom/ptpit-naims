@@ -26,7 +26,10 @@
           </b-row>
           <b-row>
             <b-col cols="6">
-              <b-form-input class="mr-sm-2" type="text" id="searchQuery" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
+              <!--
+              <input name="query" id="searchQuery" v-model="searchQuery" placeholder="フィルタ文字列">
+              -->
+              <b-form-input type="text" id="searchQuery" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
             </b-col>
             <b-col cols="4">
               <b-dropdown id="ddown-buttons" split right variant="success" size="sm" class="sorter">
