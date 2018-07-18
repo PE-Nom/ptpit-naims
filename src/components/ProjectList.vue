@@ -25,7 +25,7 @@
             <label class="currentpath-user" >{{currentPath}}／ユーザ:{{userName}}</label>
           </b-row>
           <b-row>
-            <b-col cols="6">
+            <b-col cols="7">
               <!--
               <input name="query" id="searchQuery" v-model="searchQuery" placeholder="フィルタ文字列">
               -->
@@ -33,16 +33,16 @@
             </b-col>
             <b-col cols="4">
               <b-dropdown id="ddown-buttons" split right variant="success" size="sm" class="sorter">
-                <template slot="button-content" class="sorter">
+                <template slot="button-content">
                   {{sortKey}}
                   <span class="arrow" :class="sortOrders[sortKey] > 0 ? 'asc' : 'dsc'"></span>
                 </template>
-                <b-dropdown-item v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="[{ active: sortKey == val }, { focus: sortKey == val }]" class="sorter">
+                <b-dropdown-item v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="[{ active: sortKey == val }, { focus: sortKey == val }]">
                   {{ val }}
                 </b-dropdown-item>
               </b-dropdown>
             </b-col>
-            <b-col cols="2">
+            <b-col cols="1">
               <img :src="icon_new_project" class="new_project" width='30px' height='30px' @click="createProject"/>
             </b-col>
           </b-row>
@@ -302,10 +302,20 @@ export default {
       margin-left: 1em;
     }
     .sorter {
-      float: right;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateY(-50%) translateX(-50%);
+      -webkit- transform: translateY(-50%) translateX(-50%);
+      /* float: right; */
     }
     .new_project {
-      float: right;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateY(-50%) translateX(-50%);
+      -webkit- transform: translateY(-50%) translateX(-50%);
+      /* float: right; */
     }
     .dropdown .dropdown-menu .dropdown-item:focus {
       outline: none;
