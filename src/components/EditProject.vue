@@ -1,11 +1,12 @@
 <template>
   <div class="content-fulied">
-    <div class="wrapper attributes header">
-      <b-navbar v-if="showNavbar" toggleable="md" type="dark" variant="success">
-        <b-navbar-brand to="/projects">&lt;&lt; Project List</b-navbar-brand>
-        <b-nav-text>プロジェクト登録／ユーザ：{{this.user.username}}</b-nav-text>
-      </b-navbar>
-    </div>
+    <b-navbar v-if="showNavbar" type="dark" variant="success">
+      <b-navbar-brand to="/projects">&lt;&lt; Project List</b-navbar-brand>
+    </b-navbar>
+    <b-container class="table-row header">
+      <label class="currentpath-user" >{{this.currentPath}}／ユーザ：{{this.user.username}}</label>
+    </b-container>
+
     <div class="edit-field">
       <div>
         <div class="form-group row-top">
@@ -64,6 +65,7 @@ import editstate from '../models/editState.js'
 export default {
   data () {
     return {
+      currentPath: '',
       projectId: null,
       projectName: 'Project Name',
       projectIdentifier: '',
@@ -182,7 +184,10 @@ export default {
       prj.custom_fields[0].value.forEach(el => {
         this.projectSuppliers.push(el)
       })
+      this.currentPath = 'プロジェクト 更新'
       console.log(prj)
+    } else {
+      this.currentPath = 'プロジェクト 登録'
     }
   }
 }
@@ -202,7 +207,7 @@ export default {
     margin-left: 1em;
   }
   .edit-field {
-    height: 650px;
+    height: 550px;
     overflow-y: auto;
   }
   .banner-title {

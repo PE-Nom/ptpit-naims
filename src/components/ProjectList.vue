@@ -22,6 +22,9 @@
       <div class="tablet">
         <b-container class="table-row header">
           <b-row>
+            <label class="currentpath-user" >{{currentPath}}／ユーザ:{{userName}}</label>
+          </b-row>
+          <b-row>
             <b-col cols="6">
               <b-form-input class="mr-sm-2" type="text" id="searchQuery" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
             </b-col>
@@ -60,6 +63,7 @@
 </template>
 
 <script>
+import auth from '../models/auth.js'
 import naim from '../models/naim.js'
 import editstate from '../models/editState.js'
 import iconNew from '../assets/new.png'
@@ -74,6 +78,7 @@ export default {
     })
 
     return {
+      userName: '',
       icon_new_project: iconNew,
       columns: columns,
       searchQuery: '',
@@ -82,6 +87,15 @@ export default {
     }
   },
   computed: {
+    currentPath: function () {
+      let path = 'ホーム'
+      if (this.$route.path === '/projects') {
+        path = 'プロジェクト'
+      } else if (this.$route.path === '/tickets') {
+        path = 'チケット'
+      }
+      return path
+    },
     projects: function () {
       let ret = []
       let prjs = naim.getPorjects()
@@ -165,6 +179,7 @@ export default {
     }
   },
   mounted () {
+    this.userName = auth.getUser().username
     console.log('ProjectList.vue mounted')
     this.refreshProjectList()
   }
@@ -277,6 +292,11 @@ export default {
       font-size: 80%;
       font-weight: bold;
       display: inline;
+    }
+    .currentpath-user {
+      font-size: small;
+      color:  rgb(26, 92, 0);
+      margin-left: 1em;
     }
     .sorter {
       float: right;

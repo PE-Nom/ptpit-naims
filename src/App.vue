@@ -3,7 +3,9 @@
 
     <b-navbar v-if="showNavbar" toggleable="md" type="dark" variant="success">
       <b-navbar-brand to="/">NAIMS</b-navbar-brand>
-      <b-nav-text v-if="tablet">{{currentPath}}／ユーザ：{{userName}}</b-nav-text>
+      <!--
+        <b-nav-text v-if="tablet" size="sm">{{currentPath}}／ユーザ:{{userName}}</b-nav-text>
+      -->
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
@@ -13,7 +15,9 @@
           <b-nav-item href="#" @click.prevent="showLogoutDialog = (showLogoutDialog === false)" v-else>ログアウト</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
-      <b-nav-text v-if="!tablet">{{currentPath}}／ユーザ：{{userName}}</b-nav-text>
+      <!--
+        <b-nav-text v-if="!tablet" size="sm">{{currentPath}}／ユーザ:{{userName}}</b-nav-text>
+      -->
     </b-navbar>
     <LoginDialog v-if="showLoginDialog" @cancelClose="cancelClose" @loginClose="loginClose">
       <h3 slot="header">ログイン</h3>
