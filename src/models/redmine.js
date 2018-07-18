@@ -2,8 +2,8 @@ import axios from 'axios'
 
 // const BASE_URL = 'http://192.168.10.8:3001/' // @home
 // const BASE_URL = 'http://192.168.10.9:3001/' // @home let's note
-// const BASE_URL = 'http://192.168.1.4:3001/' // @ Office
-const BASE_URL = 'http://172.20.10.2:3001/' // @ Office
+const BASE_URL = 'http://192.168.1.4:3001/' // @ Office
+// const BASE_URL = 'http://172.20.10.2:3001/' // @ iPhone デザリング
 
 export default {
   rmc: null,
@@ -50,6 +50,17 @@ export default {
         throw err
       })
   },
+  async projects (params, callback) {
+    // this.execute('GET', '/projects.json', params, callback)
+    // await this.rmc({method: 'GET', url: '/projects.json', params})
+    await this.rmc.get('/projects.json', params)
+      .then(res => {
+        callback(res)
+      })
+      .catch(err => {
+        throw err
+      })
+  },
   async createProject (data, callback) {
     console.log('createProject @ redmine.js')
     await this.rmc.post('/projects.json', data, {headers: {'Content-Type': 'application/json'}})
@@ -60,15 +71,24 @@ export default {
         throw (err)
       })
   },
-  async projects (params, callback) {
-    // this.execute('GET', '/projects.json', params, callback)
-    // await this.rmc({method: 'GET', url: '/projects.json', params})
-    await this.rmc.get('/projects.json', params)
+  async updateProject (prjId, data, callback) {
+    console.log('updateProject @ redmine.js')
+    await this.rmc.put('/projects/' + prjId + '.json', data, {headers: {'Content-Type': 'application/json'}})
       .then(res => {
         callback(res)
       })
       .catch(err => {
-        throw err
+        throw (err)
+      })
+  },
+  async deleteProject (prjId, callback) {
+    console.log('deleteProject @ redmain.js')
+    await this.rmc.delete('/projects/' + prjId + '.json')
+      .then(res => {
+        callback(res)
+      })
+      .catch(err => {
+        throw (err)
       })
   },
 

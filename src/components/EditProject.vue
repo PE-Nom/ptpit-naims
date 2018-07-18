@@ -46,7 +46,8 @@
           </div>
           <div class="col-md-2">
             <button class="control-button" v-if="this.new" @click='createProject'>新規登録</button>
-            <button class="control-button" v-else @click='updateProject'>更新</button>
+            <button class="control-button" v-if="!this.new" @click='updateProject'>更新</button>
+            <button class="control-button" v-if="!this.new" @click='deleteProject'>削除</button>
           </div>
         </div>
       </div>
@@ -63,6 +64,7 @@ import editstate from '../models/editState.js'
 export default {
   data () {
     return {
+      projectId: null,
       projectName: 'Project Name',
       projectIdentifier: '',
       projectDescription: '',
@@ -85,26 +87,30 @@ export default {
     }
   },
   methods: {
+    createQueryString: function () {
+      let sup = ''
+      this.projectSuppliers.forEach(function (value, index) {
+        if (index === 0) {
+          sup = '"' + value + '"'
+        } else {
+          sup += ', "' + value + '"'
+        }
+      })
+      let qstr = '{ ' +
+                    '"project": { ' +
+                      '"name": "' + this.projectName + '", ' +
+                      '"identifier": "' + this.projectIdentifier + '", ' +
+                      '"description": "' + this.projectDescription + '", ' +
+                      '"is_public": "false", ' +
+                      '"custom_fields": [{ "id": 1, "name": "調達先", "multiple": "true", "value": [' + sup + ']},' +
+                                        '{ "id": 2, "name": "依頼元", "value": "' + this.projectCustomer + '"}]' +
+                    '} ' +
+                  '}'
+      return qstr
+    },
     createProject: async function () {
       try {
-        let sup = ''
-        this.projectSuppliers.forEach(function (value, index) {
-          if (index === 0) {
-            sup = '"' + value + '"'
-          } else {
-            sup += ', "' + value + '"'
-          }
-        })
-        let qstr = '{ ' +
-                      '"project": { ' +
-                        '"name": "' + this.projectName + '", ' +
-                        '"identifier": "' + this.projectIdentifier + '", ' +
-                        '"description": "' + this.projectDescription + '", ' +
-                        '"is_public": "false", ' +
-                        '"custom_fields": [{ "id": 1, "name": "調達先", "multiple": "true", "value": [' + sup + ']},' +
-                                          '{ "id": 2, "name": "依頼元", "value": "' + this.projectCustomer + '"}]' +
-                      '} ' +
-                    '}'
+        let qstr = this.createQueryString()
         // console.log(qstr)
         // console.log(this.projectCustomer)
         // console.log(this.projectSuppliers)
@@ -115,8 +121,24 @@ export default {
         this.errorMessage = err.toString()
       }
     },
-    updateProject: function () {
-
+    updateProject: async function () {
+      try {
+        let qstr = this.createQueryString()
+        await naim.updateProject(this.projectId, qstr)
+        router.push('/projects')
+      } catch (err) {
+        console.log(err)
+        this.errorMessage = err.toString()
+      }
+    },
+    deleteProject: async function () {
+      try {
+        await naim.deleteProject(this.projectId)
+        router.push('/projects')
+      } catch (err) {
+        console.log(err)
+        this.errorMessage = err.toString()
+      }
     },
     convertOptions: function (values) {
       let options = []
@@ -151,8 +173,9 @@ export default {
     if (prjid !== -1) {
       this.new = false
       let prj = naim.findProject(Number(prjid))
+      this.projectId = prj.id
       this.projectName = prj.name
-      this.projectIdentifier = prj.identidier
+      this.projectIdentifier = prj.identifier
       this.projectDescription = prj.description
       this.projectCustomer = prj.custom_fields[1].value
       this.projectSuppliers = []

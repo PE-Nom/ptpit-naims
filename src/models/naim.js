@@ -55,6 +55,29 @@ export default {
       throw err
     }
   },
+  updateProject: async function (prjId, qstr) {
+    console.log('updateProject')
+    console.log(qstr)
+    try {
+      await redmine.updateProject(prjId, qstr, res => {
+        console.log('==== Update Project @ naim ====')
+        console.log(res)
+      })
+    } catch (err) {
+      throw err
+    }
+  },
+  deleteProject: async function (prjId) {
+    console.log('deleteProject')
+    try {
+      await redmine.deleteProject(prjId, res => {
+        console.log('==== Delete Project @ naim ====')
+        console.log(res)
+      })
+    } catch (err) {
+      throw err
+    }
+  },
   clearProjects: function () {
     this.projects = []
   },
