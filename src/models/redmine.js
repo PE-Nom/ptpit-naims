@@ -1,23 +1,33 @@
 import axios from 'axios'
 
 // const BASE_URL = 'http://192.168.10.8:3001/' // @home
-const BASE_URL = 'http://192.168.10.9:3001/' // @home let's note
-// const BASE_URL = 'http://192.168.1.4:3001/' // @ Office
+// const BASE_URL = 'http://192.168.10.9:3001/' // @home let's note
+const BASE_URL = 'http://192.168.1.4:3001/' // @ Office
 // const BASE_URL = 'http://localhost:3000/' // @ Office
 // const BASE_URL = 'http://172.20.10.2:3001/' // @ iPhone デザリング
 
 export default {
   rmc: null,
+  configured: false,
 
   configure (user) {
-    this.rmc = axios.create({
-      baseURL: BASE_URL,
-      auth: {
-        username: user.username,
-        password: user.password
-      },
-      json: true
-    })
+    if (user) {
+      this.rmc = axios.create({
+        baseURL: BASE_URL,
+        auth: {
+          username: user.username,
+          password: user.password
+        },
+        json: true
+      })
+      this.configured = true
+    } else {
+      this.rmc = null
+      this.configured = false
+    }
+  },
+  isConfigured () {
+    return this.configured
   },
 
   async execute (method, resource, data /* , callback */) {

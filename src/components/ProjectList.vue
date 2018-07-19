@@ -5,7 +5,7 @@
       <div class="desktop">
         <div id="query-box">
           <form id="search">
-            <input name="query" id="searchQuery" v-model="searchQuery" placeholder="フィルタ文字列">
+            <input name="query" v-model="searchQuery" placeholder="フィルタ文字列">
           </form>
         </div>
         <div class="table-row header">
@@ -22,14 +22,11 @@
       <div class="tablet">
         <b-container class="table-row header">
           <b-row>
-            <label class="currentpath-user" >{{currentPath}}／ユーザ:{{userName}}</label>
+            <label class="currentpath-user" >プロジェクト一覧</label>
           </b-row>
           <b-row>
             <b-col cols="7">
-              <!--
-              <input name="query" id="searchQuery" v-model="searchQuery" placeholder="フィルタ文字列">
-              -->
-              <b-form-input type="text" id="searchQuery" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
+              <b-form-input type="text" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
             </b-col>
             <b-col cols="4">
               <b-dropdown id="ddown-buttons" split right variant="success" size="sm" class="sorter">
@@ -43,7 +40,7 @@
               </b-dropdown>
             </b-col>
             <b-col cols="1">
-              <img :src="icon_new_project" class="new_project" width='30px' height='30px' @click="createProject"/>
+              <img :src="icon_new_project" v-if="this.userName" class="new_project" width='30px' height='30px' @click="createProject"/>
             </b-col>
           </b-row>
         </b-container>
@@ -90,16 +87,8 @@ export default {
     }
   },
   computed: {
-    currentPath: function () {
-      let path = 'ホーム'
-      if (this.$route.path === '/projects') {
-        path = 'プロジェクト'
-      } else if (this.$route.path === '/tickets') {
-        path = 'チケット'
-      }
-      return path
-    },
     projects: function () {
+      console.log('### project computed property in ProjectList.vue ####')
       let ret = []
       let prjs = naim.getPorjects()
       // console.log(prjs)
@@ -171,20 +160,11 @@ export default {
       console.log('create project')
       editstate.currentProjectId = -1
       router.push('/editproject')
-    },
-    refreshProjectList: async function () {
-      try {
-        // Project List
-        await naim.retrievPojects()
-      } catch (err) {
-        console.log(err)
-      }
     }
   },
   mounted () {
-    this.userName = auth.getUser().username
     console.log('ProjectList.vue mounted')
-    this.refreshProjectList()
+    this.userName = auth.getUser().username
   }
 }
 </script>
@@ -306,7 +286,7 @@ export default {
       top: 50%;
       left: 50%;
       transform: translateY(-50%) translateX(-50%);
-      -webkit- transform: translateY(-50%) translateX(-50%);
+      -webkit-transform: translateY(-50%) translateX(-50%);
       /* float: right; */
     }
     .new_project {
@@ -314,7 +294,7 @@ export default {
       top: 50%;
       left: 50%;
       transform: translateY(-50%) translateX(-50%);
-      -webkit- transform: translateY(-50%) translateX(-50%);
+      -webkit-transform: translateY(-50%) translateX(-50%);
       /* float: right; */
     }
     .dropdown .dropdown-menu .dropdown-item:focus {

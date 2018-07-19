@@ -1,10 +1,10 @@
 <template>
   <div class="content-fulied">
     <b-navbar v-if="showNavbar" type="dark" variant="success">
-      <b-navbar-brand to="/projects">&lt;&lt; Project List</b-navbar-brand>
+      <b-navbar-brand to="/projects">&lt;&lt; プロジェクト一覧</b-navbar-brand>
     </b-navbar>
     <b-container class="table-row header">
-      <label class="currentpath-user" >{{this.currentPath}}／ユーザ：{{this.user.username}}</label>
+      <label class="currentpath-user" >{{this.currentPath}}</label>
     </b-container>
 
     <div class="edit-field">
@@ -90,6 +90,8 @@ export default {
   },
   methods: {
     createQueryString: function () {
+      console.log('調達先　id : ' + naim.findCustomFieldId('調達先'))
+      console.log('依頼元　id : ' + naim.findCustomFieldId('依頼元'))
       let sup = ''
       this.projectSuppliers.forEach(function (value, index) {
         if (index === 0) {
@@ -104,8 +106,8 @@ export default {
                       '"identifier": "' + this.projectIdentifier + '", ' +
                       '"description": "' + this.projectDescription + '", ' +
                       '"is_public": "false", ' +
-                      '"custom_fields": [{ "id": 2, "name": "調達先", "multiple": "true", "value": [' + sup + ']},' +
-                                        '{ "id": 3, "name": "依頼元", "value": "' + this.projectCustomer + '"}]' +
+                      '"custom_fields": [{ "id": ' + naim.findCustomFieldId('調達先') + ', "name": "調達先", "multiple": "true", "value": [' + sup + ']},' +
+                                        '{ "id": ' + naim.findCustomFieldId('依頼元') + ', "name": "依頼元", "value": "' + this.projectCustomer + '"}]' +
                     '} ' +
                   '}'
       return qstr
@@ -117,6 +119,7 @@ export default {
         // console.log(this.projectCustomer)
         // console.log(this.projectSuppliers)
         await naim.createProject(qstr)
+        await naim.retrievePojects()
         router.push('/projects')
       } catch (err) {
         console.log(err)
@@ -127,6 +130,7 @@ export default {
       try {
         let qstr = this.createQueryString()
         await naim.updateProject(this.projectId, qstr)
+        await naim.retrievePojects()
         router.push('/projects')
       } catch (err) {
         console.log(err)
@@ -136,6 +140,7 @@ export default {
     deleteProject: async function () {
       try {
         await naim.deleteProject(this.projectId)
+        await naim.retrievePojects()
         router.push('/projects')
       } catch (err) {
         console.log(err)

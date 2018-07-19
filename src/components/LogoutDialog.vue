@@ -40,8 +40,7 @@ export default {
     logout: function () {
       console.log('close @ logoutDialog')
       auth.clearUser()
-      naim.clearProjects()
-      naim.clearIssues()
+      naim.finalize()
       this.$emit('logoutClose')
     },
     cancel: function () {

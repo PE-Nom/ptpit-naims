@@ -2,15 +2,15 @@
   <div id="app">
 
     <b-navbar v-if="showNavbar" toggleable="md" type="dark" variant="success">
-      <b-navbar-brand to="/">NAIMS</b-navbar-brand>
+      <b-navbar-brand to="/">NAIMS(login:{{userName}})</b-navbar-brand>
       <!--
         <b-nav-text v-if="tablet" size="sm">{{currentPath}}／ユーザ:{{userName}}</b-nav-text>
       -->
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
-          <b-nav-item to="/tickets">チケット</b-nav-item>
-          <b-nav-item to="/projects">プロジェクト</b-nav-item>
+          <b-nav-item to="/tickets">チケット一覧</b-nav-item>
+          <b-nav-item to="/projects">プロジェクト一覧</b-nav-item>
           <b-nav-item href="#" @click.prevent="showLoginDialog = (showLoginDialog === false)" v-if="!activeUser">ログイン</b-nav-item>
           <b-nav-item href="#" @click.prevent="showLogoutDialog = (showLogoutDialog === false)" v-else>ログアウト</b-nav-item>
         </b-navbar-nav>
@@ -102,6 +102,7 @@ export default {
       this.userName = this.user.username
       this.activeUser = true
       this.showLoginDialog = false
+      router.push('/')
     },
     logoutClose: function () {
       console.log('## logout@App.vue')
@@ -110,6 +111,7 @@ export default {
       this.user.username = null
       this.user.password = null
       this.userName = this.user.username
+      router.push('/')
     },
     cancelClose: function () {
       console.log('## cancelCloe@App.vue')
@@ -129,10 +131,6 @@ export default {
           // 成功したら IssuesList にルーティング
           router.push('/projects')
         } catch (err) {
-          // localStorageに記録されているアカウントを使って失敗するケースは
-          // ネットワーク障害、サーバー停止と考えられる。アカウント不正による
-          // 失敗はない。が、状態不一致となるため、アカウントリセット、再ログインとする。
-          // （ログイン状態でブラウザ再起動のため記録されたアカウントは正規のものと判断できる）
           console.log('==== App ====')
           console.log(err)
           this.activeUser = false
@@ -143,6 +141,7 @@ export default {
         this.activeUser = false
         this.userName = ''
         this.showLoginDialog = (this.showLoginDialog === false)
+        router.push('/')
       }
     }
 
