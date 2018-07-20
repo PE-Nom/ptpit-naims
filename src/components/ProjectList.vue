@@ -25,7 +25,7 @@
             <label class="currentpath-user" >プロジェクト一覧</label>
           </b-row>
           <b-row>
-            <b-col cols="7">
+            <b-col cols="6">
               <b-form-input type="text" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
             </b-col>
             <b-col cols="4">
