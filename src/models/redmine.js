@@ -1,8 +1,8 @@
 import axios from 'axios'
 
-// const BASE_URL = 'http://192.168.10.8:3001/' // @home
+const BASE_URL = 'http://192.168.10.8:3001/' // @home
 // const BASE_URL = 'http://192.168.10.9:3001/' // @home let's note
-const BASE_URL = 'http://192.168.1.4:3001/' // @ Office
+// const BASE_URL = 'http://192.168.1.4:3001/' // @ Office
 // const BASE_URL = 'http://localhost:3000/' // @ Office
 // const BASE_URL = 'http://172.20.10.2:3001/' // @ iPhone デザリング
 
@@ -52,6 +52,22 @@ export default {
       })
   },
 
+  // ============
+  // Users
+  // ============
+  async users (callback) {
+    await this.rmc.get('/users.json')
+      .then(res => {
+        callback(res)
+      })
+      .catch(err => {
+        throw err
+      })
+  },
+
+  // ============
+  // Custom Field
+  // ============
   async customFields (params, callback) {
     await this.rmc.get('/custom_fields.json', params)
       .then(res => {
@@ -61,6 +77,10 @@ export default {
         throw err
       })
   },
+
+  // ============
+  // Project
+  // ============
   async projects (params, callback) {
     // this.execute('GET', '/projects.json', params, callback)
     // await this.rmc({method: 'GET', url: '/projects.json', params})
@@ -103,6 +123,9 @@ export default {
       })
   },
 
+  // ============
+  // Issue
+  // ============
   async issues (callback) {
     // this.execute('GET', '/issues.json', {}, callback)
     // await this.rmc({method: 'GET', url: '/issues.json'})
@@ -124,7 +147,66 @@ export default {
       .catch(err => {
         throw (err)
       })
+  },
+  async getIssueStatuses (callback) {
+    console.log('getIssueStatuses @ redmine.js')
+    await this.rmc.get('/issue_statuses.json')
+      .then(res => {
+        callback(res)
+      })
+      .catch(err => {
+        throw err
+      })
+  },
+
+  // ============
+  // Trackers
+  // ============
+  async getTrackers (callback) {
+    console.log('getTrackers @ redmine.js')
+    await this.rmc.get('/trackers.json')
+      .then(res => {
+        callback(res)
+      })
+      .catch(err => {
+        throw err
+      })
+  },
+
+  // ============
+  // Enumeration
+  // ============
+  async getIssuePriorities (callback) {
+    console.log('getIssuePriority @ reamine.js')
+    await this.rmc.get('/enumerations/issue_priorities.json')
+      .then(res => {
+        callback(res)
+      })
+      .catch(err => {
+        throw err
+      })
+  },
+  async getTimeEntryActivities (callback) {
+    console.log('getTimeEntryActivities')
+    await this.rmc.get('/enumerations/time_entry_activities.json')
+      .then(res => {
+        callback(res)
+      })
+      .catch(err => {
+        throw err
+      })
+  },
+  async getDocumentCategories (callback) {
+    console.log('getDocumentCategories')
+    await this.rmc.get('/enumerations/document_categories.json')
+      .then(res => {
+        callback(res)
+      })
+      .catch(err => {
+        throw err
+      })
   }
+
   /*
   getPosts () {
     return this.execute('get', '/posts')
