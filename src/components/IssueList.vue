@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import naim from '../models/naim.js'
+
 export default {
 //  name: 'TicketList',
   data () {
@@ -15,6 +17,14 @@ export default {
       msg: 'NAIMS TikectList @ redmine',
       explanation: 'Nonconforming And Incident Management System by Pitarpit Co.,Ltd.'
     }
+  },
+  methods: {
+    getIssueDetail: async function (issId) {
+      await naim.retriveIssueDetail(issId)
+    }
+  },
+  mounted () {
+    this.getIssueDetail(5)
   }
 }
 </script>

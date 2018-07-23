@@ -155,7 +155,16 @@ export default {
       throw err
     }
   },
-
+  retriveIssueDetail: async function (issId) {
+    try {
+      await redmine.getIssue(issId, res => {
+        console.log('==== Issue Detail @ naim ====')
+        console.log(res)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  },
   getIssues: function () {
     return this.issues
   },
