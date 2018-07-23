@@ -19,12 +19,18 @@ export default {
     }
   },
   methods: {
-    getIssueDetail: async function (issId) {
-      await naim.retriveIssueDetail(issId)
+    getProperties: async function () {
+      await naim.retrieveUsers()
+      await naim.retrieveIssueDetail(4 /* issue id */)
+      await naim.retrieveIssuePriorities()
+      await naim.retrieveIssueStatuses()
+      await naim.retrieveTrackers()
+      await naim.retrieveTimeEntryActivities()
+      await naim.retrieveDocumentCategories()
     }
   },
   mounted () {
-    this.getIssueDetail(5)
+    this.getProperties()
   }
 }
 </script>

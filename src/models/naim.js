@@ -29,6 +29,20 @@ export default {
   },
 
   // ------------------
+  // Users
+  // ------------------
+  retrieveUsers: async function () {
+    try {
+      await redmine.users(res => {
+        console.log('==== Users @ naim ====')
+        console.log(res)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  },
+
+  // ------------------
   // Projects data
   // ------------------
   retrievePojects: async function () {
@@ -155,10 +169,20 @@ export default {
       throw err
     }
   },
-  retriveIssueDetail: async function (issId) {
+  retrieveIssueDetail: async function (issId) {
     try {
       await redmine.getIssue(issId, res => {
         console.log('==== Issue Detail @ naim ====')
+        console.log(res)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  retrieveIssueStatuses: async function () {
+    try {
+      await redmine.getIssueStatuses(res => {
+        console.log('==== Issue Statuses @ naim ====')
         console.log(res)
       })
     } catch (err) {
@@ -170,6 +194,54 @@ export default {
   },
   clearIssues: function () {
     this.issues = []
+  },
+
+  // ------------------
+  // Trackers
+  // ------------------
+  retrieveTrackers: async function () {
+    try {
+      await redmine.getTrackers(res => {
+        console.log('==== trackers @ naim ====')
+        console.log(res)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  },
+
+  // ------------------
+  // Enumeration
+  // ------------------
+  retrieveIssuePriorities: async function () {
+    try {
+      await redmine.getIssuePriorities(res => {
+        console.log('==== IssuePriorities @ naim ====')
+        console.log(res)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  retrieveTimeEntryActivities: async function () {
+    try {
+      await redmine.getTimeEntryActivities(res => {
+        console.log('==== TimeEntryActivities @ naim ====')
+        console.log(res)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  retrieveDocumentCategories: async function () {
+    try {
+      await redmine.getDocumentCategories(res => {
+        console.log('==== DocumentCategories @ naim ====')
+        console.log(res)
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
 }
