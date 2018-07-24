@@ -37,7 +37,7 @@
               </b-dropdown-item>
             </b-dropdown>
           </b-col>
-          <b-col cols="1">
+          <b-col cols="2">
             <img :src="icon_new_issue" class="new_issue" width='30px' height='30px' @click="createIssue"/>
           </b-col>
         </b-row>
@@ -64,7 +64,9 @@
 <script>
 import auth from '../models/auth.js'
 import naim from '../models/naim.js'
+import editstate from '../models/editState.js'
 import iconNew from '../assets/new.png'
+import router from '../router'
 
 export default {
 //  name: 'TicketList',
@@ -92,7 +94,7 @@ export default {
       isss.forEach(el => {
         let assignedName = el.assigned_to ? el.assigned_to.name : ''
         let rec = '{' +
-          ' "' + this.columns[0] + '" : "' + el.id + '"' +
+          ' "' + this.columns[0] + '" : "#' + el.id + '"' +
           ',"' + this.columns[1] + '" : "' + el.tracker.name + '"' +
           ',"' + this.columns[2] + '" : "' + el.project.name + '"' +
           ',"' + this.columns[3] + '" : "' + el.subject + '"' +
@@ -133,28 +135,21 @@ export default {
   methods: {
     sortBy: function (key) {
       console.log('Issue sortKey : ' + key)
-      console.log(this.sortOrders)
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
-    editIssue: function () {
+    editIssue: function (issue) {
       console.log('editIssue')
+      editstate.currentIssueId = issue.id.slice(1)
+      router.push('/editissue')
     },
     createIssue: function () {
-      console.log('createIssur')
-    },
-    getProperties: async function () {
-      await naim.retrieveUsers()
-      await naim.retrieveIssueDetail(5 /* issue id */)
-      await naim.retrieveIssuePriorities()
-      await naim.retrieveIssueStatuses()
-      await naim.retrieveTrackers()
-      await naim.retrieveTimeEntryActivities()
-      await naim.retrieveDocumentCategories()
+      console.log('createIssue')
+      editstate.currentIssueId = -1
+      router.push('/editissue')
     }
   },
   mounted () {
-    this.getProperties()
     this.userName = auth.getUser().userName
   }
 }

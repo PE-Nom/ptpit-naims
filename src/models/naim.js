@@ -5,6 +5,13 @@ export default {
   projects: [],
   customeFileds: [],
   issues: [],
+  issueDetail: null,
+  issueStatuses: null,
+  issuePriorities: null,
+  trackers: null,
+  users: null,
+  activities: null,
+  documentCategories: null,
 
   initialize: async function (user) {
     this.clearProjects()
@@ -34,12 +41,17 @@ export default {
   retrieveUsers: async function () {
     try {
       await redmine.users(res => {
-        console.log('==== Users @ naim ====')
-        console.log(res)
+        // console.log('==== Users @ naim ====')
+        // console.log(res)
+        this.users = res.data.users
       })
     } catch (err) {
+      console.log('==== Users @ naim ====')
       console.log(err)
     }
+  },
+  getUsers: function () {
+    return this.users
   },
 
   // ------------------
@@ -172,25 +184,35 @@ export default {
   retrieveIssueDetail: async function (issId) {
     try {
       await redmine.getIssue(issId, res => {
-        console.log('==== Issue Detail @ naim ====')
-        console.log(res)
+        // console.log('==== Issue Detail @ naim ====')
+        // console.log(res)
+        this.issueDetail = res.data.issue
       })
     } catch (err) {
+      console.log('==== Issue Detail @ naim ====')
       console.log(err)
     }
   },
   retrieveIssueStatuses: async function () {
     try {
       await redmine.getIssueStatuses(res => {
-        console.log('==== Issue Statuses @ naim ====')
-        console.log(res)
+        // console.log('==== Issue Statuses @ naim ====')
+        // console.log(res)
+        this.issueStatuses = res.data.issue_statuses
       })
     } catch (err) {
+      console.log('==== Issue Statuses @ naim ====')
       console.log(err)
     }
   },
   getIssues: function () {
     return this.issues
+  },
+  getIssueStatuses: function () {
+    return this.issueStatuses
+  },
+  getIssueDetail: function () {
+    return this.issueDetail
   },
   clearIssues: function () {
     this.issues = []
@@ -202,12 +224,17 @@ export default {
   retrieveTrackers: async function () {
     try {
       await redmine.getTrackers(res => {
-        console.log('==== trackers @ naim ====')
-        console.log(res)
+        // console.log('==== trackers @ naim ====')
+        // console.log(res)
+        this.trackers = res.data.trackers
       })
     } catch (err) {
+      console.log('==== trackers @ naim ====')
       console.log(err)
     }
+  },
+  getTrackers: function () {
+    return this.trackers
   },
 
   // ------------------
@@ -216,32 +243,46 @@ export default {
   retrieveIssuePriorities: async function () {
     try {
       await redmine.getIssuePriorities(res => {
-        console.log('==== IssuePriorities @ naim ====')
-        console.log(res)
+        // console.log('==== IssuePriorities @ naim ====')
+        // console.log(res)
+        this.issuePriorities = res.data.issue_priorities
       })
     } catch (err) {
+      console.log('==== IssuePriorities @ naim ====')
       console.log(err)
     }
+  },
+  getIssuePriorities: function () {
+    return this.issuePriorities
   },
   retrieveTimeEntryActivities: async function () {
     try {
       await redmine.getTimeEntryActivities(res => {
-        console.log('==== TimeEntryActivities @ naim ====')
-        console.log(res)
+        // console.log('==== TimeEntryActivities @ naim ====')
+        // console.log(res)
+        this.activities = res.data.time_entry_activities
       })
     } catch (err) {
+      console.log('==== TimeEntryActivities @ naim ====')
       console.log(err)
     }
+  },
+  getTimeEntryActivities: function () {
+    return this.activities
   },
   retrieveDocumentCategories: async function () {
     try {
       await redmine.getDocumentCategories(res => {
-        console.log('==== DocumentCategories @ naim ====')
-        console.log(res)
+        // console.log('==== DocumentCategories @ naim ====')
+        // console.log(res)
+        this.documentCategories = res.data.document_categories
       })
     } catch (err) {
+      console.log('==== DocumentCategories @ naim ====')
       console.log(err)
     }
+  },
+  getDocumentCategories: function () {
+    return this.documentCategories
   }
-
 }

@@ -138,7 +138,7 @@ export default {
       })
   },
   async getIssue (issId, callback) {
-    console.log('getIssue @ redmine.js')
+    // console.log('getIssue @ redmine.js')
     // await this.rmc.put('/issues/' + issId + '.json&include=journals')
     await this.rmc.get('/issues/' + issId + '.json?include=attachments,journals')
       .then(res => {
@@ -149,7 +149,7 @@ export default {
       })
   },
   async getIssueStatuses (callback) {
-    console.log('getIssueStatuses @ redmine.js')
+    // console.log('getIssueStatuses @ redmine.js')
     await this.rmc.get('/issue_statuses.json')
       .then(res => {
         callback(res)
@@ -163,7 +163,7 @@ export default {
   // Trackers
   // ============
   async getTrackers (callback) {
-    console.log('getTrackers @ redmine.js')
+    // console.log('getTrackers @ redmine.js')
     await this.rmc.get('/trackers.json')
       .then(res => {
         callback(res)
@@ -177,7 +177,7 @@ export default {
   // Enumeration
   // ============
   async getIssuePriorities (callback) {
-    console.log('getIssuePriority @ reamine.js')
+    // console.log('getIssuePriority @ reamine.js')
     await this.rmc.get('/enumerations/issue_priorities.json')
       .then(res => {
         callback(res)
@@ -187,7 +187,7 @@ export default {
       })
   },
   async getTimeEntryActivities (callback) {
-    console.log('getTimeEntryActivities')
+    // console.log('getTimeEntryActivities')
     await this.rmc.get('/enumerations/time_entry_activities.json')
       .then(res => {
         callback(res)
@@ -197,7 +197,7 @@ export default {
       })
   },
   async getDocumentCategories (callback) {
-    console.log('getDocumentCategories')
+    // console.log('getDocumentCategories')
     await this.rmc.get('/enumerations/document_categories.json')
       .then(res => {
         callback(res)
