@@ -11,6 +11,24 @@
       <div>
         <div class="form-group row-top">
           <div class="col-md-10">
+            <label for="inputProjectName" class="control-label">プロジェクト名</label>
+            <input type="text" class="form-control" id="inputProjectName" placeholder="プロジェクト名" v-model="this.projectName">
+          </div>
+        </div>
+        <div class="form-group row-top">
+          <div class="col-md-10">
+            <label for="inputSubject" class="control-label">題名</label>
+            <input type="text" class="form-control" id="inputSubject" placeholder="題名" v-model="this.subject">
+          </div>
+        </div>
+        <div class="form-group row-top">
+          <div class="col-md-10">
+            <label for="inputDescription" class="control-label">説明</label>
+            <input type="text" class="form-control" id="inputDescription" placeholder="説明の記述" v-model="this.description">
+          </div>
+        </div>
+        <div class="form-group row-top">
+          <div class="col-md-10">
             <label for="inputTracker" class="control-label">トラッカー</label>
             <b-form-select v-model="tracker" :options="trackerOptions">
             </b-form-select>
@@ -44,16 +62,16 @@
             </b-form-select>
           </div>
         </div>
-        <div class="form-group">
-          <div class="col-md-8">
-            <p v-if=errorMessage class="message-field">{{errorMessage}}</p>
-          </div>
-          <div class="col-md-2">
-            <b-button class="control-button create" variant="success" v-if="this.new" @click='createIssue'>新規登録</b-button>
-            <b-button class="control-button update" variant="success" v-if="!this.new" @click='updateIssue'>更新</b-button>
-          </div>
-        </div>
 
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-8">
+        <p v-if=errorMessage class="message-field">{{errorMessage}}</p>
+      </div>
+      <div class="col-md-2">
+        <b-button class="control-button create" variant="success" v-if="this.new" @click='createIssue'>新規登録</b-button>
+        <b-button class="control-button update" variant="success" v-if="!this.new" @click='updateIssue'>更新</b-button>
       </div>
     </div>
 
@@ -70,7 +88,10 @@ export default {
       new: false,
       currentPath: '',
       issId: null,
-      issDetaile: null,
+      issDetail: null,
+      projectName: '',
+      subject: '',
+      description: '',
       trackerOptions: [{value: '', text: ''}],
       tracker: '',
       issueStatuses: [{value: '', text: ''}],
@@ -121,6 +142,9 @@ export default {
         await naim.retrieveIssueDetail(Number(this.issId))
         this.issDetail = naim.getIssueDetail()
         console.log(this.issDetail)
+        this.projectName = this.issDetail.project.name
+        this.subject = this.issDetail.subject
+        this.description = this.issDetail.description
         this.tracker = this.issDetail.tracker.id
         this.issueStatus = this.issDetail.status.id
         this.issuePriority = this.issDetail.priority.id
