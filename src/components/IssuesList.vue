@@ -1,85 +1,83 @@
 <template>
-    <div class="container-fluid">
-
-      <!-- #### Desktop用 #### -->
-      <div class="desktop">
-        <div id="query-box">
-          <form id="search">
-            <input name="query" v-model="searchQuery" placeholder="フィルタ文字列">
-          </form>
-        </div>
-        <div class="table-row header">
-          <div class="wrapper attributes header">
-            <div v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="[{ active: sortKey == val }, val]">
-              {{ val }}
-              <span class="arrow" :class="sortOrders[val] > 0 ? 'asc' : 'dsc'"></span>
-            </div>
+  <div class="container-fluid">
+    <!-- #### Desktop用 #### -->
+    <div class="desktop">
+      <div id="query-box">
+        <form id="search">
+          <input name="query" v-model="searchQuery" placeholder="フィルタ文字列">
+        </form>
+      </div>
+      <div class="table-row header">
+        <div class="wrapper attributes header">
+          <div v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="[{ active: sortKey == val }, val]">
+            {{ val }}
+            <span class="arrow" :class="sortOrders[val] > 0 ? 'asc' : 'dsc'"></span>
           </div>
         </div>
       </div>
+    </div>
+    <!-- #### tablet用 #### -->
+    <div class="tablet">
+      <b-container class="table-row header">
+        <b-row>
+          <label class="currentpath-user" >チケット一覧</label>
+        </b-row>
+        <b-row>
+          <b-col cols="6">
+            <b-form-input type="text" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
+          </b-col>
+          <b-col cols="4">
+            <b-dropdown id="ddown-buttons" split right variant="success" size="sm" class="sorter">
+              <template slot="button-content">
+                {{sortKey}}
+                <span class="arrow" :class="sortOrders[sortKey] > 0 ? 'asc' : 'dsc'"></span>
+              </template>
+              <b-dropdown-item v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="[{ active: sortKey == val }, { focus: sortKey == val }]">
+                {{ val }}
+              </b-dropdown-item>
+            </b-dropdown>
+          </b-col>
+          <b-col cols="1">
+            <img :src="icon_new_issue" class="new_issue" width='30px' height='30px' @click="createIssue"/>
+          </b-col>
+        </b-row>
+      </b-container>
+    </div>
 
-      <!-- #### tablet用 #### -->
-      <div class="tablet">
-        <b-container class="table-row header">
-          <b-row>
-            <label class="currentpath-user" >プロジェクト一覧</label>
-          </b-row>
-          <b-row>
-            <b-col cols="6">
-              <b-form-input type="text" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
-            </b-col>
-            <b-col cols="4">
-              <b-dropdown id="ddown-buttons" split right variant="success" size="sm" class="sorter">
-                <template slot="button-content">
-                  {{sortKey}}
-                  <span class="arrow" :class="sortOrders[sortKey] > 0 ? 'asc' : 'dsc'"></span>
-                </template>
-                <b-dropdown-item v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="[{ active: sortKey == val }, { focus: sortKey == val }]">
-                  {{ val }}
-                </b-dropdown-item>
-              </b-dropdown>
-            </b-col>
-            <b-col cols="1">
-              <img :src="icon_new_project" v-if="this.userName" class="new_project" width='30px' height='30px' @click="createProject"/>
-            </b-col>
-          </b-row>
-        </b-container>
-      </div>
-
-      <div class="data-field">
-        <div v-for="(entry,idx) in projects" v-bind:key=idx @click="editProject(entry)">
-          <div class="table-row data">
-            <div class="wrapper attributes data">
-              <div v-for="(val, idx) in columns" v-bind:key=idx :class="[val]">
-                <span>
-                  {{entry[val]}}
-                </span>
-              </div>
+    <div class="data-field">
+      <div v-for="(entry,idx) in issues" v-bind:key=idx @click="editIssue(entry)">
+        <div class="table-row data">
+          <div class="wrapper attributes data">
+            <div v-for="(val, idx) in columns" v-bind:key=idx :class="[val]">
+              <span>
+                {{entry[val]}}
+              </span>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+  </div>
 </template>
 
 <script>
 import auth from '../models/auth.js'
 import naim from '../models/naim.js'
-import editstate from '../models/editState.js'
 import iconNew from '../assets/new.png'
-import router from '../router'
 
 export default {
+//  name: 'TicketList',
   data () {
     let sortOrders = {}
-    let columns = ['id', '名称', '顧客', '調達先', '説明']
+    let columns = ['id', 'トラッカー', 'プロジェクト', '題名', '優先度', 'ステータス', '進捗率', '作成者', '担当者', '開始日', '期日', '更新日']
     columns.forEach(function (key) {
       sortOrders[key] = 1
     })
 
     return {
       userName: '',
-      icon_new_project: iconNew,
+      icon_new_issue: iconNew,
       columns: columns,
       searchQuery: '',
       sortKey: 'キー',
@@ -87,38 +85,26 @@ export default {
     }
   },
   computed: {
-    projects: function () {
-      console.log('### project computed property in ProjectList.vue ####')
+    issues: function () {
+      console.log('### issues computes propery in IssuesList.vue ###')
       let ret = []
-      let prjs = naim.getPorjects()
-      // console.log(prjs)
-      prjs.forEach(element => {
-        // 調達先（複数指定可）の文字列生成
-        let supplier = ''
-        if (element.custom_fields[0].multiple) {
-          element.custom_fields[0].value.forEach(el => {
-            if (supplier.length === 0) {
-              supplier = el
-            } else {
-              supplier += ', ' + el
-            }
-          })
-        } else {
-          supplier = element.custome_fields[0].value[0]
-        }
-        // 顧客の文字列生成
-        let customer = element.custom_fields[1].value
-        // 説明欄の改行コードエスケープ
-        let desc = String(element.description)
-        desc = desc.replace(/(\r\n)/g, '\\\\n')
-        // Project List の表示オブジェクト生成
+      let isss = naim.getIssues()
+      isss.forEach(el => {
+        let assignedName = el.assigned_to ? el.assigned_to.name : ''
         let rec = '{' +
-          ' "id" : "' + '#' + element.id + '"' +
-          ',"名称" : "' + element.name + '"' +
-          ',"顧客" : "' + customer + '"' +
-          ',"調達先" : "' + supplier + '"' +
-          ',"説明" : "' + desc + '"' +
-          ' }'
+          ' "' + this.columns[0] + '" : "' + el.id + '"' +
+          ',"' + this.columns[1] + '" : "' + el.tracker.name + '"' +
+          ',"' + this.columns[2] + '" : "' + el.project.name + '"' +
+          ',"' + this.columns[3] + '" : "' + el.subject + '"' +
+          ',"' + this.columns[4] + '" : "' + el.priority.name + '"' +
+          ',"' + this.columns[5] + '" : "' + el.status.name + '"' +
+          ',"' + this.columns[6] + '" : "' + el.due_ratio + ' %"' +
+          ',"' + this.columns[7] + '" : "' + el.author.name + '"' +
+          ',"' + this.columns[8] + '" : "' + assignedName + '"' +
+          ',"' + this.columns[9] + '" : "' + el.start_date + '"' +
+          ',"' + this.columns[10] + '" : "' + el.due_date + '"' +
+          ',"' + this.columns[11] + '" : "' + el.updated_on + '"' +
+        '}'
         let obj = JSON.parse(rec)
         ret.push(obj)
       })
@@ -146,26 +132,30 @@ export default {
   },
   methods: {
     sortBy: function (key) {
-      console.log('sortBy : key=' + key)
+      console.log('Issue sortKey : ' + key)
       console.log(this.sortOrders)
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
-    editProject: function (prj) {
-      console.log('edit project')
-      console.log(prj)
-      editstate.currentProjectId = prj.id.slice(1)
-      router.push('/editproject')
+    editIssue: function () {
+      console.log('editIssue')
     },
-    createProject: function () {
-      console.log('create project')
-      editstate.currentProjectId = -1
-      router.push('/editproject')
+    createIssue: function () {
+      console.log('createIssur')
+    },
+    getProperties: async function () {
+      await naim.retrieveUsers()
+      await naim.retrieveIssueDetail(5 /* issue id */)
+      await naim.retrieveIssuePriorities()
+      await naim.retrieveIssueStatuses()
+      await naim.retrieveTrackers()
+      await naim.retrieveTimeEntryActivities()
+      await naim.retrieveDocumentCategories()
     }
   },
   mounted () {
-    console.log('ProjectList.vue mounted')
-    this.userName = auth.getUser().username
+    this.getProperties()
+    this.userName = auth.getUser().userName
   }
 }
 </script>
@@ -208,7 +198,7 @@ export default {
   .wrapper.attributes.data {
     height: 100px;
   }
-
+  
   .id {
     width: 100px;
     overflow: hidden;
@@ -216,29 +206,78 @@ export default {
     text-overflow: ellipsis;
     text-align: left;
   }
-  .名称 {
-    width: 300px;
+  .トラッカー {
+    width: 100px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     text-align: left;
   }
-  .顧客 {
-    width: 200px;
+  .プロジェクト {
+    width: 100px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     text-align: left;
   }
-  .調達先 {
-    width: 200px;
+  .題名 {
+    width: 100px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     text-align: left;
   }
-  .説明 {
-    width: 400px;
+  .優先度 {
+    width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+  .ステータス {
+    width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+  .進捗率 {
+    width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+  .作成者 {
+    width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+  .担当者 {
+    width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+  .開始日 {
+    width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+  .期日 {
+    width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+  .期日 {
+    width: 100px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -290,7 +329,7 @@ export default {
       -webkit-transform: translateY(-50%) translateX(-50%);
       /* float: right; */
     }
-    .new_project {
+    .new_issue {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -316,7 +355,7 @@ export default {
       word-wrap: break-word;
     }
     .attributes {
-     flex-direction: column;
+      flex-direction: column;
       -webkit-flex-direction: column;
     }
     .attributes div {
@@ -367,4 +406,4 @@ export default {
     border-right: 4px solid transparent;
     border-top: 4px solid rgb(55, 11, 177);
   }
-</style>
+  </style>

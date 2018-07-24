@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import IssueList from '@/components/IssueList'
+import IssuesList from '@/components/IssuesList'
 import ProjectList from '@/components/ProjectList'
 import EditProject from '@/components/EditProject'
 import Home from '@/components/Home'
@@ -17,7 +17,7 @@ export default new Router({
     {
       path: '/tickets',
       name: 'TicketList',
-      component: IssueList
+      component: IssuesList
     },
     {
       path: '/projects',
