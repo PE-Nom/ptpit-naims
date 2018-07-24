@@ -120,7 +120,7 @@ export default {
         this.currentPath = 'チケット更新'
         await naim.retrieveIssueDetail(Number(this.issId))
         this.issDetail = naim.getIssueDetail()
-        // console.log(this.issDetail)
+        console.log(this.issDetail)
         this.tracker = this.issDetail.tracker.id
         this.issueStatus = this.issDetail.status.id
         this.issuePriority = this.issDetail.priority.id
