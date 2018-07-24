@@ -93,6 +93,8 @@ export default {
       let isss = naim.getIssues()
       isss.forEach(el => {
         let assignedName = el.assigned_to ? el.assigned_to.name : ''
+        let dueRatio = el.due_ratio ? el.due_ratio : '0'
+        let dueDate = el.due_date ? el.due_date : '未定義'
         let rec = '{' +
           ' "' + this.columns[0] + '" : "#' + el.id + '"' +
           ',"' + this.columns[1] + '" : "' + el.tracker.name + '"' +
@@ -100,11 +102,11 @@ export default {
           ',"' + this.columns[3] + '" : "' + el.subject + '"' +
           ',"' + this.columns[4] + '" : "' + el.priority.name + '"' +
           ',"' + this.columns[5] + '" : "' + el.status.name + '"' +
-          ',"' + this.columns[6] + '" : "' + el.due_ratio + ' %"' +
+          ',"' + this.columns[6] + '" : "' + dueRatio + ' %"' +
           ',"' + this.columns[7] + '" : "' + el.author.name + '"' +
           ',"' + this.columns[8] + '" : "' + assignedName + '"' +
           ',"' + this.columns[9] + '" : "' + el.start_date + '"' +
-          ',"' + this.columns[10] + '" : "' + el.due_date + '"' +
+          ',"' + this.columns[10] + '" : "' + dueDate + '"' +
           ',"' + this.columns[11] + '" : "' + el.updated_on + '"' +
         '}'
         let obj = JSON.parse(rec)
