@@ -41,7 +41,7 @@
             </b-form-select>
           </div>
         </div>
-        <div class="form-group">
+        <div class="button-group">
           <div class="col-md-8">
             <p v-if=errorMessage class="message-field">{{errorMessage}}</p>
           </div>
@@ -213,6 +213,9 @@ export default {
   }
   .form-group {
     margin-bottom: 0.5em;
+  }
+  .button-group {
+    margin-top: 1em;
   }
   .update {
     margin-left: 1em;

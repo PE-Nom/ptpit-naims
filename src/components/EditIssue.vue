@@ -15,47 +15,62 @@
             <input type="text" class="form-control" id="inputProjectName" placeholder="プロジェクト名" v-model="this.projectName">
           </div>
         </div>
-        <div class="form-group row-top">
+        <div class="form-group">
           <div class="col-md-10">
             <label for="inputSubject" class="control-label">題名</label>
             <input type="text" class="form-control" id="inputSubject" placeholder="題名" v-model="this.subject">
           </div>
         </div>
-        <div class="form-group row-top">
+        <div class="form-group">
           <div class="col-md-10">
             <label for="inputDescription" class="control-label">説明</label>
             <input type="text" class="form-control" id="inputDescription" placeholder="説明の記述" v-model="this.description">
           </div>
         </div>
-        <div class="form-group row-top">
+        <div class="form-group">
+          <div class="col-md-10">
+            <label for="inputStartDate" class="control-label">開始日</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-10">
+            <label for="inputDueDate" class="control-label">期日</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-10">
+            <label for="inputDoneRatio" class="control-label">進捗率</label>
+          </div>
+        </div>
+        <div class="form-group">
           <div class="col-md-10">
             <label for="inputTracker" class="control-label">トラッカー</label>
             <b-form-select v-model="tracker" :options="trackerOptions">
             </b-form-select>
           </div>
         </div>
-        <div class="form-group row-top">
+        <div class="form-group">
           <div class="col-md-10">
             <label for="inputIssueStatus" class="control-label">ステータス</label>
             <b-form-select v-model="issueStatus" :options="issueStatuses">
             </b-form-select>
           </div>
         </div>
-        <div class="form-group row-top">
+        <div class="form-group">
           <div class="col-md-10">
             <label for="inputIssuePriority" class="control-label">優先度</label>
             <b-form-select v-model="issuePriority" :options="issuePriorities">
             </b-form-select>
           </div>
         </div>
-        <div class="form-group row-top">
+        <div class="form-group">
           <div class="col-md-10">
             <label for="inputAuthor" class="control-label">作成者</label>
             <b-form-select v-model="author" :options="users">
             </b-form-select>
           </div>
         </div>
-        <div class="form-group row-top">
+        <div class="form-group">
           <div class="col-md-10">
             <label for="inputAssigned" class="control-label">担当者</label>
             <b-form-select v-model="assigned" :options="users">
@@ -65,7 +80,7 @@
 
       </div>
     </div>
-    <div class="form-group">
+    <div class="button-group">
       <div class="col-md-8">
         <p v-if=errorMessage class="message-field">{{errorMessage}}</p>
       </div>
@@ -104,6 +119,10 @@ export default {
       activities: [{value: '', text: ''}],
       activity: null,
       documentCategries: [{value: '', text: ''}],
+      start_date: '',
+      due_date: '',
+      done_ratio: '',
+      update_on: '',
       errorMessage: ''
     }
   },
@@ -150,6 +169,11 @@ export default {
         this.issuePriority = this.issDetail.priority.id
         this.author = this.issDetail.author.id
         this.assigned = this.issDetail.assigned_to ? this.issDetail.assigned_to.id : '-'
+        this.start_date = this.issDetail.start_date ? this.issDetail.start_date : '未定義'
+        this.due_date = this.issDetail.due_date ? this.issDetail.due_date : '未定義'
+        this.start_date = this.issDetail.start_date ? this.issDetail.start_date : '未定義'
+        this.update_on = this.issDetail.update_on ? this.issDetail.update_on : '未定義'
+        this.done_ratio = this.issDetail.done_ratio ? this.issDetail.done_ratio : '未定義'
       } else {
         this.new = true
         this.currentPath = 'チケット 登録'
@@ -224,6 +248,9 @@ export default {
   }
   .form-group {
     margin-bottom: 0.5em;
+  }
+  .button-group {
+    margin-top: 1em;
   }
   .update {
     margin-left: 1em;
