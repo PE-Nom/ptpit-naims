@@ -1,65 +1,64 @@
 <template>
-    <div class="container-fluid">
-
-      <!-- #### Desktop用 #### -->
-      <div class="desktop">
-        <div id="query-box">
-          <form id="search">
-            <input name="query" v-model="searchQuery" placeholder="フィルタ文字列">
-          </form>
-        </div>
-        <div class="table-row header">
-          <div class="wrapper attributes header">
-            <div v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="[{ active: sortKey == val }, val]">
-              {{ val }}
-              <span class="arrow" :class="sortOrders[val] > 0 ? 'asc' : 'dsc'"></span>
-            </div>
+  <div class="container-fluid">
+    <!-- #### Desktop用 #### -->
+    <div class="desktop">
+      <div id="query-box">
+        <form id="search">
+          <input name="query" v-model="searchQuery" placeholder="フィルタ文字列">
+        </form>
+      </div>
+      <div class="table-row header">
+        <div class="wrapper attributes header">
+          <div v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="[{ active: sortKey == val }, val]">
+            {{ val }}
+            <span class="arrow" :class="sortOrders[val] > 0 ? 'asc' : 'dsc'"></span>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- #### tablet用 #### -->
-      <div class="tablet">
-        <b-container class="table-row header">
-          <b-row>
-            <label class="currentpath-user" >プロジェクト一覧</label>
-          </b-row>
-          <b-row>
-            <b-col cols="6">
-              <b-form-input type="text" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
-            </b-col>
-            <b-col cols="4">
-              <b-dropdown id="ddown-buttons" split right variant="success" size="sm" class="sorter">
-                <template slot="button-content">
-                  {{sortKey}}
-                  <span class="arrow" :class="sortOrders[sortKey] > 0 ? 'asc' : 'dsc'"></span>
-                </template>
-                <b-dropdown-item v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="[{ active: sortKey == val }, { focus: sortKey == val }]">
-                  {{ val }}
-                </b-dropdown-item>
-              </b-dropdown>
-            </b-col>
-            <b-col cols="1">
-              <img :src="icon_new_project" v-if="this.userName" class="new_project" width='30px' height='30px' @click="createProject"/>
-            </b-col>
-          </b-row>
-        </b-container>
-      </div>
+    <!-- #### tablet用 #### -->
+    <div class="tablet">
+      <b-container class="table-row header">
+        <b-row>
+          <label class="currentpath-user" >プロジェクト一覧</label>
+        </b-row>
+        <b-row>
+          <b-col cols="6">
+            <b-form-input type="text" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
+          </b-col>
+          <b-col cols="4">
+            <b-dropdown id="ddown-buttons" split right variant="success" size="sm" class="sorter">
+              <template slot="button-content">
+                {{sortKey}}
+                <span class="arrow" :class="sortOrders[sortKey] > 0 ? 'asc' : 'dsc'"></span>
+              </template>
+              <b-dropdown-item v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="[{ active: sortKey == val }, { focus: sortKey == val }]">
+                {{ val }}
+              </b-dropdown-item>
+            </b-dropdown>
+          </b-col>
+          <b-col cols="1">
+            <img :src="icon_new_project" v-if="this.userName" class="new_project" width='30px' height='30px' @click="createProject"/>
+          </b-col>
+        </b-row>
+      </b-container>
+    </div>
 
-      <div class="data-field">
-        <div v-for="(entry,idx) in projects" v-bind:key=idx @click="editProject(entry)">
-          <div class="table-row data">
-            <div class="wrapper attributes data">
-              <div v-for="(val, idx) in columns" v-bind:key=idx :class="[val]">
-                <span>
-                  {{entry[val]}}
-                </span>
-              </div>
+    <div class="data-field">
+      <div v-for="(entry,idx) in projects" v-bind:key=idx @click="editProject(entry)">
+        <div class="table-row data">
+          <div class="wrapper attributes data">
+            <div v-for="(val, idx) in columns" v-bind:key=idx :class="[val]">
+              <span>
+                {{entry[val]}}
+              </span>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
