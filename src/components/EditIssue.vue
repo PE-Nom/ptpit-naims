@@ -44,6 +44,16 @@
             </b-form-select>
           </div>
         </div>
+        <div class="form-group">
+          <div class="col-md-8">
+            <p v-if=errorMessage class="message-field">{{errorMessage}}</p>
+          </div>
+          <div class="col-md-2">
+            <b-button class="control-button create" variant="success" v-if="this.new" @click='createIssue'>新規登録</b-button>
+            <b-button class="control-button update" variant="success" v-if="!this.new" @click='updateIssue'>更新</b-button>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -57,6 +67,7 @@ import editstate from '../models/editState.js'
 export default {
   data () {
     return {
+      new: false,
       currentPath: '',
       issId: null,
       issDetaile: null,
@@ -71,7 +82,8 @@ export default {
       assigned: null, // 担当者
       activities: [{value: '', text: ''}],
       activity: null,
-      documentCategries: [{value: '', text: ''}]
+      documentCategries: [{value: '', text: ''}],
+      errorMessage: ''
     }
   },
   computed: {
@@ -84,6 +96,11 @@ export default {
     }
   },
   methods: {
+    createIssue: async function () {
+    },
+    updateIssue: async function () {
+
+    },
     convertOptions: function (values, key) {
       let options = []
       values.forEach(el => {
@@ -99,6 +116,7 @@ export default {
       this.issId = editstate.currentIssueId
       // console.log(this.issId)
       if (this.issId !== -1) {
+        this.new = false
         this.currentPath = 'チケット更新'
         await naim.retrieveIssueDetail(Number(this.issId))
         this.issDetail = naim.getIssueDetail()
@@ -109,6 +127,7 @@ export default {
         this.author = this.issDetail.author.id
         this.assigned = this.issDetail.assigned_to ? this.issDetail.assigned_to.id : '-'
       } else {
+        this.new = true
         this.currentPath = 'チケット 登録'
       }
     },
@@ -167,4 +186,26 @@ export default {
 </script>
 
 <style scoped>
+  .control-label {
+    float: left;
+  }
+  .control-button {
+    float: right;
+  }
+  .row-top {
+    margin-top: 1em;
+  }
+  .control-label {
+    margin-bottom: 0.1em;
+  }
+  .form-group {
+    margin-bottom: 0.5em;
+  }
+  .update {
+    margin-left: 1em;
+  }
+  .edit-field {
+    height: 550px;
+    overflow-y: auto;
+  }
 </style>
