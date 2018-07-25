@@ -147,7 +147,7 @@
             <b-card-body>
               <!-- 添付ファイルのリスト表示領域 -->
               <b-list-group>
-                <b-list-group-item v-for="(val, idx) in attachment" v-bind:key=idx>
+                <b-list-group-item v-for="(val, idx) in attachments" v-bind:key=idx>
                   {{val.caption}}
                 </b-list-group-item>
               </b-list-group>
@@ -159,9 +159,20 @@
           <b-card-header header-tag="header" class="p-1" role="tab">
             <b-btn block href="#" v-b-toggle.accordion-history variant="info">履歴</b-btn>
           </b-card-header>
-          <b-collapse id="accordion-history" visible accordion="my-accordion" role="tabpanel">
+          <b-collapse id="accordion-history" visible accordion="my-history-accordion" role="tabpanel">
             <b-card-body>
-              <!-- 添付ファイルのリスト表示領域 -->
+              <!--履歴の表示領域 -->
+              <b-card no-body v-for="(val, idx) in journals" v-bind:key=idx class="mb-1">
+                <b-card-header header-tag="header" class="p-1" role="tab">
+                  <b-btn block href="#" v-b-toggle.accordion-history-item variant="info">{{val.created_on}}</b-btn>
+                </b-card-header>
+                <b-collapse id="accordion-history-item" visible accordion="my-history-item-accordion" role="tabpanel">
+                  <b-card-body v-for="(item, id) in val.details" v-bind:key=id>
+                    {{item.name}}
+                  </b-card-body>
+                </b-collapse>
+              </b-card>
+              <!--履歴の表示領域 -->
             </b-card-body>
           </b-collapse>
         </b-card>
@@ -227,7 +238,8 @@ export default {
         {value: 100, text: '100%'}
       ],
       update_on: '',
-      attachment: [],
+      attachments: [],
+      journals: [],
       errorMessage: '',
       // for date selector
       dateFormat: 'YYYY-MM-DD',
@@ -303,7 +315,9 @@ export default {
           }
           attachmentItems.push(item)
         })
-        this.attachment = attachmentItems
+        this.attachments = attachmentItems
+        // 履歴のリスト
+        this.journals = this.issDetail.journals
       } else {
         this.new = true
         this.currentPath = 'チケット 登録'
