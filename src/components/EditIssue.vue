@@ -170,7 +170,7 @@ export default {
       activities: [{value: '', text: ''}],
       activity: null,
       documentCategries: [{value: '', text: ''}],
-      start_date: '',
+      start_date: '2018-07-11',
       due_date: '',
       done_ratio: '',
       doneRatioOptions: [

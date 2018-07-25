@@ -69,6 +69,8 @@ export default {
         })
       },
       set: function (v) {
+        console.log('dateSelector:set ')
+        console.log(v)
         var _d = null
         if (moment.isMoment(v)) {
           _d = v
@@ -85,7 +87,7 @@ export default {
       }
     }
   },
-  mounted: function () {
+  created: function () {
     let _s = moment(this.start, this.format)
     let err
     if (!_s.isValid()) {
