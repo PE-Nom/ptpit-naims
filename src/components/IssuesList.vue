@@ -88,7 +88,7 @@ export default {
   },
   computed: {
     issues: function () {
-      console.log('### issues computes propery in IssuesList.vue ###')
+      // console.log('### issues computes propery in IssuesList.vue ###')
       let ret = []
       let isss = naim.getIssues()
       isss.forEach(el => {

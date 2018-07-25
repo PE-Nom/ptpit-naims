@@ -86,7 +86,7 @@
                   </b-row>
                   <b-row>
                     <div class="col-md-10">
-                      <date-selector :format="dateFormat" :start="minDate" :default="currentDate" :end="maxDate" @date-change="dueDate"></date-selector>
+                      <date-selector :format="dateFormat" :start="minDate" v-bind:default="due_date" :end="maxDate" @date-change="dueDate"></date-selector>
                     </div>
                   </b-row>
                 </b-container>
@@ -171,7 +171,7 @@ export default {
       activity: null,
       documentCategries: [{value: '', text: ''}],
       start_date: '2018-07-11',
-      due_date: '',
+      due_date: '2018-08-11',
       done_ratio: '',
       doneRatioOptions: [
         {value: 0, text: '0%'},
@@ -207,15 +207,16 @@ export default {
   methods: {
     startDate: function (date) {
       this.start_date = date.format(this.dateFormat)
-      // console.log('開始日' + this.start_date)
+      console.log('開始日' + this.start_date)
     },
     dueDate: function (date) {
       this.due_date = date.format(this.dateFormat)
-      // console.log('期日' + this.due_date)
+      console.log('期日' + this.due_date)
     },
     createIssue: async function () {
     },
     updateIssue: async function () {
+      console.log('updateIssue')
     },
     convertOptions: function (values, key) {
       let options = []
@@ -236,7 +237,7 @@ export default {
         this.currentPath = 'チケット更新'
         await naim.retrieveIssueDetail(Number(this.issId))
         this.issDetail = naim.getIssueDetail()
-        console.log(this.issDetail)
+        // console.log(this.issDetail)
         this.projectName = this.issDetail.project.name
         this.subject = this.issDetail.subject
         this.description = this.issDetail.description
@@ -246,11 +247,12 @@ export default {
         this.author = this.issDetail.author.id
         this.assigned = this.issDetail.assigned_to ? this.issDetail.assigned_to.id : '-'
         this.start_date = this.issDetail.start_date ? this.issDetail.start_date : ''
-        console.log(this.start_date)
+        // console.log('start_date : ' + this.start_date)
         this.due_date = this.issDetail.due_date ? this.issDetail.due_date : ''
-        console.log(this.due_date)
+        // console.log('due_date : ' + this.due_date)
         this.update_on = this.issDetail.update_on ? this.issDetail.update_on : '未定義'
         this.done_ratio = this.issDetail.done_ratio ? this.issDetail.done_ratio : 0
+        // dateSelector.parseDate()
       } else {
         this.new = true
         this.currentPath = 'チケット 登録'
@@ -302,12 +304,12 @@ export default {
     }
   },
   created () {
-    console.log('EditIssue created')
+    // console.log('EditIssue created')
     this.getIssueDetail()
     this.getProperties()
   },
   mounted () {
-    console.log('EditIssue mounted')
+    // console.log('EditIssue mounted')
   }
 }
 </script>

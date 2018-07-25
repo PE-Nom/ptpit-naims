@@ -69,8 +69,8 @@ export default {
         })
       },
       set: function (v) {
-        console.log('dateSelector:set ')
-        console.log(v)
+        // console.log('dateSelector:set ')
+        // console.log(v)
         var _d = null
         if (moment.isMoment(v)) {
           _d = v
@@ -83,48 +83,57 @@ export default {
         this.year = _d.year()
         this.month = _d.month()
         this.day = _d.date()
-        console.log('Current date: ', this.year, this.month, this.day)
+        // console.log('Current date: ', this.year, this.month, this.day)
       }
     }
   },
+  watch: {
+    default: function () {
+      this.parseDate()
+    }
+  },
   created: function () {
-    let _s = moment(this.start, this.format)
-    let err
-    if (!_s.isValid()) {
-      err = 'Start date is not right, or format is not right.'
-      console.log(err)
-      // throw new Error(err)
-    }
-    var _d = moment(this.default, this.format)
-    if (!_d.isValid()) {
-      err = 'Default date is not right, or format is not right.'
-      console.log(err)
-      // throw new Error(err)
-    }
-    var _e = moment(this.end, this.format)
-    if (!_e.isValid()) {
-      err = 'End date is not right, or format is not right.'
-      console.log(err)
-      // throw new Error(err)
-    }
-    if (!_s.isBefore(_e)) {
-      err = 'Start date must before end date.'
-      console.log(err)
-      // throw new Error(err)
-    }
-    if (!_d.isBetween(_s, _e)) {
-      err = 'Default date must between start and end.'
-      console.log(err)
-      // throw new Error(err)
-    }
-    this.startDate = {year: _s.year(), month: _s.month(), day: _s.date()}
-    this.endDate = {year: _e.year(), month: _e.month(), day: _e.date()}
-    this.date = _d
-    this.getYears()
-    this.getMonths()
-    this.getDays()
+    this.parseDate()
   },
   methods: {
+    parseDate: function () {
+      // console.log('parseDate')
+      let _s = moment(this.start, this.format)
+      let err
+      if (!_s.isValid()) {
+        err = 'Start date is not right, or format is not right.'
+        console.log(err)
+        // throw new Error(err)
+      }
+      var _d = moment(this.default, this.format)
+      if (!_d.isValid()) {
+        err = 'Default date is not right, or format is not right.'
+        console.log(err)
+        // throw new Error(err)
+      }
+      var _e = moment(this.end, this.format)
+      if (!_e.isValid()) {
+        err = 'End date is not right, or format is not right.'
+        console.log(err)
+        // throw new Error(err)
+      }
+      if (!_s.isBefore(_e)) {
+        err = 'Start date must before end date.'
+        console.log(err)
+        // throw new Error(err)
+      }
+      if (!_d.isBetween(_s, _e)) {
+        err = 'Default date must between start and end.'
+        console.log(err)
+        // throw new Error(err)
+      }
+      this.startDate = {year: _s.year(), month: _s.month(), day: _s.date()}
+      this.endDate = {year: _e.year(), month: _e.month(), day: _e.date()}
+      this.date = _d
+      this.getYears()
+      this.getMonths()
+      this.getDays()
+    },
     getYears: function () {
       var _to = this.endDate.year
       for (var _y = this.startDate.year; _y <= _to; _y++) {
