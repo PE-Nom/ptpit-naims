@@ -9,51 +9,10 @@
 
     <div class="edit-field">
       <div>
-        <div class="form-group row-top">
-          <div class="col-md-10">
-            <label for="inputProjectName" class="control-label">プロジェクト名</label>
-            <input type="text" class="form-control" id="inputProjectName" placeholder="プロジェクト名" v-model="this.projectName">
-          </div>
-        </div>
         <div class="form-group">
           <div class="col-md-10">
             <label for="inputSubject" class="control-label">題名</label>
             <input type="text" class="form-control" id="inputSubject" placeholder="題名" v-model="this.subject">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-10">
-            <label for="inputDescription" class="control-label">説明</label>
-            <input type="text" class="form-control" id="inputDescription" placeholder="説明の記述" v-model="this.description">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-10">
-            <label for="inputStartDate" class="control-label">開始日</label>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-10">
-            <label for="inputDueDate" class="control-label">期日</label>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-10">
-            <label for="inputDoneRatio" class="control-label">進捗率</label>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-10">
-            <label for="inputTracker" class="control-label">トラッカー</label>
-            <b-form-select v-model="tracker" :options="trackerOptions">
-            </b-form-select>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-10">
-            <label for="inputIssueStatus" class="control-label">ステータス</label>
-            <b-form-select v-model="issueStatus" :options="issueStatuses">
-            </b-form-select>
           </div>
         </div>
         <div class="form-group">
@@ -65,18 +24,88 @@
         </div>
         <div class="form-group">
           <div class="col-md-10">
-            <label for="inputAuthor" class="control-label">作成者</label>
-            <b-form-select v-model="author" :options="users">
+            <label for="inputIssueStatus" class="control-label">ステータス</label>
+            <b-form-select v-model="issueStatus" :options="issueStatuses">
             </b-form-select>
           </div>
         </div>
-        <div class="form-group">
-          <div class="col-md-10">
-            <label for="inputAssigned" class="control-label">担当者</label>
-            <b-form-select v-model="assigned" :options="users">
-            </b-form-select>
-          </div>
-        </div>
+        <b-card no-body class="mb-1">
+          <b-card-header header-tag="header" class="p-1" role="tab">
+            <b-btn block href="#" v-b-toggle.accordion-priority-and-status variant="info">情報</b-btn>
+          </b-card-header>
+          <b-collapse id="accordion-priority-and-status" visible accordion="my-accordion" role="tabpanel">
+            <b-card-body>
+              <div class="form-group">
+                <div class="col-md-10">
+                  <label for="inputTracker" class="control-label">トラッカー</label>
+                  <b-form-select v-model="tracker" :options="trackerOptions">
+                  </b-form-select>
+                </div>
+              </div>
+              <div class="form-group row-top">
+                <div class="col-md-10">
+                  <label for="inputProjectName" class="control-label">プロジェクト名</label>
+                  <input type="text" class="form-control" id="inputProjectName" placeholder="プロジェクト名" v-model="this.projectName">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-10">
+                  <label for="inputDescription" class="control-label">説明</label>
+                  <input type="text" class="form-control" id="inputDescription" placeholder="説明の記述" v-model="this.description">
+                </div>
+              </div>
+            </b-card-body>
+          </b-collapse>
+        </b-card>
+        <b-card no-body class="mb-1">
+          <b-card-header header-tag="header" class="p-1" role="tab">
+            <b-btn block href="#" v-b-toggle.accordion-schedule variant="info">スケジュール</b-btn>
+          </b-card-header>
+          <b-collapse id="accordion-schedule" visible accordion="my-accordion" role="tabpanel">
+            <b-card-body>
+              <div class="form-group">
+                <div class="col-md-10">
+                  <label for="inputStartDate" class="control-label">開始日</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-10">
+                  <label for="inputDueDate" class="control-label">期日</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-10">
+                  <label for="inputDoneRatio" class="control-label">進捗率</label>
+                  <b-form-select v-model="done_ratio" :options="doneRatioOptions">
+                  </b-form-select>
+                </div>
+              </div>
+            </b-card-body>
+          </b-collapse>
+        </b-card>
+        <b-card no-body class="mb-1">
+          <b-card-header header-tag="header" class="p-1" role="tab">
+            <b-btn block href="#" v-b-toggle.accordion-menber variant="info">メンバー</b-btn>
+          </b-card-header>
+          <b-collapse id="accordion-menber" visible accordion="my-accordion" role="tabpanel">
+            <b-card-body>
+              <div class="form-group">
+                <div class="col-md-10">
+                  <label for="inputAssigned" class="control-label">担当者</label>
+                  <b-form-select v-model="assigned" :options="users">
+                  </b-form-select>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-10">
+                  <label for="inputAuthor" class="control-label">作成者</label>
+                  <b-form-select v-model="author" :options="users">
+                  </b-form-select>
+                </div>
+              </div>
+            </b-card-body>
+          </b-collapse>
+        </b-card>
 
       </div>
     </div>
@@ -122,6 +151,19 @@ export default {
       start_date: '',
       due_date: '',
       done_ratio: '',
+      doneRatioOptions: [
+        {value: 0, text: '0%'},
+        {value: 10, text: '10%'},
+        {value: 20, text: '20%'},
+        {value: 30, text: '30%'},
+        {value: 40, text: '40%'},
+        {value: 50, text: '50%'},
+        {value: 60, text: '60%'},
+        {value: 70, text: '70%'},
+        {value: 80, text: '80%'},
+        {value: 90, text: '90%'},
+        {value: 100, text: '100%'}
+      ],
       update_on: '',
       errorMessage: ''
     }
@@ -173,7 +215,7 @@ export default {
         this.due_date = this.issDetail.due_date ? this.issDetail.due_date : '未定義'
         this.start_date = this.issDetail.start_date ? this.issDetail.start_date : '未定義'
         this.update_on = this.issDetail.update_on ? this.issDetail.update_on : '未定義'
-        this.done_ratio = this.issDetail.done_ratio ? this.issDetail.done_ratio : '未定義'
+        this.done_ratio = this.issDetail.done_ratio ? this.issDetail.done_ratio : 0
       } else {
         this.new = true
         this.currentPath = 'チケット 登録'
