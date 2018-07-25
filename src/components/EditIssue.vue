@@ -4,7 +4,7 @@
       <b-navbar-brand to="/tickets">&lt;&lt; チケット一覧</b-navbar-brand>
     </b-navbar>
     <b-container class="table-row header">
-      <label class="currentpath-user" >{{this.currentPath}}</label>
+      <label class="currentpath-user" >{{this.currentPath}} / id: #{{this.issId}}</label>
     </b-container>
 
     <div class="edit-field">
@@ -29,6 +29,7 @@
             </b-form-select>
           </div>
         </div>
+        <!-- 情報アコーディオン -->
         <b-card no-body class="mb-1">
           <b-card-header header-tag="header" class="p-1" role="tab">
             <b-btn block href="#" v-b-toggle.accordion-priority-and-status variant="info">情報</b-btn>
@@ -57,6 +58,7 @@
             </b-card-body>
           </b-collapse>
         </b-card>
+        <!-- スケジュール アコーディオン -->
         <b-card no-body class="mb-1">
           <b-card-header header-tag="header" class="p-1" role="tab">
             <b-btn block href="#" v-b-toggle.accordion-schedule variant="info">スケジュール</b-btn>
@@ -101,6 +103,7 @@
             </b-card-body>
           </b-collapse>
         </b-card>
+        <!-- メンバー アコーディオン -->
         <b-card no-body class="mb-1">
           <b-card-header header-tag="header" class="p-1" role="tab">
             <b-btn block href="#" v-b-toggle.accordion-menber variant="info">メンバー</b-btn>
@@ -124,7 +127,44 @@
             </b-card-body>
           </b-collapse>
         </b-card>
-
+        <!-- 時間と注記 アコーディオン -->
+        <b-card no-body class="mb-1">
+          <b-card-header header-tag="header" class="p-1" role="tab">
+            <b-btn block href="#" v-b-toggle.accordion-notation variant="info">時間の記録と注記</b-btn>
+          </b-card-header>
+          <b-collapse id="accordion-notation" visible accordion="my-accordion" role="tabpanel">
+            <b-card-body>
+              <!-- 時間の記録と注記の入力欄 -->
+            </b-card-body>
+          </b-collapse>
+        </b-card>
+        <!-- 添付ファイル アコーディオン -->
+        <b-card no-body class="mb-1">
+          <b-card-header header-tag="header" class="p-1" role="tab">
+            <b-btn block href="#" v-b-toggle.accordion-files variant="info">添付ファイル</b-btn>
+          </b-card-header>
+          <b-collapse id="accordion-files" visible accordion="my-accordion" role="tabpanel">
+            <b-card-body>
+              <!-- 添付ファイルのリスト表示領域 -->
+              <b-list-group>
+                <b-list-group-item v-for="(val, idx) in attachment" v-bind:key=idx>
+                  {{val.caption}}
+                </b-list-group-item>
+              </b-list-group>
+            </b-card-body>
+          </b-collapse>
+        </b-card>
+        <!-- 履歴 アコーディオン -->
+        <b-card no-body class="mb-1">
+          <b-card-header header-tag="header" class="p-1" role="tab">
+            <b-btn block href="#" v-b-toggle.accordion-history variant="info">履歴</b-btn>
+          </b-card-header>
+          <b-collapse id="accordion-history" visible accordion="my-accordion" role="tabpanel">
+            <b-card-body>
+              <!-- 添付ファイルのリスト表示領域 -->
+            </b-card-body>
+          </b-collapse>
+        </b-card>
       </div>
     </div>
     <div class="button-group">
@@ -187,6 +227,7 @@ export default {
         {value: 100, text: '100%'}
       ],
       update_on: '',
+      attachment: [],
       errorMessage: '',
       // for date selector
       dateFormat: 'YYYY-MM-DD',
@@ -207,11 +248,11 @@ export default {
   methods: {
     startDate: function (date) {
       this.start_date = date.format(this.dateFormat)
-      console.log('開始日' + this.start_date)
+      // console.log('開始日' + this.start_date)
     },
     dueDate: function (date) {
       this.due_date = date.format(this.dateFormat)
-      console.log('期日' + this.due_date)
+      // console.log('期日' + this.due_date)
     },
     createIssue: async function () {
     },
@@ -237,7 +278,7 @@ export default {
         this.currentPath = 'チケット更新'
         await naim.retrieveIssueDetail(Number(this.issId))
         this.issDetail = naim.getIssueDetail()
-        // console.log(this.issDetail)
+        console.log(this.issDetail)
         this.projectName = this.issDetail.project.name
         this.subject = this.issDetail.subject
         this.description = this.issDetail.description
@@ -253,6 +294,16 @@ export default {
         this.update_on = this.issDetail.update_on ? this.issDetail.update_on : '未定義'
         this.done_ratio = this.issDetail.done_ratio ? this.issDetail.done_ratio : 0
         // dateSelector.parseDate()
+        // 添付ファイルのリスト
+        let attachmentItems = []
+        this.issDetail.attachments.forEach(el => {
+          let item = {
+            caption: el.filename + '(' + parseInt(el.filesize / 1000) + 'kbyte) : ' + el.description,
+            item: el
+          }
+          attachmentItems.push(item)
+        })
+        this.attachment = attachmentItems
       } else {
         this.new = true
         this.currentPath = 'チケット 登録'
