@@ -9,7 +9,7 @@
 
     <div class="edit-field">
       <div>
-        <div class="form-group">
+        <div class="form-group row-top">
           <div class="col-md-10">
             <label for="inputSubject" class="control-label">題名</label>
             <input type="text" class="form-control" id="inputSubject" placeholder="題名" v-model="this.subject">
@@ -64,14 +64,32 @@
           <b-collapse id="accordion-schedule" visible accordion="my-accordion" role="tabpanel">
             <b-card-body>
               <div class="form-group">
-                <div class="col-md-10">
-                  <label for="inputStartDate" class="control-label">開始日</label>
-                </div>
+                <b-container>
+                  <b-row>
+                    <div class="col-md-10">
+                      <label for="inputStartDate" class="control-label">開始日</label>
+                    </div>
+                  </b-row>
+                  <b-row>
+                    <div class="col-md-10">
+                      <date-selector :format="dateFormat" :start="minDate" :default="start_date" :end="maxDate" @date-change="startDate"></date-selector>
+                    </div>
+                  </b-row>
+                </b-container>
               </div>
               <div class="form-group">
-                <div class="col-md-10">
-                  <label for="inputDueDate" class="control-label">期日</label>
-                </div>
+                <b-container>
+                  <b-row>
+                    <div class="col-md-10">
+                      <label for="inputDueDate" class="control-label">期日</label>
+                    </div>
+                  </b-row>
+                  <b-row>
+                    <div class="col-md-10">
+                      <date-selector :format="dateFormat" :start="minDate" :default="currentDate" :end="maxDate" @date-change="dueDate"></date-selector>
+                    </div>
+                  </b-row>
+                </b-container>
               </div>
               <div class="form-group">
                 <div class="col-md-10">
@@ -125,8 +143,12 @@
 <script>
 import naim from '../models/naim.js'
 import editstate from '../models/editState.js'
+import dateSelector from './DateSelector.vue'
 
 export default {
+  components: {
+    dateSelector
+  },
   data () {
     return {
       new: false,
@@ -165,7 +187,12 @@ export default {
         {value: 100, text: '100%'}
       ],
       update_on: '',
-      errorMessage: ''
+      errorMessage: '',
+      // for date selector
+      dateFormat: 'YYYY-MM-DD',
+      currentDate: '2018-07-25',
+      minDate: '2018-01-01',
+      maxDate: '2030-12-31'
     }
   },
   computed: {
@@ -178,10 +205,17 @@ export default {
     }
   },
   methods: {
+    startDate: function (date) {
+      this.start_date = date.format(this.dateFormat)
+      // console.log('開始日' + this.start_date)
+    },
+    dueDate: function (date) {
+      this.due_date = date.format(this.dateFormat)
+      // console.log('期日' + this.due_date)
+    },
     createIssue: async function () {
     },
     updateIssue: async function () {
-
     },
     convertOptions: function (values, key) {
       let options = []
@@ -211,9 +245,10 @@ export default {
         this.issuePriority = this.issDetail.priority.id
         this.author = this.issDetail.author.id
         this.assigned = this.issDetail.assigned_to ? this.issDetail.assigned_to.id : '-'
-        this.start_date = this.issDetail.start_date ? this.issDetail.start_date : '未定義'
-        this.due_date = this.issDetail.due_date ? this.issDetail.due_date : '未定義'
-        this.start_date = this.issDetail.start_date ? this.issDetail.start_date : '未定義'
+        this.start_date = this.issDetail.start_date ? this.issDetail.start_date : ''
+        console.log(this.start_date)
+        this.due_date = this.issDetail.due_date ? this.issDetail.due_date : ''
+        console.log(this.due_date)
         this.update_on = this.issDetail.update_on ? this.issDetail.update_on : '未定義'
         this.done_ratio = this.issDetail.done_ratio ? this.issDetail.done_ratio : 0
       } else {
@@ -267,10 +302,12 @@ export default {
     }
   },
   created () {
+    console.log('EditIssue created')
+    this.getIssueDetail()
     this.getProperties()
   },
   mounted () {
-    this.getIssueDetail()
+    console.log('EditIssue mounted')
   }
 }
 </script>
@@ -290,6 +327,9 @@ export default {
   }
   .form-group {
     margin-bottom: 0.5em;
+  }
+  .form-dummy {
+    height: 0px;
   }
   .button-group {
     margin-top: 1em;
