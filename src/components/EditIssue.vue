@@ -32,7 +32,7 @@
         <!-- 情報アコーディオン -->
         <b-card no-body class="mb-1">
           <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-btn block href="#" v-b-toggle.accordion-priority-and-status variant="info">情報</b-btn>
+            <b-btn block href="#" v-b-toggle.accordion-priority-and-status variant="success">チケット情報</b-btn>
           </b-card-header>
           <b-collapse id="accordion-priority-and-status" accordion="my-accordion" role="tabpanel">
             <b-card-body>
@@ -68,7 +68,7 @@
         <!-- スケジュール アコーディオン -->
         <b-card no-body class="mb-1">
           <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-btn block href="#" v-b-toggle.accordion-schedule variant="info">スケジュール</b-btn>
+            <b-btn block href="#" v-b-toggle.accordion-schedule variant="success">スケジュール</b-btn>
           </b-card-header>
           <b-collapse id="accordion-schedule" accordion="my-accordion" role="tabpanel">
             <b-card-body>
@@ -113,7 +113,7 @@
         <!-- メンバー アコーディオン -->
         <b-card no-body class="mb-1">
           <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-btn block href="#" v-b-toggle.accordion-menber variant="info">メンバー</b-btn>
+            <b-btn block href="#" v-b-toggle.accordion-menber variant="success">メンバー</b-btn>
           </b-card-header>
           <b-collapse id="accordion-menber" accordion="my-accordion" role="tabpanel">
             <b-card-body>
@@ -137,7 +137,7 @@
         <!-- 時間と注記 アコーディオン -->
         <b-card no-body class="mb-1">
           <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-btn block href="#" v-b-toggle.accordion-notation variant="info">時間の記録と注記</b-btn>
+            <b-btn block href="#" v-b-toggle.accordion-notation variant="success">時間の記録と注記</b-btn>
           </b-card-header>
           <b-collapse id="accordion-notation" accordion="my-accordion" role="tabpanel">
             <b-card-body>
@@ -164,22 +164,21 @@
         <!-- 履歴 アコーディオン -->
         <b-card no-body class="mb-1">
           <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-btn block href="#" v-b-toggle.accordion-history variant="info">履歴</b-btn>
+            <b-btn block href="#" v-b-toggle.accordion-history variant="info">更新履歴</b-btn>
           </b-card-header>
           <b-collapse id="accordion-history" accordion="my-accordion" role="tabpanel">
             <b-card-body>
               <!--履歴の表示領域 -->
               <b-card no-body v-for="(val, idx) in journals" v-bind:key=idx class="mb-1">
                 <b-card-header header-tag="header" class="p-1" role="tab">
-                  <b-btn block v-b-toggle="'accordion-history-item'+val.id" variant="info">{{val.created_on}}</b-btn>
+                  <b-btn block v-b-toggle="'accordion-history-item'+val.id" variant="default">{{val.created_on}}</b-btn>
                 </b-card-header>
                 <b-collapse v-bind:id="'accordion-history-item'+val.id" accordion="my-history-item-accordion" role="tabpanel">
                   <b-card-body v-for="(item, id) in val.details" v-bind:key=id>
-                    {{item.name}}
+                    {{item}}
                   </b-card-body>
                 </b-collapse>
               </b-card>
-              <!--履歴の表示領域 -->
             </b-card-body>
           </b-collapse>
         </b-card>
@@ -327,7 +326,19 @@ export default {
         })
         this.attachments = attachmentItems
         // 履歴のリスト
-        this.journals = this.issDetail.journals
+        this.journals = []
+        this.issDetail.journals.forEach(journal => {
+          let details = []
+          journal.details.forEach(detail => {
+            let name = detail.name
+            let oldValue = detail.old_value ? detail.old_value : '未定義'
+            let newValue = detail.new_value
+            let str = name + ' : ' + oldValue + ' -> ' + newValue
+            details.push(str)
+          })
+          this.journals.push({id: journal.id, created_on: journal.created_on, details: details})
+        })
+        console.log(this.journals)
       } else {
         this.new = true
         this.currentPath = 'チケット 登録'
