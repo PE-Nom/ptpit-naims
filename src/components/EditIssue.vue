@@ -34,7 +34,7 @@
           <b-card-header header-tag="header" class="p-1" role="tab">
             <b-btn block href="#" v-b-toggle.accordion-priority-and-status variant="info">情報</b-btn>
           </b-card-header>
-          <b-collapse id="accordion-priority-and-status" visible accordion="my-accordion" role="tabpanel">
+          <b-collapse id="accordion-priority-and-status" accordion="my-accordion" role="tabpanel">
             <b-card-body>
               <div class="form-group">
                 <div class="col-md-10">
@@ -63,7 +63,7 @@
           <b-card-header header-tag="header" class="p-1" role="tab">
             <b-btn block href="#" v-b-toggle.accordion-schedule variant="info">スケジュール</b-btn>
           </b-card-header>
-          <b-collapse id="accordion-schedule" visible accordion="my-accordion" role="tabpanel">
+          <b-collapse id="accordion-schedule" accordion="my-accordion" role="tabpanel">
             <b-card-body>
               <div class="form-group">
                 <b-container>
@@ -108,7 +108,7 @@
           <b-card-header header-tag="header" class="p-1" role="tab">
             <b-btn block href="#" v-b-toggle.accordion-menber variant="info">メンバー</b-btn>
           </b-card-header>
-          <b-collapse id="accordion-menber" visible accordion="my-accordion" role="tabpanel">
+          <b-collapse id="accordion-menber" accordion="my-accordion" role="tabpanel">
             <b-card-body>
               <div class="form-group">
                 <div class="col-md-10">
@@ -132,7 +132,7 @@
           <b-card-header header-tag="header" class="p-1" role="tab">
             <b-btn block href="#" v-b-toggle.accordion-notation variant="info">時間の記録と注記</b-btn>
           </b-card-header>
-          <b-collapse id="accordion-notation" visible accordion="my-accordion" role="tabpanel">
+          <b-collapse id="accordion-notation" accordion="my-accordion" role="tabpanel">
             <b-card-body>
               <!-- 時間の記録と注記の入力欄 -->
             </b-card-body>
@@ -143,7 +143,7 @@
           <b-card-header header-tag="header" class="p-1" role="tab">
             <b-btn block href="#" v-b-toggle.accordion-files variant="info">添付ファイル</b-btn>
           </b-card-header>
-          <b-collapse id="accordion-files" visible accordion="my-accordion" role="tabpanel">
+          <b-collapse id="accordion-files" accordion="my-accordion" role="tabpanel">
             <b-card-body>
               <!-- 添付ファイルのリスト表示領域 -->
               <b-list-group>
@@ -159,14 +159,14 @@
           <b-card-header header-tag="header" class="p-1" role="tab">
             <b-btn block href="#" v-b-toggle.accordion-history variant="info">履歴</b-btn>
           </b-card-header>
-          <b-collapse id="accordion-history" visible accordion="my-history-accordion" role="tabpanel">
+          <b-collapse id="accordion-history" accordion="my-accordion" role="tabpanel">
             <b-card-body>
               <!--履歴の表示領域 -->
               <b-card no-body v-for="(val, idx) in journals" v-bind:key=idx class="mb-1">
                 <b-card-header header-tag="header" class="p-1" role="tab">
-                  <b-btn block href="#" v-b-toggle.accordion-history-item variant="info">{{val.created_on}}</b-btn>
+                  <b-btn block v-b-toggle="'accordion-history-item'+val.id" variant="info">{{val.created_on}}</b-btn>
                 </b-card-header>
-                <b-collapse id="accordion-history-item" visible accordion="my-history-item-accordion" role="tabpanel">
+                <b-collapse v-bind:id="'accordion-history-item'+val.id" accordion="my-history-item-accordion" role="tabpanel">
                   <b-card-body v-for="(item, id) in val.details" v-bind:key=id>
                     {{item.name}}
                   </b-card-body>
