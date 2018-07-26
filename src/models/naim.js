@@ -109,7 +109,7 @@ export default {
   clearProjects: function () {
     this.projects = []
   },
-  getPorjects: function () {
+  getProjects: function () {
     return this.projects
   },
   findProject: function (id) {

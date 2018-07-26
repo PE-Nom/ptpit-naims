@@ -46,13 +46,20 @@
               <div class="form-group row-top">
                 <div class="col-md-10">
                   <label for="inputProjectName" class="control-label">プロジェクト名</label>
+                  <b-form-select v-model="projectId" :options="projects">
+                  </b-form-select>
+                  <!--
                   <input type="text" class="form-control" id="inputProjectName" placeholder="プロジェクト名" v-model="this.projectName">
+                  -->
                 </div>
               </div>
               <div class="form-group">
                 <div class="col-md-10">
                   <label for="inputDescription" class="control-label">説明</label>
+                  <!--
                   <input type="text" class="form-control" id="inputDescription" placeholder="説明の記述" v-model="this.description">
+                  -->
+                  <textarea class="form-control" rows="3" id="inputDescription" placeholder="説明の記述" v-model="this.description"></textarea>
                 </div>
               </div>
             </b-card-body>
@@ -207,6 +214,8 @@ export default {
       issId: null,
       issDetail: null,
       projectName: '',
+      projectId: '',
+      projects: [{value: '', text: ''}],
       subject: '',
       description: '',
       trackerOptions: [{value: '', text: ''}],
@@ -292,6 +301,7 @@ export default {
         this.issDetail = naim.getIssueDetail()
         console.log(this.issDetail)
         this.projectName = this.issDetail.project.name
+        this.projectId = this.issDetail.project.id
         this.subject = this.issDetail.subject
         this.description = this.issDetail.description
         this.tracker = this.issDetail.tracker.id
@@ -322,6 +332,10 @@ export default {
         this.new = true
         this.currentPath = 'チケット 登録'
       }
+    },
+    getProjects: async function () {
+      let prjs = naim.getProjects()
+      this.projects = this.convertOptions(prjs, 'name')
     },
     getTrackerOptions: async function () {
       await naim.retrieveTrackers()
@@ -360,6 +374,7 @@ export default {
       // console.log(this.documentCategries)
     },
     getProperties: async function () {
+      await this.getProjects()
       await this.getUsers()
       await this.getTrackerOptions()
       await this.getIssueStatuses()

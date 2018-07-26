@@ -89,7 +89,7 @@ export default {
     projects: function () {
       console.log('### project computed property in ProjectList.vue ####')
       let ret = []
-      let prjs = naim.getPorjects()
+      let prjs = naim.getProjects()
       // console.log(prjs)
       prjs.forEach(element => {
         // 調達先（複数指定可）の文字列生成
