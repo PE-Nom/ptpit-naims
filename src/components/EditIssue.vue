@@ -137,11 +137,20 @@
         <!-- 時間と注記 アコーディオン -->
         <b-card no-body class="mb-1">
           <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-btn block href="#" v-b-toggle.accordion-notation variant="success">時間の記録と注記</b-btn>
+            <b-btn block href="#" v-b-toggle.accordion-notation variant="success">作業時間の記録と注記</b-btn>
           </b-card-header>
           <b-collapse id="accordion-notation" accordion="my-accordion" role="tabpanel">
             <b-card-body>
               <!-- 時間の記録と注記の入力欄 -->
+              <label for="inputActivities" class="control-label">活動</label>
+              <b-form-select v-model="activity" :options="activities">
+              </b-form-select>
+              <label for="inputWorkingTime" class="control-label">作業時間</label>
+              <input type="text" class="form-control" id="inputWorkingTime" v-model="workingTime">
+              <label for="inputComment" class="control-label">コメント</label>
+              <input type="text" class="form-control" id="inputComment" v-model="comment">
+              <label for="inputNotaion" class="control-label">注記</label>
+              <textarea class="form-control" rows="3" id="inputNotation" v-model="notation"></textarea>
             </b-card-body>
           </b-collapse>
         </b-card>
@@ -228,6 +237,9 @@ export default {
       assigned: null, // 担当者
       activities: [{value: '', text: ''}],
       activity: null,
+      workingTime: '',
+      comment: '',
+      notation: '',
       documentCategries: [{value: '', text: ''}],
       start_date: '2018-07-11',
       due_date: '2018-08-11',
