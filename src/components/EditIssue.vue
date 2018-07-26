@@ -4,13 +4,14 @@
       <b-navbar-brand to="/tickets">&lt;&lt; チケット一覧</b-navbar-brand>
     </b-navbar>
     <b-container class="table-row header">
-      <label class="currentpath-user" >{{this.currentPath}} / id: #{{this.issId}}</label>
+      <label class="currentpath-user" >{{this.currentPath}}</label>
     </b-container>
 
     <div class="edit-field">
       <div>
         <div class="form-group row-top">
           <div class="col-md-10">
+            <h4>id : #{{this.issId}}  </h4>
             <label for="inputSubject" class="control-label">題名</label>
             <input type="text" class="form-control" id="inputSubject" placeholder="題名" v-model="this.subject">
           </div>
