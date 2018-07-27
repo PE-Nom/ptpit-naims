@@ -47,7 +47,7 @@
               <div class="form-group row-top">
                 <div class="col-md-10">
                   <label for="inputProjectName" class="control-label">プロジェクト名</label>
-                  <b-form-select v-model="projectId" :options="projects">
+                  <b-form-select v-model="projectId" :options="projectOptions">
                   </b-form-select>
                   <!--
                   <input type="text" class="form-control" id="inputProjectName" placeholder="プロジェクト名" v-model="this.projectName">
@@ -224,7 +224,8 @@ export default {
       issDetail: null,
       projectName: '',
       projectId: '',
-      projects: [{value: '', text: ''}],
+      projects: [{id: '', name: ''}],
+      projectOptions: [{value: '', text: ''}],
       subject: '',
       description: '',
       trackers: null,
@@ -283,6 +284,10 @@ export default {
     tracker: function (newVal, oldVal) {
       console.log('tracker changed : new = ' + newVal + ', old = ' + oldVal + ', this.tracker : ' + this.tracker)
       console.log(this.findElement(this.trackers, 'id', this.tracker))
+    },
+    projectId: function (newVal, oldVal) {
+      console.log('projectId changed : new = ' + newVal + ', old = ' + oldVal + ', this.projectId : ' + this.projectId)
+      console.log(this.findElement(this.projects, 'id', this.projectId))
     }
   },
   methods: {
@@ -312,7 +317,8 @@ export default {
         // ----------------------
         // '"tracker: "' + this.trackers[this.tracker] + '", "' + // tracker Object
         '"tracker: "' + this.findElement(this.trackers, 'id', this.tracker) + '", "' + // tracker Object
-        '"project: "' + this.projectId + '", "' + // project Object
+        // '"project: "' + this.projectId + '", "' + // project Object
+        '"project: "' + this.findElement(this.projects, 'id', this.projectId) + '", "' + // project Object
         '"description: "' + this.description + '", ' + // description
         // ----------------------
         '"start_date: "' + this.start_date + '", ' + // start_date
@@ -346,6 +352,17 @@ export default {
         let option = {
           value: el.id,
           text: el[key]
+        }
+        options.push(option)
+      })
+      return options
+    },
+    convertProjectObjs: function (values, key) {
+      let options = []
+      values.forEach(el => {
+        let option = {
+          id: el.id,
+          name: el[key]
         }
         options.push(option)
       })
@@ -399,7 +416,7 @@ export default {
           })
           this.journals.push({id: journal.id, created_on: journal.created_on, details: details})
         })
-        console.log(this.journals)
+        // console.log(this.journals)
       } else {
         this.new = true
         this.currentPath = 'チケット 登録'
@@ -407,7 +424,10 @@ export default {
     },
     getProjects: async function () {
       let prjs = naim.getProjects()
-      this.projects = this.convertOptions(prjs, 'name')
+      this.projects = this.convertProjectObjs(prjs, 'name')
+      // console.log(this.projects)
+      this.projectOptions = this.convertOptions(prjs, 'name')
+      // console.log(this.projectOptions)
     },
     getTrackerOptions: async function () {
       await naim.retrieveTrackers()
