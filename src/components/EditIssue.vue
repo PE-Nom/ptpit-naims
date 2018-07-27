@@ -227,6 +227,7 @@ export default {
       projects: [{value: '', text: ''}],
       subject: '',
       description: '',
+      trackers: null,
       trackerOptions: [{value: '', text: ''}],
       tracker: '',
       issueStatuses: [{value: '', text: ''}],
@@ -278,6 +279,12 @@ export default {
       return show
     }
   },
+  watch: {
+    tracker: function (newVal, oldVal) {
+      console.log('tracker changed : new = ' + newVal + ', old = ' + oldVal + ', this.tracker : ' + this.tracker)
+      console.log(this.findElement(this.trackers, 'id', this.tracker))
+    }
+  },
   methods: {
     startDate: function (date) {
       this.start_date = date.format(this.dateFormat)
@@ -287,6 +294,15 @@ export default {
       this.due_date = date.format(this.dateFormat)
       // console.log('期日' + this.due_date)
     },
+    findElement: function (elements, key, val) {
+      let ret = null
+      elements.forEach(el => {
+        if (el[key] === val) {
+          ret = el
+        }
+      })
+      return ret
+    },
     createQueryString: function () {
       let qstr = '{' +
         '"issue": { ' +
@@ -294,7 +310,8 @@ export default {
         '"priority: "' + this.issuePriority + '", ' + // priority Object
         '"status: "' + this.issueStatus + '", ' + // status Object
         // ----------------------
-        '"tracker: "' + this.tracker + '", "' + // tracker Object
+        // '"tracker: "' + this.trackers[this.tracker] + '", "' + // tracker Object
+        '"tracker: "' + this.findElement(this.trackers, 'id', this.tracker) + '", "' + // tracker Object
         '"project: "' + this.projectId + '", "' + // project Object
         '"description: "' + this.description + '", ' + // description
         // ----------------------
@@ -394,8 +411,8 @@ export default {
     },
     getTrackerOptions: async function () {
       await naim.retrieveTrackers()
-      let trackers = naim.getTrackers()
-      this.trackerOptions = this.convertOptions(trackers, 'name')
+      this.trackers = naim.getTrackers()
+      this.trackerOptions = this.convertOptions(this.trackers, 'name')
       // console.log(this.trackerOptions)
     },
     getIssueStatuses: async function () {
@@ -438,10 +455,10 @@ export default {
       await this.getDocumentCategries()
     }
   },
-  created () {
+  async created () {
     // console.log('EditIssue created')
-    this.getIssueDetail()
-    this.getProperties()
+    await this.getProperties()
+    await this.getIssueDetail()
   },
   mounted () {
     // console.log('EditIssue mounted')
