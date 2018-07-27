@@ -287,10 +287,41 @@ export default {
       this.due_date = date.format(this.dateFormat)
       // console.log('期日' + this.due_date)
     },
+    createQueryString: function () {
+      let qstr = '{' +
+        '"issue": { ' +
+        '"subject": "' + this.subject + '", ' + // subject
+        '"priority: "' + this.issuePriority + '", ' + // priority Object
+        '"status: "' + this.issueStatus + '", ' + // status Object
+        // ----------------------
+        '"tracker: "' + this.tracker + '", "' + // tracker Object
+        '"project: "' + this.projectId + '", "' + // project Object
+        '"description: "' + this.description + '", ' + // description
+        // ----------------------
+        '"start_date: "' + this.start_date + '", ' + // start_date
+        '"due_date: "' + this.due_date + '", ' + // due_date
+        '"done_ratio: "' + this.done_ratio + '", ' + // done_ratio
+        // ----------------------
+        '"assigned_to: "' + this.assigned + '", ' + // assigned_to Object
+        '"author: "' + this.author + '", ' + // author Object
+        // ----------------------
+        // activity
+        // workingTime
+        // comment
+        '"notes: "' + this.notes + '", ' + // notation
+        '}' +
+      '}'
+      return qstr
+    },
     createIssue: async function () {
+      console.log('createIssue')
+      let qstr = this.createQueryString()
+      console.log(qstr)
     },
     updateIssue: async function () {
       console.log('updateIssue')
+      let qstr = this.createQueryString()
+      console.log(qstr)
     },
     convertOptions: function (values, key) {
       let options = []

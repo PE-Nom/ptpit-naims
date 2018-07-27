@@ -193,6 +193,27 @@ export default {
       console.log(err)
     }
   },
+  createIssue: async function (qstr) {
+    try {
+      await redmine.createIssue(qstr, res => {
+        console.log('==== Create Issue @ naim ====')
+        console.log(res)
+      })
+    } catch (err) {
+      throw err
+    }
+  },
+  updateIssue: async function (issId, qstr) {
+    try {
+      await redmine.updateIssue(issId, qstr, res => {
+        console.log('==== Update Issue @ naim ====')
+        console.log(res)
+      })
+    } catch (err) {
+      throw err
+    }
+  },
+
   retrieveIssueStatuses: async function () {
     try {
       await redmine.getIssueStatuses(res => {

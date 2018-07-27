@@ -1,10 +1,11 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://192.168.10.8:3001/' // @home
+// const BASE_URL = 'http://192.168.10.8:3001/' // @home
 // const BASE_URL = 'http://192.168.10.9:3001/' // @home let's note
 // const BASE_URL = 'http://192.168.1.4:3001/' // @ Office
 // const BASE_URL = 'http://localhost:3000/' // @ Office
-// const BASE_URL = 'http://172.20.10.2:3001/' // @ iPhone デザリング
+const BASE_URL = 'http://172.20.10.2:3001/' // @ iPhone デザリング
+// const BASE_URL = 'http://192.168.1.5:8080/' // On Ubuntu @ Office
 
 export default {
   rmc: null,
@@ -135,6 +136,26 @@ export default {
       })
       .catch(err => {
         throw err
+      })
+  },
+  async createIssue (data, callback) {
+    console.log('createIssue @ redmine.js')
+    await this.rmc.post('/issues.json', data, {headers: {'Content-Type': 'application/json'}})
+      .then(res => {
+        callback(res)
+      })
+      .catch(err => {
+        throw (err)
+      })
+  },
+  async updateIssue (issId, data, callback) {
+    console.log('updateIssue @ redmine.js')
+    await this.rmc.put('/issues/' + issId + '.json', data, {headers: {'Content-Type': 'application/json'}})
+      .then(res => {
+        callback(res)
+      })
+      .catch(err => {
+        throw (err)
       })
   },
   async getIssue (issId, callback) {
