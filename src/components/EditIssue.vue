@@ -13,7 +13,7 @@
           <div class="col-md-10">
             <h4>id : #{{this.issId}}  </h4>
             <label for="inputSubject" class="control-label">題名</label>
-            <input type="text" class="form-control" id="inputSubject" placeholder="題名" v-model="this.subject">
+            <input type="text" class="form-control" id="inputSubject" placeholder="題名" v-model="subject">
           </div>
         </div>
         <div class="form-group">
@@ -60,7 +60,7 @@
                   <!--
                   <input type="text" class="form-control" id="inputDescription" placeholder="説明の記述" v-model="this.description">
                   -->
-                  <textarea class="form-control" rows="3" id="inputDescription" placeholder="説明の記述" v-model="this.description"></textarea>
+                  <textarea class="form-control" rows="3" id="inputDescription" placeholder="説明の記述" v-model="description"></textarea>
                 </div>
               </div>
             </b-card-body>
@@ -121,14 +121,14 @@
               <div class="form-group">
                 <div class="col-md-10">
                   <label for="inputAssigned" class="control-label">担当者</label>
-                  <b-form-select v-model="assigned" :options="users">
+                  <b-form-select v-model="assigned" :options="usersOptions">
                   </b-form-select>
                 </div>
               </div>
               <div class="form-group">
                 <div class="col-md-10">
                   <label for="inputAuthor" class="control-label">作成者</label>
-                  <b-form-select v-model="author" :options="users">
+                  <b-form-select v-model="author" :options="usersOptions">
                   </b-form-select>
                 </div>
               </div>
@@ -228,16 +228,24 @@ export default {
       projectOptions: [{value: '', text: ''}],
       subject: '',
       description: '',
-      trackers: null,
+
+      trackers: [{id: '', name: ''}],
       trackerOptions: [{value: '', text: ''}],
       tracker: '',
+
+      statuses: [{id: '', name: ''}],
       issueStatuses: [{value: '', text: ''}],
       issueStatus: '',
+
+      priorities: [{id: '', name: ''}],
       issuePriorities: [{value: '', text: ''}],
       issuePriority: '',
-      users: [{value: '', text: ''}],
-      author: null, // 作成者
-      assigned: null, // 担当者
+
+      users: [{id: '', name: ''}],
+      usersOptions: [{value: '', text: ''}],
+      author: '', // 作成者
+      assigned: '', // 担当者
+
       activities: [{value: '', text: ''}],
       activity: null,
       workingTime: '',
@@ -282,12 +290,22 @@ export default {
   },
   watch: {
     tracker: function (newVal, oldVal) {
-      console.log('tracker changed : new = ' + newVal + ', old = ' + oldVal + ', this.tracker : ' + this.tracker)
-      console.log(this.findElement(this.trackers, 'id', this.tracker))
+      // console.log('tracker changed : new = ' + newVal + ', old = ' + oldVal + ', this.tracker : ' + this.tracker)
     },
     projectId: function (newVal, oldVal) {
-      console.log('projectId changed : new = ' + newVal + ', old = ' + oldVal + ', this.projectId : ' + this.projectId)
-      console.log(this.findElement(this.projects, 'id', this.projectId))
+      // console.log('projectId changed : new = ' + newVal + ', old = ' + oldVal + ', this.projectId : ' + this.projectId)
+    },
+    issueStatus: function (newVal, oldVal) {
+      // console.log('issueStatus changed : new = ' + newVal + ', old = ' + oldVal + ', this.issueStatus : ' + this.issueStatus)
+    },
+    issuePriority: function (newVal, oldVal) {
+      // console.log('issuePriority changed : new = ' + newVal + ', old = ' + oldVal + ', this.issuePriority : ' + this.issuePriority)
+    },
+    assigned: function (newVal, oldVal) {
+      // console.log('assigned changed : new = ' + newVal + ', old = ' + oldVal + ', this.assigned : ' + this.assigned)
+    },
+    author: function (newVal, oldVal) {
+      // console.log('author changed : new = ' + newVal + ', old = ' + oldVal + ', this.author : ' + this.author)
     }
   },
   methods: {
@@ -299,41 +317,29 @@ export default {
       this.due_date = date.format(this.dateFormat)
       // console.log('期日' + this.due_date)
     },
-    findElement: function (elements, key, val) {
-      let ret = null
-      elements.forEach(el => {
-        if (el[key] === val) {
-          ret = el
-        }
-      })
-      return ret
-    },
     createQueryString: function () {
-      let qstr = '{' +
-        '"issue": { ' +
-        '"subject": "' + this.subject + '", ' + // subject
-        '"priority: "' + this.issuePriority + '", ' + // priority Object
-        '"status: "' + this.issueStatus + '", ' + // status Object
-        // ----------------------
-        // '"tracker: "' + this.trackers[this.tracker] + '", "' + // tracker Object
-        '"tracker: "' + this.findElement(this.trackers, 'id', this.tracker) + '", "' + // tracker Object
-        // '"project: "' + this.projectId + '", "' + // project Object
-        '"project: "' + this.findElement(this.projects, 'id', this.projectId) + '", "' + // project Object
-        '"description: "' + this.description + '", ' + // description
-        // ----------------------
-        '"start_date: "' + this.start_date + '", ' + // start_date
-        '"due_date: "' + this.due_date + '", ' + // due_date
-        '"done_ratio: "' + this.done_ratio + '", ' + // done_ratio
-        // ----------------------
-        '"assigned_to: "' + this.assigned + '", ' + // assigned_to Object
-        '"author: "' + this.author + '", ' + // author Object
-        // ----------------------
-        // activity
-        // workingTime
-        // comment
-        '"notes: "' + this.notes + '", ' + // notation
-        '}' +
-      '}'
+      let qstr = {
+        'issue': {
+          'subject': this.subject, // subject
+          'priority_id': this.issuePriority, // priority Object
+          'status_id': this.issueStatus, // status Object
+          // ----------------------
+          'tracker_id': this.tracker, // tracker Object
+          'project_id': this.projectId, // project Object
+          'description': this.description, // description
+          // ----------------------
+          'start_date': this.start_date, // start_date
+          'due_date': this.due_date, // due_date
+          'done_ratio': this.done_ratio, // done_ratio
+          // ----------------------
+          'assigned_to_id': this.assigned, // assigned_to Object
+          // ----------------------
+          // activity
+          // workingTime
+          // comment
+          'notes': this.notation // notation
+        }
+      }
       return qstr
     },
     createIssue: async function () {
@@ -344,6 +350,7 @@ export default {
     updateIssue: async function () {
       console.log('updateIssue')
       let qstr = this.createQueryString()
+      await naim.updateIssue(this.issId, JSON.stringify(qstr))
       console.log(qstr)
     },
     convertOptions: function (values, key) {
@@ -363,6 +370,17 @@ export default {
         let option = {
           id: el.id,
           name: el[key]
+        }
+        options.push(option)
+      })
+      return options
+    },
+    convertUsersObjs: function (values) {
+      let options = []
+      values.forEach(el => {
+        let option = {
+          id: el.id,
+          name: el.firstname + ' ' + el.lastname
         }
         options.push(option)
       })
@@ -407,6 +425,8 @@ export default {
         this.journals = []
         this.issDetail.journals.forEach(journal => {
           let details = []
+          details.push('by ' + journal.user.name)
+          if (journal.notes !== '') details.push(journal.notes)
           journal.details.forEach(detail => {
             let name = detail.name
             let oldValue = detail.old_value ? detail.old_value : '未定義'
@@ -431,27 +451,31 @@ export default {
     },
     getTrackerOptions: async function () {
       await naim.retrieveTrackers()
-      this.trackers = naim.getTrackers()
+      this.trackers = this.convertProjectObjs(naim.getTrackers(), 'name')
+      // console.log(this.trackers)
       this.trackerOptions = this.convertOptions(this.trackers, 'name')
       // console.log(this.trackerOptions)
     },
     getIssueStatuses: async function () {
       await naim.retrieveIssueStatuses()
-      let statuses = naim.getIssueStatuses()
-      this.issueStatuses = this.convertOptions(statuses, 'name')
+      this.statuses = this.convertProjectObjs(naim.getIssueStatuses(), 'name')
+      // console.log(this.statuses)
+      this.issueStatuses = this.convertOptions(this.statuses, 'name')
       // console.log(this.issueStatuses)
     },
     getIssuePriorities: async function () {
       await naim.retrieveIssuePriorities()
-      let priorities = naim.getIssuePriorities()
-      this.issuePriorities = this.convertOptions(priorities, 'name')
+      this.priorities = this.convertProjectObjs(naim.getIssuePriorities(), 'name')
+      // console.log(this.priorities)
+      this.issuePriorities = this.convertOptions(this.priorities, 'name')
       // console.log(this.issuePriorities)
     },
     getUsers: async function () {
       await naim.retrieveUsers()
-      let users = naim.getUsers()
-      this.users = this.convertOptions(users, 'login')
+      this.users = this.convertUsersObjs(naim.getUsers())
       // console.log(this.users)
+      this.usersOptions = this.convertOptions(this.users, 'name')
+      // console.log(this.usersOptions)
     },
     getTimeEntryActivities: async function () {
       await naim.retrieveTimeEntryActivities()
