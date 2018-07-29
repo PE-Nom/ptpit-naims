@@ -209,6 +209,7 @@
 </template>
 
 <script>
+import router from '../router'
 import naim from '../models/naim.js'
 import editstate from '../models/editState.js'
 import dateSelector from './DateSelector.vue'
@@ -350,10 +351,13 @@ export default {
       console.log(qstr)
     },
     updateIssue: async function () {
+      router.push('/localvideo')
+      /*
       console.log('updateIssue')
       let qstr = this.createQueryString()
       await naim.updateIssue(this.issId, JSON.stringify(qstr))
       console.log(qstr)
+      */
     },
     convertOptions: function (values, key) {
       let options = []

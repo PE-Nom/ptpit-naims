@@ -4,6 +4,7 @@ import IssuesList from '@/components/IssuesList'
 import ProjectList from '@/components/ProjectList'
 import EditProject from '@/components/EditProject'
 import EditIssue from '@/components/EditIssue'
+import LocalVideo from '@/components/LocalVideo'
 import Home from '@/components/Home'
 
 Vue.use(Router)
@@ -34,6 +35,11 @@ export default new Router({
       path: '/editissue',
       name: 'EditIssue',
       component: EditIssue
+    },
+    {
+      path: '/localvideo',
+      name: 'LocalVideo',
+      component: LocalVideo
     }
   ]
 })
