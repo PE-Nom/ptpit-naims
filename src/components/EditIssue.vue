@@ -11,7 +11,8 @@
       <div>
         <div class="form-group row-top">
           <div class="col-md-10">
-            <h4>id : #{{this.issId}}  </h4>
+            <h4 v-if="this.new">id : #</h4>
+            <h4 v-else>id :#{{this.issId}}</h4>
             <label for="inputSubject" class="control-label">題名</label>
             <input type="text" class="form-control" id="inputSubject" placeholder="題名" v-model="subject">
           </div>
@@ -200,7 +201,7 @@
       </div>
       <div class="col-md-2">
         <b-button class="control-button create" variant="success" v-if="this.new" @click='createIssue'>新規登録</b-button>
-        <b-button class="control-button update" variant="success" v-if="!this.new" @click='updateIssue'>更新</b-button>
+        <b-button class="control-button update" variant="success" v-else @click='updateIssue'>更新</b-button>
       </div>
     </div>
 
@@ -345,6 +346,7 @@ export default {
     createIssue: async function () {
       console.log('createIssue')
       let qstr = this.createQueryString()
+      await naim.createIssue(JSON.stringify(qstr))
       console.log(qstr)
     },
     updateIssue: async function () {
@@ -387,11 +389,7 @@ export default {
       return options
     },
     getIssueDetail: async function () {
-      this.issId = editstate.currentIssueId
-      // console.log(this.issId)
       if (this.issId !== -1) {
-        this.new = false
-        this.currentPath = 'チケット更新'
         await naim.retrieveIssueDetail(Number(this.issId))
         this.issDetail = naim.getIssueDetail()
         console.log(this.issDetail)
@@ -437,9 +435,6 @@ export default {
           this.journals.push({id: journal.id, created_on: journal.created_on, details: details})
         })
         // console.log(this.journals)
-      } else {
-        this.new = true
-        this.currentPath = 'チケット 登録'
       }
     },
     getProjects: async function () {
@@ -501,6 +496,14 @@ export default {
   },
   async created () {
     // console.log('EditIssue created')
+    this.issId = editstate.currentIssueId
+    if (this.issId !== -1) {
+      this.new = false
+      this.currentPath = 'チケット更新'
+    } else {
+      this.new = true
+      this.currentPath = 'チケット 登録'
+    }
     await this.getProperties()
     await this.getIssueDetail()
   },

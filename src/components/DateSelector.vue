@@ -32,19 +32,19 @@ export default {
   props: {
     format: {
       type: String,
-      default: 'YYYYMMDD'
+      default: 'YYYY-MM-DD'
     },
     start: {
       type: String,
-      default: '19000101'
+      default: '1900-01-01'
     },
     default: {
       type: String,
-      default: '20180101'
+      default: '2018-01-01'
     },
     end: {
       type: String,
-      default: '20301231'
+      default: '2030-12-31'
     }
   },
   data: function () {
