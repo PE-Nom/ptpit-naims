@@ -1,12 +1,12 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://localhost:3001/'
+// const BASE_URL = 'http://localhost:3001/'
 // const BASE_URL = 'http://192.168.10.8:3001/' // @home
 // const BASE_URL = 'http://192.168.10.9:3001/' // @home let's note
 // const BASE_URL = 'http://192.168.1.10:3001/' // @ Office
 // const BASE_URL = 'http://localhost:3000/' // @ Office
 // const BASE_URL = 'http://172.20.10.2:3001/' // @ iPhone デザリング
-// const BASE_URL = 'http://192.168.1.5:8080/' // On Ubuntu @ Office
+const BASE_URL = 'https://192.168.1.5:8080/' // On Ubuntu @ Office
 
 export default {
   rmc: null,

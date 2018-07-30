@@ -9,6 +9,7 @@
       </b-container>
     </div>
     <div>
+      <!--
       <div class="camera-modal">
         <video ref="video" class="camera-stream"/>
         <div class="camera-modal-container">
@@ -17,7 +18,13 @@
           </span>
         </div>
       </div>
-    </div>
+      -->
+      <div>
+        <label for="inputImage" class="control-label">写真</label>
+        <input type="file" class="form-control" id="inputImage" accept="image/*">
+        <label for="inputVideo" class="control-label">動画</label>
+        <input type="file" class="form-control" id="inputVideoe" accept="video/*">
+      </div>
   </div>
 </template>
 
@@ -42,6 +49,7 @@ export default {
   },
   mounted () {
     console.log('mounted')
+    /*
     navigator.mediaDevices.getUserMedia({ video: true })
       .then(mediaStream => {
         this.mediaStream = mediaStream
@@ -49,11 +57,14 @@ export default {
         this.$refs.video.play()
       })
       .catch(error => console.error('getUserMedia() error:', error))
+      */
   },
   destroyed () {
     console.log('destroyed')
+    /*
     const tracks = this.mediaStream.getTracks()
     tracks.map(track => track.stop())
+    */
   }
 }
 </script>
