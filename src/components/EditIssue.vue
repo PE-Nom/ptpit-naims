@@ -351,7 +351,7 @@ export default {
       console.log(qstr)
     },
     updateIssue: async function () {
-      router.push('/localvideo')
+      router.push('/cameraview')
       /*
       console.log('updateIssue')
       let qstr = this.createQueryString()

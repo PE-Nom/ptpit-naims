@@ -4,7 +4,7 @@ import IssuesList from '@/components/IssuesList'
 import ProjectList from '@/components/ProjectList'
 import EditProject from '@/components/EditProject'
 import EditIssue from '@/components/EditIssue'
-import LocalVideo from '@/components/LocalVideo'
+import CameraView from '@/components/CameraView'
 import Home from '@/components/Home'
 
 Vue.use(Router)
@@ -37,9 +37,9 @@ export default new Router({
       component: EditIssue
     },
     {
-      path: '/localvideo',
-      name: 'LocalVideo',
-      component: LocalVideo
+      path: '/cameraview',
+      name: 'CameraView',
+      component: CameraView
     }
   ]
 })
