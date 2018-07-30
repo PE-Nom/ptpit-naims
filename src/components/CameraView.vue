@@ -20,11 +20,16 @@
       </div>
       -->
       <div>
-        <label for="inputImage" class="control-label">写真</label>
-        <input type="file" class="form-control" id="inputImage" accept="image/*">
-        <label for="inputVideo" class="control-label">動画</label>
-        <input type="file" class="form-control" id="inputVideoe" accept="video/*">
+        <div class="form-group row-top">
+          <div class="col-md-10">
+            <label for="inputImage" class="control-label">写真</label>
+            <input type="file" class="form-control" id="inputImage" variant="success" accept="image/*" @change="onImageChanged">
+            <label for="inputVideo" class="control-label">動画</label>
+            <input type="file" class="form-control" id="inputVideoe" variant="success" accept="video/*" @change="onVideoChanged">
+          </div>
+        </div>
       </div>
+    </div>
   </div>
 </template>
 
@@ -32,12 +37,27 @@
 export default {
   data () {
     return {
+      image: null,
+      video: null,
       showNavbar: true,
       currentPath: '画像',
       mediaStream: null
     }
   },
   methods: {
+    onImageChanged (event) {
+      console.log(event)
+      if (event.target.files.length) {
+        let img = event.target.files[0]
+        console.log(img)
+        this.image = img
+      } else {
+        console.log('no file selected')
+      }
+    },
+    onVideoChanged (event) {
+
+    },
     capture () {
       console.log('capture')
       const mediaStreamTrack = this.mediaStream.getVideoTracks()[0]
