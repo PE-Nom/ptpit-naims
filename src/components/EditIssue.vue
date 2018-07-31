@@ -186,7 +186,8 @@
               <!-- 添付ファイルのリスト表示領域 -->
               <b-list-group>
                 <b-list-group-item v-for="(val, idx) in attachments" v-bind:key=idx>
-                  {{val.caption}}
+                  <a :href="val.content_url">{{val.filename}}</a> ({{val.filesize}}) </br>
+                  {{val.description}}
                 </b-list-group-item>
               </b-list-group>
               <div class="h-divider"></div>
@@ -439,8 +440,11 @@ export default {
         let attachmentItems = []
         this.issDetail.attachments.forEach(el => {
           let item = {
-            caption: el.filename + '(' + parseInt(el.filesize / 1000) + 'kbyte) : ' + el.description,
-            item: el
+            filename: el.filename,
+            filesize: parseInt(el.filesize / 1000) + 'kbyte',
+            description: el.description,
+            content_type: el.content_type,
+            content_url: el.content_url
           }
           attachmentItems.push(item)
         })
