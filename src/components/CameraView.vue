@@ -15,6 +15,16 @@
             <label for="inputImage" class="control-label">写真</label>
             <input type="file" class="form-control" id="inputImage" variant="success" accept="image/*" capture="camera" @change="onImageChanged">
             <div><img id="thumbnail" src=""></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-10">
+            <label for="inputImageDescription" class="control-label">画像の説明</label>
+            <textarea class="form-control" rows="3" id="inputImageDescription" placeholder="画像の記述" v-model="imageDescription"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-10">
             <label for="inputVideo" class="control-label">動画</label>
             <input type="file" class="form-control" id="inputVideoe" variant="success" accept="video/*" capture="camera" @change="onVideoChanged">
           </div>
@@ -45,7 +55,7 @@ export default {
       video: null,
       showNavbar: true,
       currentPath: '画像',
-      mediaStream: null
+      imageDescription: ''
     }
   },
   methods: {
@@ -83,6 +93,7 @@ export default {
               'uploads': [{
                 'token': this.token,
                 'filename': this.file.name,
+                'description': this.imageDescription,
                 'content_type': this.file.type
               }]
             }
@@ -106,4 +117,7 @@ export default {
 </script>
 
 <style scoped>
+#thumbnail {
+  max-width: 100%;
+}
 </style>
