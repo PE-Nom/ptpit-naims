@@ -241,6 +241,19 @@ export default {
     this.issues = []
   },
 
+  uploadFiles: async function (data) {
+    console.log(data)
+    try {
+      let ret = await redmine.attachingFiles(data, res => {
+        // console.log('==== uploadFiles @ naim ====')
+        // console.log(res)
+      })
+      return ret
+    } catch (err) {
+      throw err
+    }
+  },
+
   // ------------------
   // Trackers
   // ------------------

@@ -19,15 +19,28 @@
             <input type="file" class="form-control" id="inputVideoe" variant="success" accept="video/*" capture="camera" @change="onVideoChanged">
           </div>
         </div>
+        <div class="button-group attachment">
+          <div class="col-md-8">
+            <p></p>
+          </div>
+          <div class="col-md-2">
+            <b-button class="control-button attachment" variant="info" @click='uploadFiles'>アップロード</b-button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import naim from '../models/naim.js'
+import editstate from '../models/editState.js'
+
 export default {
   data () {
     return {
+      file: '',
+      token: '',
       image: null,
       video: null,
       showNavbar: true,
@@ -40,23 +53,47 @@ export default {
       console.log(event)
       if (event.target.files.length) {
         // 選択されたファイル情報を取得
-        let file = event.target.files[0]
+        this.file = event.target.files[0]
 
-        // readerのresultプロパティに、データURLとしてエンコードされたファイルデータを格納
+        this.image = new Image()
         let reader = new FileReader()
-        reader.readAsDataURL(file)
-
-        reader.onload = function () {
+        // let vm = this
+        reader.onload = (e) => {
+          this.image = e.target.result
           let thumbnail = document.getElementById('thumbnail')
-          thumbnail.setAttribute('src', reader.result)
-          console.log(reader.result)
+          thumbnail.setAttribute('src', this.image)
         }
+        reader.readAsDataURL(this.file)
       } else {
         console.log('no file selected')
       }
     },
     onVideoChanged (event) {
 
+    },
+    async uploadFiles () {
+      if (this.file) {
+        try {
+          let res = await naim.uploadFiles(this.file)
+          this.token = res.data.upload.token
+          console.log('uploaded file')
+          console.log('token : ' + this.token)
+          let qstr = {
+            'issue': {
+              'uploads': [{
+                'token': this.token,
+                'filename': this.file.name,
+                'content_type': this.file.type
+              }]
+            }
+          }
+          await naim.updateIssue(editstate.currentIssueId, JSON.stringify(qstr))
+          console.log('attached file')
+        } catch (err) {
+          console.log('error has occured @ attachingFile')
+          console.log(err)
+        }
+      }
     }
   },
   mounted () {

@@ -7,178 +7,210 @@
       <label class="currentpath-user" >{{this.currentPath}}</label>
     </b-container>
 
-    <div class="edit-field">
-      <div>
-        <div class="form-group row-top">
-          <div class="col-md-10">
-            <h4 v-if="this.new">id : #</h4>
-            <h4 v-else>id :#{{this.issId}}</h4>
-            <label for="inputSubject" class="control-label">題名</label>
-            <input type="text" class="form-control" id="inputSubject" placeholder="題名" v-model="subject">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-10">
-            <label for="inputIssuePriority" class="control-label">優先度</label>
-            <b-form-select v-model="issuePriority" :options="issuePriorities">
-            </b-form-select>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-10">
-            <label for="inputIssueStatus" class="control-label">ステータス</label>
-            <b-form-select v-model="issueStatus" :options="issueStatuses">
-            </b-form-select>
-          </div>
-        </div>
-        <!-- 情報アコーディオン -->
-        <b-card no-body class="mb-1">
-          <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-btn block href="#" v-b-toggle.accordion-priority-and-status variant="success">チケット情報</b-btn>
-          </b-card-header>
-          <b-collapse id="accordion-priority-and-status" accordion="my-accordion" role="tabpanel">
-            <b-card-body>
-              <div class="form-group">
-                <div class="col-md-10">
-                  <label for="inputTracker" class="control-label">トラッカー</label>
-                  <b-form-select v-model="tracker" :options="trackerOptions">
-                  </b-form-select>
+    <div>
+      <!-- 情報アコーディオン -->
+      <b-card no-body class="mb-1">
+        <b-card-header header-tag="header" class="p-1" role="tab">
+          <b-btn block href="#" v-b-toggle.accordion-issue variant="success">チケット id:#{{this.issId}}</b-btn>
+        </b-card-header>
+        <b-collapse id="accordion-issue" visible accordion="issue-accordion" role="tabpanel">
+          <b-card-body>
+            <div class="edit-field">
+              <!-- チケットサマリ -->
+              <div id="summary">
+                <div class="form-group row-top">
+                  <div class="col-md-10">
+                    <label for="inputSubject" class="control-label">題名</label>
+                    <input type="text" class="form-control" id="inputSubject" placeholder="題名" v-model="subject">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-10">
+                    <label for="inputIssuePriority" class="control-label">優先度</label>
+                    <b-form-select v-model="issuePriority" :options="issuePriorities">
+                    </b-form-select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-10">
+                    <label for="inputIssueStatus" class="control-label">ステータス</label>
+                    <b-form-select v-model="issueStatus" :options="issueStatuses">
+                    </b-form-select>
+                  </div>
                 </div>
               </div>
-              <div class="form-group row-top">
-                <div class="col-md-10">
-                  <label for="inputProjectName" class="control-label">プロジェクト名</label>
-                  <b-form-select v-model="projectId" :options="projectOptions">
-                  </b-form-select>
-                  <!--
-                  <input type="text" class="form-control" id="inputProjectName" placeholder="プロジェクト名" v-model="this.projectName">
-                  -->
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-md-10">
-                  <label for="inputDescription" class="control-label">説明</label>
-                  <!--
-                  <input type="text" class="form-control" id="inputDescription" placeholder="説明の記述" v-model="this.description">
-                  -->
-                  <textarea class="form-control" rows="3" id="inputDescription" placeholder="説明の記述" v-model="description"></textarea>
-                </div>
-              </div>
-            </b-card-body>
-          </b-collapse>
-        </b-card>
-        <!-- スケジュール アコーディオン -->
-        <b-card no-body class="mb-1">
-          <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-btn block href="#" v-b-toggle.accordion-schedule variant="success">スケジュール</b-btn>
-          </b-card-header>
-          <b-collapse id="accordion-schedule" accordion="my-accordion" role="tabpanel">
-            <b-card-body>
-              <div class="form-group">
-                <b-container>
-                  <b-row>
-                    <div class="col-md-10">
-                      <label for="inputStartDate" class="control-label">開始日</label>
+              <b-card no-body class="mb-1">
+                <b-card-header header-tag="header" class="p-1" role="tab">
+                  <b-btn block href="#" v-b-toggle.accordion-issue-detail variant="success">詳細情報</b-btn>
+                </b-card-header>
+                <b-collapse id="accordion-issue-detail" accordion="issue-detail-accordion" role="tabpanel">
+                  <b-card-body>
+                    <!-- チケット詳細 -->
+                    <div id="detail">
+                      <div class="form-group">
+                        <div class="col-md-10">
+                          <label for="inputTracker" class="control-label">トラッカー</label>
+                          <b-form-select v-model="tracker" :options="trackerOptions">
+                          </b-form-select>
+                        </div>
+                      </div>
+                      <div class="form-group row-top">
+                        <div class="col-md-10">
+                          <label for="inputProjectName" class="control-label">プロジェクト名</label>
+                          <b-form-select v-model="projectId" :options="projectOptions">
+                          </b-form-select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-10">
+                          <label for="inputDescription" class="control-label">説明</label>
+                          <textarea class="form-control" rows="3" id="inputDescription" placeholder="説明の記述" v-model="description"></textarea>
+                        </div>
+                      </div>
                     </div>
-                  </b-row>
-                  <b-row>
-                    <div class="col-md-10">
-                      <date-selector :format="dateFormat" :start="minDate" :default="start_date" :end="maxDate" @date-change="startDate"></date-selector>
+                    <!-- スケジュール -->
+                    <div class="h-divider"></div>
+                    <div id="schedule">
+                      <div class="form-group">
+                        <b-container>
+                          <b-row>
+                            <div class="col-md-10">
+                              <label for="inputStartDate" class="control-label">開始日</label>
+                            </div>
+                          </b-row>
+                          <b-row>
+                            <div class="col-md-10">
+                              <date-selector :format="dateFormat" :start="minDate" :default="start_date" :end="maxDate" @date-change="startDate"></date-selector>
+                            </div>
+                          </b-row>
+                        </b-container>
+                      </div>
+                      <div class="form-group">
+                        <b-container>
+                          <b-row>
+                            <div class="col-md-10">
+                              <label for="inputDueDate" class="control-label">期日</label>
+                            </div>
+                          </b-row>
+                          <b-row>
+                            <div class="col-md-10">
+                              <date-selector :format="dateFormat" :start="minDate" v-bind:default="due_date" :end="maxDate" @date-change="dueDate"></date-selector>
+                            </div>
+                          </b-row>
+                        </b-container>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-10">
+                          <label for="inputDoneRatio" class="control-label">進捗率</label>
+                          <b-form-select v-model="done_ratio" :options="doneRatioOptions">
+                          </b-form-select>
+                        </div>
+                      </div>
                     </div>
-                  </b-row>
-                </b-container>
-              </div>
-              <div class="form-group">
-                <b-container>
-                  <b-row>
-                    <div class="col-md-10">
-                      <label for="inputDueDate" class="control-label">期日</label>
+                    <!-- メンバー -->
+                    <div class="h-divider"></div>
+                    <div id="member">
+                      <div class="form-group">
+                        <div class="col-md-10">
+                          <label for="inputAssigned" class="control-label">担当者</label>
+                          <b-form-select v-model="assigned" :options="usersOptions">
+                          </b-form-select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-10">
+                          <label for="inputAuthor" class="control-label">作成者</label>
+                          <b-form-select v-model="author" :options="usersOptions">
+                          </b-form-select>
+                        </div>
+                      </div>
                     </div>
-                  </b-row>
-                  <b-row>
-                    <div class="col-md-10">
-                      <date-selector :format="dateFormat" :start="minDate" v-bind:default="due_date" :end="maxDate" @date-change="dueDate"></date-selector>
+                    <!-- 時間の記録と注記 -->
+                    <div class="h-divider"></div>
+                    <div id="notation">
+                      <div class="form-group">
+                        <div class="col-md-10">
+                          <label for="inputActivities" class="control-label">活動</label>
+                          <b-form-select v-model="activity" :options="activities">
+                          </b-form-select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-10">
+                          <label for="inputWorkingTime" class="control-label">作業時間</label>
+                          <input type="text" class="form-control" id="inputWorkingTime" v-model="workingTime">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-10">
+                          <label for="inputComment" class="control-label">コメント</label>
+                          <input type="text" class="form-control" id="inputComment" v-model="comment">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-10">
+                          <label for="inputNotaion" class="control-label">注記</label>
+                          <textarea class="form-control" rows="3" id="inputNotation" v-model="notation"></textarea>
+                        </div>
+                      </div>
                     </div>
-                  </b-row>
-                </b-container>
-              </div>
-              <div class="form-group">
-                <div class="col-md-10">
-                  <label for="inputDoneRatio" class="control-label">進捗率</label>
-                  <b-form-select v-model="done_ratio" :options="doneRatioOptions">
-                  </b-form-select>
+                  </b-card-body>
+                </b-collapse>
+              </b-card>
+              <!-- 更新・登録 -->
+              <div class="button-group">
+                <div class="col-md-8">
+                  <p v-if=errorMessage class="message-field">{{errorMessage}}</p>
+                </div>
+                <div class="col-md-2">
+                  <b-button class="control-button create" variant="success" v-if="this.new" @click='createIssue'>新規登録</b-button>
+                  <b-button class="control-button update" variant="success" v-else @click='updateIssue'>更新</b-button>
                 </div>
               </div>
-            </b-card-body>
-          </b-collapse>
-        </b-card>
-        <!-- メンバー アコーディオン -->
-        <b-card no-body class="mb-1">
-          <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-btn block href="#" v-b-toggle.accordion-menber variant="success">メンバー</b-btn>
-          </b-card-header>
-          <b-collapse id="accordion-menber" accordion="my-accordion" role="tabpanel">
-            <b-card-body>
-              <div class="form-group">
-                <div class="col-md-10">
-                  <label for="inputAssigned" class="control-label">担当者</label>
-                  <b-form-select v-model="assigned" :options="usersOptions">
-                  </b-form-select>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-md-10">
-                  <label for="inputAuthor" class="control-label">作成者</label>
-                  <b-form-select v-model="author" :options="usersOptions">
-                  </b-form-select>
-                </div>
-              </div>
-            </b-card-body>
-          </b-collapse>
-        </b-card>
-        <!-- 時間と注記 アコーディオン -->
-        <b-card no-body class="mb-1">
-          <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-btn block href="#" v-b-toggle.accordion-notation variant="success">作業時間の記録と注記</b-btn>
-          </b-card-header>
-          <b-collapse id="accordion-notation" accordion="my-accordion" role="tabpanel">
-            <b-card-body>
-              <!-- 時間の記録と注記の入力欄 -->
-              <label for="inputActivities" class="control-label">活動</label>
-              <b-form-select v-model="activity" :options="activities">
-              </b-form-select>
-              <label for="inputWorkingTime" class="control-label">作業時間</label>
-              <input type="text" class="form-control" id="inputWorkingTime" v-model="workingTime">
-              <label for="inputComment" class="control-label">コメント</label>
-              <input type="text" class="form-control" id="inputComment" v-model="comment">
-              <label for="inputNotaion" class="control-label">注記</label>
-              <textarea class="form-control" rows="3" id="inputNotation" v-model="notation"></textarea>
-            </b-card-body>
-          </b-collapse>
-        </b-card>
-        <!-- 添付ファイル アコーディオン -->
-        <b-card no-body class="mb-1">
-          <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-btn block href="#" v-b-toggle.accordion-files variant="info">添付ファイル</b-btn>
-          </b-card-header>
-          <b-collapse id="accordion-files" accordion="my-accordion" role="tabpanel">
-            <b-card-body>
+            </div>
+          </b-card-body>
+        </b-collapse>
+      </b-card>
+    </div>
+
+    <!-- #################################### -->
+    <!-- 添付ファイル アコーディオン -->
+    <div>
+      <b-card no-body class="mb-1">
+        <b-card-header header-tag="header" class="p-1" role="tab">
+          <b-btn block href="#" v-b-toggle.accordion-files variant="info">添付ファイル</b-btn>
+        </b-card-header>
+        <b-collapse id="accordion-files" accordion="issue-accordion" role="tabpanel">
+          <b-card-body>
+            <div class="attachment-field">
               <!-- 添付ファイルのリスト表示領域 -->
               <b-list-group>
                 <b-list-group-item v-for="(val, idx) in attachments" v-bind:key=idx>
                   {{val.caption}}
                 </b-list-group-item>
               </b-list-group>
-            </b-card-body>
-          </b-collapse>
-        </b-card>
-        <!-- 履歴 アコーディオン -->
-        <b-card no-body class="mb-1">
-          <b-card-header header-tag="header" class="p-1" role="tab">
-            <b-btn block href="#" v-b-toggle.accordion-history variant="info">更新履歴</b-btn>
-          </b-card-header>
-          <b-collapse id="accordion-history" accordion="my-accordion" role="tabpanel">
-            <b-card-body>
+              <div class="h-divider"></div>
+              <!-- 添付ファイル登録-->
+              <div class="button-group attachment">
+                <div class="col-md-8">
+                  <p></p>
+                </div>
+                <div class="col-md-2">
+                  <b-button class="control-button attachment" variant="info" @click='fileAttachment'>添付の登録</b-button>
+                </div>
+              </div>
+            </div>
+          </b-card-body>
+        </b-collapse>
+      </b-card>
+      <!-- 履歴 アコーディオン -->
+      <b-card no-body class="mb-1">
+        <b-card-header header-tag="header" class="p-1" role="tab">
+          <b-btn block href="#" v-b-toggle.accordion-history variant="info">更新履歴</b-btn>
+        </b-card-header>
+        <b-collapse id="accordion-history" accordion="issue-accordion" role="tabpanel">
+          <b-card-body>
+            <div class="history-field">
               <!--履歴の表示領域 -->
               <b-card no-body v-for="(val, idx) in journals" v-bind:key=idx class="mb-1">
                 <b-card-header header-tag="header" class="p-1" role="tab">
@@ -190,21 +222,11 @@
                   </b-card-body>
                 </b-collapse>
               </b-card>
-            </b-card-body>
-          </b-collapse>
-        </b-card>
-      </div>
+            </div>
+          </b-card-body>
+        </b-collapse>
+      </b-card>
     </div>
-    <div class="button-group">
-      <div class="col-md-8">
-        <p v-if=errorMessage class="message-field">{{errorMessage}}</p>
-      </div>
-      <div class="col-md-2">
-        <b-button class="control-button create" variant="success" v-if="this.new" @click='createIssue'>新規登録</b-button>
-        <b-button class="control-button update" variant="success" v-else @click='updateIssue'>更新</b-button>
-      </div>
-    </div>
-
   </div>
 </template>
 
@@ -351,13 +373,13 @@ export default {
       console.log(qstr)
     },
     updateIssue: async function () {
-      router.push('/cameraview')
-      /*
       console.log('updateIssue')
       let qstr = this.createQueryString()
       await naim.updateIssue(this.issId, JSON.stringify(qstr))
       console.log(qstr)
-      */
+    },
+    fileAttachment: function () {
+      router.push('/cameraview')
     },
     convertOptions: function (values, key) {
       let options = []
@@ -543,7 +565,25 @@ export default {
     margin-left: 1em;
   }
   .edit-field {
-    height: 550px;
+    height: 500px;
     overflow-y: auto;
+  }
+  .attachment-field {
+    height: 500px;
+    overflow-y: auto;
+  }
+  .history-field {
+    height: 500px;
+    overflow-y: auto;
+  }
+  .button-group .attachment {
+    margin-bottom: 1em;
+  }
+  .h-divider {
+    margin-top:5px;
+    margin-bottom:5px;
+    height:1px;
+    width:100%;
+    border-top:1px solid gray;
   }
 </style>

@@ -180,6 +180,20 @@ export default {
         throw err
       })
   },
+  async attachingFiles (data, callback) {
+    console.log('attachingFiles @ redmine.js')
+    let ret = null
+    await this.rmc.post('/uploads.json', data, {headers: {'Content-Type': 'application/octet-stream'}})
+      .then(res => {
+        callback(res)
+        // console.log('attachinfGiles @ redmine')
+        ret = res
+      })
+      .catch(err => {
+        throw (err)
+      })
+    return ret
+  },
 
   // ============
   // Trackers
