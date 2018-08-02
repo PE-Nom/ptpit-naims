@@ -186,10 +186,10 @@
               <!-- 添付ファイルのリスト表示領域 -->
               <b-list-group>
                 <b-list-group-item v-for="(val, idx) in attachments" v-bind:key=idx>
-                  <a :href="val.content_url">{{val.filename}}</a> ({{val.filesize}}) <br>
                   <!--
-                  <a href="#!" v-on:click="previewAttachment(val)"> {{val.filename}} </a> ({{val.filesize}}) <br>
+                  <a :href="val.content_url">{{val.filename}}</a> ({{val.filesize}}) <br>
                   -->
+                  <a href="#!" v-on:click="previewAttachment(val)"> {{val.filename}} </a> ({{val.filesize}}) <br>
                   {{val.description}}
                 </b-list-group-item>
               </b-list-group>
@@ -246,6 +246,7 @@ export default {
   },
   data () {
     return {
+      test_url: 'http://192.168.10.6/JS/tmp/55490595197__A207B747-2C2B-4A9E-B06B-0DF83D88B0AB.MOV',
       new: false,
       currentPath: '',
       issId: null,
@@ -342,7 +343,9 @@ export default {
       console.log('  filename :' + file.filename)
       console.log('  content_type : ' + file.content_type)
       console.log('  content_url : ' + file.content_url)
-
+      window.open(this.test_url)
+    },
+    dummy: function (file) {
       // XMLHttpRequestオブジェクトを作成する
       let xhr = new XMLHttpRequest()
       xhr.open('GET', file.content_url, true)
