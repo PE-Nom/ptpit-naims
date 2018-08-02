@@ -186,7 +186,10 @@
               <!-- 添付ファイルのリスト表示領域 -->
               <b-list-group>
                 <b-list-group-item v-for="(val, idx) in attachments" v-bind:key=idx>
-                  <a :href="val.content_url">{{val.filename}}</a> ({{val.filesize}}) </br>
+                  <a :href="val.content_url">{{val.filename}}</a> ({{val.filesize}}) <br>
+                  <!--
+                  <a href="#!" v-on:click="previewAttachment(val)"> {{val.filename}} </a> ({{val.filesize}}) <br>
+                  -->
                   {{val.description}}
                 </b-list-group-item>
               </b-list-group>
@@ -334,6 +337,54 @@ export default {
     }
   },
   methods: {
+    previewAttachment: function (file) {
+      console.log('select attachment :')
+      console.log('  filename :' + file.filename)
+      console.log('  content_type : ' + file.content_type)
+      console.log('  content_url : ' + file.content_url)
+
+      // XMLHttpRequestオブジェクトを作成する
+      let xhr = new XMLHttpRequest()
+      xhr.open('GET', file.content_url, true)
+      xhr.responseType = 'blob' // Blobオブジェクトとしてダウンロードする
+      xhr.onload = function (oEvent) {
+        // ダウンロード完了後の処理を定義する
+        console.log('receive response')
+        let blob = xhr.response
+        console.log(blob)
+        if (window.navigator.msSaveBlob) {
+          // IEとEdge
+          window.navigator.msSaveBlob(blob, file.filename)
+        } else {
+          // それ以外のブラウザ
+          // Blobオブジェクトを指すURLオブジェクトを作る
+          let objectURL = window.URL.createObjectURL(blob)
+          console.log(objectURL)
+          // リンク（<a>要素）を生成し、JavaScriptからクリックする
+          /*
+          var link = document.createElement('a')
+          document.body.appendChild(link)
+          link.href = objectURL
+          link.download = file.filename
+          link.click()
+          document.body.removeChild(link)
+          */
+          let attachment = {
+            filename: file.filename,
+            content_type: file.content_type,
+            // content_url: file.content_url.slice(file.content_url.indexOf('/attachment'))
+            content_url: objectURL
+          }
+          if (attachment.content_type.indexOf('video') !== -1) {
+            editstate.attachment = attachment
+            console.log(editstate.attachment)
+            router.push('/previewvideo')
+          }
+        }
+      }
+      // XMLHttpRequestオブジェクトの通信を開始する
+      xhr.send()
+    },
     startDate: function (date) {
       this.start_date = date.format(this.dateFormat)
       // console.log('開始日' + this.start_date)

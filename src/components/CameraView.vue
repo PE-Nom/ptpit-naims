@@ -1,7 +1,7 @@
 <template>
   <div class="content-fulied">
     <div>
-      <b-navbar v-if="showNavbar" type="dark" variant="success">
+      <b-navbar type="dark" variant="success">
         <b-navbar-brand to="/editissue">&lt;&lt; チケット編集</b-navbar-brand>
       </b-navbar>
       <b-container class="table-row header">
@@ -53,7 +53,6 @@ export default {
       token: '',
       image: null,
       video: null,
-      showNavbar: true,
       currentPath: '画像',
       imageDescription: ''
     }
@@ -79,6 +78,7 @@ export default {
       }
     },
     onVideoChanged (event) {
+      console.log('onVideoChanged @ CameraView')
       console.log(event)
       if (event.target.files.length) {
         // 選択されたファイル情報を取得
