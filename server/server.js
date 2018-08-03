@@ -22,24 +22,10 @@ app.get('/up.html', function (req, res) {
 
 app.post('/file_upload', function (req, res) {
   console.log('######')
-  console.log(req.body.originalname)
+  console.log(req)
   // let file = path.join(__dirname, '/public/images/' + req.body.originalname)
-  let file = path.join('C:/home/apache/htdocs/JS/data', req.body.originalname)
+  let file = path.join('C:/home/apache/htdocs/JS/data', req.file.originalname)
   console.log(file)
-  fs.writeFile(file, req.body.uploaddata, function (err) {
-    let response
-    if (err) {
-      console.log(err)
-    } else {
-      response = {
-        message: 'Success!',
-        filename: req.body.originalname
-      }
-    }
-    console.log(response)
-    res.end(JSON.stringify(response))
-  })
-  /*
   fs.readFile(req.file.path, function (err, data) {
     if (err) {
       console.log(err)
@@ -51,7 +37,7 @@ app.post('/file_upload', function (req, res) {
         } else {
           response = {
             message: 'Success!',
-            filename: req.body.originalname
+            filename: req.file.originalname
           }
         }
         console.log(response)
@@ -59,7 +45,6 @@ app.post('/file_upload', function (req, res) {
       })
     }
   })
-  */
 })
 
 var server = app.listen(8081, function () {

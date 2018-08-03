@@ -64,7 +64,6 @@ export default {
       if (event.target.files.length) {
         // 選択されたファイル情報を取得
         this.file = event.target.files[0]
-
         this.image = new Image()
         let reader = new FileReader()
         // let vm = this

@@ -7,8 +7,8 @@ export default {
     console.log('uploadFile @ fileUploader.js')
     console.log(data)
     let formData = new FormData()
-    formData.append('uploaddata', data)
-    formData.append('originalname', file.name)
+    formData.append('file', file, file.name)
+    // formData.append('originalname', file.name)
     await axios.post(BASE_URL + '/file_upload', formData, {headers: {'Content-Type': 'multipart/form-data'}})
       .then(res => {
         console.log('axios.post success')
