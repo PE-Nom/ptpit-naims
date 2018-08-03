@@ -246,7 +246,8 @@ export default {
   },
   data () {
     return {
-      test_url: 'http://192.168.10.6/JS/tmp/55490595197__A207B747-2C2B-4A9E-B06B-0DF83D88B0AB.MOV',
+      // test_url: 'http://192.168.10.6/JS/tmp/55490595197__A207B747-2C2B-4A9E-B06B-0DF83D88B0AB.MOV',
+      test_url: 'http://192.168.1.3:8008/JS/data/55471914228__4ED81EBD-F2EE-498B-99F8-DD138A8EACEE.MOV',
       new: false,
       currentPath: '',
       issId: null,
@@ -343,50 +344,29 @@ export default {
       console.log('  filename :' + file.filename)
       console.log('  content_type : ' + file.content_type)
       console.log('  content_url : ' + file.content_url)
-      window.open(this.test_url)
+      this.dummy(file)
     },
     dummy: function (file) {
-      // XMLHttpRequestオブジェクトを作成する
-      let xhr = new XMLHttpRequest()
-      xhr.open('GET', file.content_url, true)
-      xhr.responseType = 'blob' // Blobオブジェクトとしてダウンロードする
-      xhr.onload = function (oEvent) {
-        // ダウンロード完了後の処理を定義する
-        console.log('receive response')
-        let blob = xhr.response
-        console.log(blob)
-        if (window.navigator.msSaveBlob) {
-          // IEとEdge
-          window.navigator.msSaveBlob(blob, file.filename)
-        } else {
-          // それ以外のブラウザ
-          // Blobオブジェクトを指すURLオブジェクトを作る
-          let objectURL = window.URL.createObjectURL(blob)
-          console.log(objectURL)
-          // リンク（<a>要素）を生成し、JavaScriptからクリックする
-          /*
-          var link = document.createElement('a')
-          document.body.appendChild(link)
-          link.href = objectURL
-          link.download = file.filename
-          link.click()
-          document.body.removeChild(link)
-          */
-          let attachment = {
-            filename: file.filename,
-            content_type: file.content_type,
-            // content_url: file.content_url.slice(file.content_url.indexOf('/attachment'))
-            content_url: objectURL
-          }
-          if (attachment.content_type.indexOf('video') !== -1) {
-            editstate.attachment = attachment
-            console.log(editstate.attachment)
-            router.push('/previewvideo')
-          }
+      if (file.content_type.indexOf('video') === -1) {
+        // 動画以外はそのまま新しいタブで表示
+        console.log('image')
+        window.open(file.content_url)
+      } else {
+        console.log('video')
+        window.open(file.content_url)
+        // window.open(this.test_url)
+        /*
+        let attachment = {
+          filename: file.filename,
+          content_type: file.content_type,
+          // content_url: file.content_url.slice(file.content_url.indexOf('/attachment'))
+          content_url: this.test_url
         }
+        editstate.attachment = attachment
+        console.log(editstate.attachment)
+        router.push('/previewvideo')
+        */
       }
-      // XMLHttpRequestオブジェクトの通信を開始する
-      xhr.send()
     },
     startDate: function (date) {
       this.start_date = date.format(this.dateFormat)

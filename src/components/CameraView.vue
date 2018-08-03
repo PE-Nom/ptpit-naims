@@ -45,6 +45,7 @@
 <script>
 import naim from '../models/naim.js'
 import editstate from '../models/editState.js'
+import fileUploader from '../models/fileUploader.js'
 
 export default {
   data () {
@@ -85,6 +86,9 @@ export default {
         this.file = event.target.files[0]
         this.image = new Image()
         let reader = new FileReader()
+        reader.onload = (e) => {
+          this.video = e.target.result
+        }
         reader.readAsDataURL(this.file)
       } else {
         console.log('no file selected')
@@ -108,6 +112,12 @@ export default {
             }
           }
           await naim.updateIssue(editstate.currentIssueId, JSON.stringify(qstr))
+          console.log('uploade video file')
+          if (this.file.type.indexOf('video') !== -1) {
+            await fileUploader.uploadFile(this.file, this.video)
+          } else {
+            await fileUploader.uploadFile(this.file, this.image)
+          }
           console.log('attached file')
         } catch (err) {
           console.log('error has occured @ attachingFile')
