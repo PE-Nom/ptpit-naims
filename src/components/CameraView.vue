@@ -38,6 +38,7 @@
           </div>
         </div>
       </div>
+      <p>{{errorMessage}}</p>
     </div>
   </div>
 </template>
@@ -55,7 +56,8 @@ export default {
       image: null,
       video: null,
       currentPath: '画像',
-      imageDescription: ''
+      imageDescription: '',
+      errorMessage: ''
     }
   },
   methods: {
@@ -113,14 +115,15 @@ export default {
           await naim.updateIssue(editstate.currentIssueId, JSON.stringify(qstr))
           console.log('uploade video file')
           if (this.file.type.indexOf('video') !== -1) {
-            await fileUploader.uploadFile(this.file, this.video)
+            await fileUploader.uploadFile(editstate.currentIssueId, this.file, this.video)
           } else {
-            await fileUploader.uploadFile(this.file, this.image)
+            await fileUploader.uploadFile(editstate.currentIssueId, this.file, this.image)
           }
           console.log('attached file')
         } catch (err) {
           console.log('error has occured @ attachingFile')
           console.log(err)
+          this.errorMessage = err.toString()
         }
       }
     }

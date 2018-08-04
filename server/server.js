@@ -22,9 +22,14 @@ app.get('/up.html', function (req, res) {
 
 app.post('/file_upload', function (req, res) {
   console.log('######')
-  console.log(req)
+  // console.log(req)
   // let file = path.join(__dirname, '/public/images/' + req.body.originalname)
-  let file = path.join('C:/home/apache/htdocs/JS/data', req.file.originalname)
+  console.log('---- チケットId : ', req.body.issueId)
+  let file = path.join('C:/home/apache/htdocs/JS/data/', req.body.issueId)
+  if (!fs.existsSync(file)) {
+    fs.mkdirSync(file)
+  }
+  file = path.join(file, req.file.originalname)
   console.log(file)
   fs.readFile(req.file.path, function (err, data) {
     if (err) {

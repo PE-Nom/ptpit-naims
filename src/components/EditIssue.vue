@@ -248,7 +248,8 @@ export default {
     return {
       // test_url: 'http://192.168.10.6/JS/tmp/55490595197__A207B747-2C2B-4A9E-B06B-0DF83D88B0AB.MOV',
       // test_url: 'http://192.168.1.3:8008/JS/data/55471914228__4ED81EBD-F2EE-498B-99F8-DD138A8EACEE.MOV',
-      test_url: 'http://192.168.1.3:8008/JS/data/',
+      // test_url: 'http://192.168.1.3:8008/JS/data/',
+      test_url: 'http://192.168.10.6/JS/data/',
       new: false,
       currentPath: '',
       issId: null,
@@ -348,14 +349,13 @@ export default {
       this.dummy(file)
     },
     dummy: function (file) {
+      let contentUrl = this.test_url + this.issId + '/' + file.filename
       if (file.content_type.indexOf('video') === -1) {
         // 動画以外はそのまま新しいタブで表示
         console.log('image')
-        let contentUrl = this.test_url + file.filename
         window.open(contentUrl)
       } else {
-        console.log('image')
-        let contentUrl = this.test_url + file.filename
+        console.log('video')
         window.open(contentUrl)
         // window.open(this.test_url)
         /*

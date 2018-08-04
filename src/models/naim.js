@@ -208,8 +208,8 @@ export default {
       // console.log('updateIssue @ naim : ' + issId)
       // console.log(qstr)
       await redmine.updateIssue(issId, qstr, res => {
-        // console.log('==== Update Issue @ naim ====')
-        // console.log(res)
+        console.log('==== Update Issue @ naim ====')
+        console.log(res)
       })
     } catch (err) {
       throw err
