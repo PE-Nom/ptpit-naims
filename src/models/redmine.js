@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 // const BASE_URL = 'http://localhost:3001/'
-const BASE_URL = 'http://192.168.10.6:3001/' // @home
+const BASE_URL = 'http://192.168.10.3:3001/' // @home
 // const BASE_URL = 'http://192.168.10.9:3001/' // @home let's note
 // const BASE_URL = 'http://192.168.1.3:3001/' // @ Office
 // const BASE_URL = 'http://localhost:3000/' // @ Office

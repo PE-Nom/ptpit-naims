@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import editstate from '../models/editState.js'
 export default {
   // name: 'Home',
   data () {
@@ -15,6 +16,13 @@ export default {
       msg: 'NAIMS',
       explanation: 'Nonconforming And Incident Management System by Pitarpit Co.,Ltd.'
     }
+  },
+  created () {
+    console.log('home created')
+    editstate.setCurrentPath('/')
+  },
+  destroy () {
+    editstate.clearCurrentPath()
   }
 }
 </script>

@@ -32,12 +32,13 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import LoginDialog from '@/components/LoginDialog.vue'
 import LogoutDialog from '@/components/LogoutDialog.vue'
+import router from './router'
 import auth from './models/auth.js'
 import naim from './models/naim.js'
-import router from './router'
-import _ from 'lodash'
+import editstate from './models/editState.js'
 
 export default {
   name: 'app',
@@ -119,6 +120,8 @@ export default {
       this.showLogoutDialog = false
     },
     refreshActiveUser: async function () {
+      let path = editstate.getCurrentPath()
+      console.log('path : ' + path)
       this.user = auth.getUser()
       console.log(this.user)
       console.log(' username : ' + this.user.username)
@@ -129,7 +132,15 @@ export default {
           this.activeUser = true
           this.userName = this.user.username
           // 成功したら IssuesList にルーティング
-          router.push('/projects')
+          if (path !== null) {
+            if (path === '/editissue') {
+              let issId = editstate.getCurrentIssId()
+              editstate.currentIssueId = issId
+            }
+            router.push(path)
+          } else {
+            router.push('/')
+          }
         } catch (err) {
           console.log('==== App ====')
           console.log(err)

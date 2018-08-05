@@ -161,6 +161,7 @@ export default {
   },
   created () {
     console.log('EditProject created')
+    editstate.setCurrentPath('/editproject')
     this.user = auth.getUser()
     let customFields = naim.getCustomeFileds()
     customFields.forEach(element => {
@@ -194,6 +195,9 @@ export default {
     } else {
       this.currentPath = 'プロジェクト 登録'
     }
+  },
+  destroy () {
+    editstate.clearCurrentPath()
   }
 }
 </script>

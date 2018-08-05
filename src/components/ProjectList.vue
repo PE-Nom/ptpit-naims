@@ -162,9 +162,16 @@ export default {
       router.push('/editproject')
     }
   },
+  created () {
+    console.log('/projects created')
+    editstate.setCurrentPath('/projects')
+  },
   mounted () {
     console.log('ProjectList.vue mounted')
     this.userName = auth.getUser().username
+  },
+  destroy () {
+    editstate.clearCurrentPath()
   }
 }
 </script>

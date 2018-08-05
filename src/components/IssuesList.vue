@@ -151,8 +151,15 @@ export default {
       router.push('/editissue')
     }
   },
+  created () {
+    console.log('/tickets created')
+    editstate.setCurrentPath('/tickets')
+  },
   mounted () {
     this.userName = auth.getUser().userName
+  },
+  destroy () {
+    editstate.clearCurrentPath()
   }
 }
 </script>
