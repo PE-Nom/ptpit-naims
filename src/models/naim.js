@@ -63,7 +63,7 @@ export default {
       const prjs = []
       if (redmine.isConfigured()) {
         await redmine.projects({}, res => {
-          console.log('==== Retrieve Projects @ naim ====')
+          // console.log('==== Retrieve Projects @ naim ====')
           res.data.projects.forEach(element => {
             prjs.push(element)
             // console.log(element)
@@ -79,8 +79,8 @@ export default {
   createProject: async function (qstr) {
     try {
       await redmine.createProject(qstr, res => {
-        console.log('==== Create Project @ naim ====')
-        console.log(res)
+        // console.log('==== Create Project @ naim ====')
+        // console.log(res)
       })
     } catch (err) {
       throw err
@@ -89,8 +89,8 @@ export default {
   updateProject: async function (prjId, qstr) {
     try {
       await redmine.updateProject(prjId, qstr, res => {
-        console.log('==== Update Project @ naim ====')
-        console.log(res)
+        // console.log('==== Update Project @ naim ====')
+        // console.log(res)
       })
     } catch (err) {
       throw err
@@ -99,8 +99,8 @@ export default {
   deleteProject: async function (prjId) {
     try {
       await redmine.deleteProject(prjId, res => {
-        console.log('==== Delete Project @ naim ====')
-        console.log(res)
+        // console.log('==== Delete Project @ naim ====')
+        // console.log(res)
       })
     } catch (err) {
       throw err
@@ -130,10 +130,10 @@ export default {
       const customfileds = []
       if (redmine.isConfigured()) {
         await redmine.customFields({}, res => {
-          console.log('==== CustomFields @ naim ====')
+          // console.log('==== CustomFields @ naim ====')
           res.data.custom_fields.forEach(element => {
             customfileds.push(element)
-            console.log(element)
+            // console.log(element)
           })
         })
       }
@@ -168,10 +168,10 @@ export default {
       const iss = []
       if (redmine.isConfigured()) {
         await redmine.issues(res => {
-          console.log('==== Issues @ naim ====')
+          // console.log('==== Issues @ naim ====')
           res.data.issues.forEach(element => {
             iss.push(element)
-            console.log(element)
+            // console.log(element)
           })
         })
       }
@@ -196,8 +196,8 @@ export default {
   createIssue: async function (qstr) {
     try {
       await redmine.createIssue(qstr, res => {
-        console.log('==== Create Issue @ naim ====')
-        console.log(res)
+        // console.log('==== Create Issue @ naim ====')
+        // console.log(res)
       })
     } catch (err) {
       throw err

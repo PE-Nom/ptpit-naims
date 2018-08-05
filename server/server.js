@@ -25,11 +25,12 @@ app.post('/file_upload', function (req, res) {
   // console.log(req)
   // let file = path.join(__dirname, '/public/images/' + req.body.originalname)
   console.log('---- チケットId : ', req.body.issueId)
+  console.log('---- 添付Id : ', req.body.attachId)
   let file = path.join('C:/home/apache/htdocs/JS/data/', req.body.issueId)
   if (!fs.existsSync(file)) {
     fs.mkdirSync(file)
   }
-  file = path.join(file, req.file.originalname)
+  file = path.join(file, req.body.attachId + '_' + req.file.originalname)
   console.log(file)
   fs.readFile(req.file.path, function (err, data) {
     if (err) {
@@ -43,6 +44,18 @@ app.post('/file_upload', function (req, res) {
           response = {
             message: 'Success!',
             filename: req.file.originalname
+          }
+          // テンポラリファイルの削除
+          let targetRemoveFiles = fs.readdirSync('tmp/')
+          for (let file in targetRemoveFiles) {
+            fs.unlinkSync('tmp/' + targetRemoveFiles[file], function (err) {
+              if (err) {
+                console.error(err)
+                process.exit(1)
+              } else {
+                console.log('unlink : ' + targetRemoveFiles[file])
+              }
+            })
           }
         }
         console.log(response)

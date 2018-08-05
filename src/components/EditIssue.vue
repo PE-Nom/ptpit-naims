@@ -346,30 +346,18 @@ export default {
       console.log('  filename :' + file.filename)
       console.log('  content_type : ' + file.content_type)
       console.log('  content_url : ' + file.content_url)
+      console.log('  id : ' + file.id)
       this.dummy(file)
     },
     dummy: function (file) {
-      let contentUrl = this.test_url + this.issId + '/' + file.filename
+      let contentUrl = this.test_url + this.issId + '/' + file.id + '_' + file.filename
       if (file.content_type.indexOf('video') === -1) {
         // 動画以外はそのまま新しいタブで表示
         console.log('image')
-        window.open(contentUrl)
       } else {
         console.log('video')
-        window.open(contentUrl)
-        // window.open(this.test_url)
-        /*
-        let attachment = {
-          filename: file.filename,
-          content_type: file.content_type,
-          // content_url: file.content_url.slice(file.content_url.indexOf('/attachment'))
-          content_url: this.test_url
-        }
-        editstate.attachment = attachment
-        console.log(editstate.attachment)
-        router.push('/previewvideo')
-        */
       }
+      window.open(contentUrl)
     },
     startDate: function (date) {
       this.start_date = date.format(this.dateFormat)
@@ -481,7 +469,8 @@ export default {
             filesize: parseInt(el.filesize / 1000) + 'kbyte',
             description: el.description,
             content_type: el.content_type,
-            content_url: el.content_url
+            content_url: el.content_url,
+            id: el.id
           }
           attachmentItems.push(item)
         })

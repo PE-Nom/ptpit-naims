@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import router from '../router'
 import naim from '../models/naim.js'
 import editstate from '../models/editState.js'
 import fileUploader from '../models/fileUploader.js'
@@ -100,8 +101,10 @@ export default {
         try {
           let res = await naim.uploadFiles(this.file)
           this.token = res.data.upload.token
+          let attachId = res.data.upload.id
           console.log('uploaded file')
           console.log('token : ' + this.token)
+          console.log('id : ' + attachId)
           let qstr = {
             'issue': {
               'uploads': [{
@@ -113,13 +116,12 @@ export default {
             }
           }
           await naim.updateIssue(editstate.currentIssueId, JSON.stringify(qstr))
-          console.log('uploade video file')
           if (this.file.type.indexOf('video') !== -1) {
-            await fileUploader.uploadFile(editstate.currentIssueId, this.file, this.video)
+            await fileUploader.uploadFile(editstate.currentIssueId, attachId, this.file, this.video)
           } else {
-            await fileUploader.uploadFile(editstate.currentIssueId, this.file, this.image)
+            await fileUploader.uploadFile(editstate.currentIssueId, attachId, this.file, this.image)
           }
-          console.log('attached file')
+          router.push('/editissue')
         } catch (err) {
           console.log('error has occured @ attachingFile')
           console.log(err)
