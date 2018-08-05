@@ -5,7 +5,6 @@ import ProjectList from '@/components/ProjectList'
 import EditProject from '@/components/EditProject'
 import EditIssue from '@/components/EditIssue'
 import CameraView from '@/components/CameraView'
-import PreviewVideo from '@/components/PreviewVideo.vue'
 import Home from '@/components/Home'
 
 Vue.use(Router)
@@ -41,11 +40,6 @@ export default new Router({
       path: '/cameraview',
       name: 'CameraView',
       component: CameraView
-    },
-    {
-      path: '/previewvideo',
-      name: 'PreviewVideo',
-      component: PreviewVideo
     }
   ]
 })
