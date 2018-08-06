@@ -93,7 +93,7 @@ export default {
       let isss = naim.getIssues()
       isss.forEach(el => {
         let assignedName = el.assigned_to ? el.assigned_to.name : ''
-        let dueRatio = el.due_ratio ? el.due_ratio : '0'
+        let dueRatio = el.done_ratio ? el.done_ratio : '0'
         let dueDate = el.due_date ? el.due_date : '未定義'
         let rec = '{' +
           ' "' + this.columns[0] + '" : "#' + el.id + '"' +
