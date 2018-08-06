@@ -58,7 +58,8 @@ export default {
       video: null,
       currentPath: '画像',
       imageDescription: '',
-      errorMessage: ''
+      errorMessage: '',
+      uploading: false
     }
   },
   methods: {
@@ -97,35 +98,40 @@ export default {
       }
     },
     async uploadFiles () {
-      if (this.file) {
-        try {
-          let res = await naim.uploadFiles(this.file)
-          this.token = res.data.upload.token
-          let attachId = res.data.upload.id
-          console.log('uploaded file')
-          console.log('token : ' + this.token)
-          console.log('id : ' + attachId)
-          let qstr = {
-            'issue': {
-              'uploads': [{
-                'token': this.token,
-                'filename': this.file.name,
-                'description': this.imageDescription,
-                'content_type': this.file.type
-              }]
+      if (this.uploading) {
+        this.errorMessage = 'Now uploading'
+      } else {
+        this.uploading = true
+        if (this.file) {
+          try {
+            let res = await naim.uploadFiles(this.file)
+            this.token = res.data.upload.token
+            let attachId = res.data.upload.id
+            console.log('uploaded file')
+            console.log('token : ' + this.token)
+            console.log('id : ' + attachId)
+            let qstr = {
+              'issue': {
+                'uploads': [{
+                  'token': this.token,
+                  'filename': this.file.name,
+                  'description': this.imageDescription,
+                  'content_type': this.file.type
+                }]
+              }
             }
+            await naim.updateIssue(editstate.currentIssueId, JSON.stringify(qstr))
+            if (this.file.type.indexOf('video') !== -1) {
+              await fileUploader.uploadFile(editstate.currentIssueId, attachId, this.file, this.video)
+            } else {
+              await fileUploader.uploadFile(editstate.currentIssueId, attachId, this.file, this.image)
+            }
+            router.push('/editissue')
+          } catch (err) {
+            console.log('error has occured @ attachingFile')
+            console.log(err)
+            this.errorMessage = err.toString()
           }
-          await naim.updateIssue(editstate.currentIssueId, JSON.stringify(qstr))
-          if (this.file.type.indexOf('video') !== -1) {
-            await fileUploader.uploadFile(editstate.currentIssueId, attachId, this.file, this.video)
-          } else {
-            await fileUploader.uploadFile(editstate.currentIssueId, attachId, this.file, this.image)
-          }
-          router.push('/editissue')
-        } catch (err) {
-          console.log('error has occured @ attachingFile')
-          console.log(err)
-          this.errorMessage = err.toString()
         }
       }
     }

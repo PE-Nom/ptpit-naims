@@ -248,8 +248,6 @@ export default {
   },
   data () {
     return {
-      // test_url: 'http://192.168.10.6/JS/tmp/55490595197__A207B747-2C2B-4A9E-B06B-0DF83D88B0AB.MOV',
-      // test_url: 'http://192.168.1.3:8008/JS/data/55471914228__4ED81EBD-F2EE-498B-99F8-DD138A8EACEE.MOV',
       test_url: 'http://192.168.1.3:8008/JS/data/',
       // test_url: 'http://192.168.10.3/JS/data/',
       // test_url: 'http://192.168.1.5/JS/data/',
