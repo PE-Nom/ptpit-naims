@@ -397,13 +397,17 @@ export default {
       console.log('createIssue')
       let qstr = this.createQueryString()
       await naim.createIssue(JSON.stringify(qstr))
+      await naim.retrieveIssues()
       console.log(qstr)
+      router.push('/tickets')
     },
     updateIssue: async function () {
       console.log('updateIssue')
       let qstr = this.createQueryString()
       await naim.updateIssue(this.issId, JSON.stringify(qstr))
+      await naim.retrieveIssues()
       console.log(qstr)
+      router.push('/tickets')
     },
     fileAttachment: function () {
       router.push('/cameraview')
