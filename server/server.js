@@ -5,6 +5,8 @@ var bodyParser = require('body-parser')
 var multer = require('multer')
 var path = require('path')
 
+// const folderPath = 'C:/home/apache/htdocs/JS/data/'
+const folderPath = '/var/www/html/JS/data/'
 // CORSを許可する
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
@@ -26,7 +28,7 @@ app.post('/file_upload', function (req, res) {
   // let file = path.join(__dirname, '/public/images/' + req.body.originalname)
   console.log('---- チケットId : ', req.body.issueId)
   console.log('---- 添付Id : ', req.body.attachId)
-  let file = path.join('C:/home/apache/htdocs/JS/data/', req.body.issueId)
+  let file = path.join(folderPath, req.body.issueId)
   if (!fs.existsSync(file)) {
     fs.mkdirSync(file)
   }
@@ -65,7 +67,8 @@ app.post('/file_upload', function (req, res) {
   })
 })
 
-var server = app.listen(8081, function () {
+const port = 8081
+var server = app.listen(port, function () {
   var host = server.address().address
   var port = server.address().port
   console.log(path.join(__dirname, '/public/images'))
