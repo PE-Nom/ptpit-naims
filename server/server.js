@@ -5,8 +5,8 @@ var bodyParser = require('body-parser')
 var multer = require('multer')
 var path = require('path')
 
-// const folderPath = 'C:/home/apache/htdocs/JS/data/'
-const folderPath = '/var/www/html/JS/data/'
+const folderPath = 'C:/home/apache/htdocs/JS/data/'
+// const folderPath = '/var/www/html/JS/data/'
 // CORSを許可する
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')

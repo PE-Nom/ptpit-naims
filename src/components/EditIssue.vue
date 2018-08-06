@@ -117,6 +117,7 @@
                           </b-form-select>
                         </div>
                       </div>
+                      <!--
                       <div class="form-group">
                         <div class="col-md-10">
                           <label for="inputAuthor" class="control-label">作成者</label>
@@ -124,6 +125,7 @@
                           </b-form-select>
                         </div>
                       </div>
+                      -->
                     </div>
                     <!-- 時間の記録と注記 -->
                     <div class="h-divider"></div>
@@ -248,9 +250,9 @@ export default {
     return {
       // test_url: 'http://192.168.10.6/JS/tmp/55490595197__A207B747-2C2B-4A9E-B06B-0DF83D88B0AB.MOV',
       // test_url: 'http://192.168.1.3:8008/JS/data/55471914228__4ED81EBD-F2EE-498B-99F8-DD138A8EACEE.MOV',
-      // test_url: 'http://192.168.1.3:8008/JS/data/',
+      test_url: 'http://192.168.1.3:8008/JS/data/',
       // test_url: 'http://192.168.10.3/JS/data/',
-      test_url: 'http://192.168.1.5/JS/data/',
+      // test_url: 'http://192.168.1.5/JS/data/',
       new: false,
       currentPath: '',
       issId: null,
@@ -276,7 +278,7 @@ export default {
 
       users: [{id: '', name: ''}],
       usersOptions: [{value: '', text: ''}],
-      author: '', // 作成者
+      // author: '', // 作成者
       assigned: '', // 担当者
 
       activities: [{value: '', text: ''}],
@@ -336,10 +338,10 @@ export default {
     },
     assigned: function (newVal, oldVal) {
       // console.log('assigned changed : new = ' + newVal + ', old = ' + oldVal + ', this.assigned : ' + this.assigned)
-    },
-    author: function (newVal, oldVal) {
-      // console.log('author changed : new = ' + newVal + ', old = ' + oldVal + ', this.author : ' + this.author)
     }
+    // author: function (newVal, oldVal) {
+    // console.log('author changed : new = ' + newVal + ', old = ' + oldVal + ', this.author : ' + this.author)
+    // }
   },
   methods: {
     previewAttachment: function (file) {
@@ -457,7 +459,7 @@ export default {
         this.tracker = this.issDetail.tracker.id
         this.issueStatus = this.issDetail.status.id
         this.issuePriority = this.issDetail.priority.id
-        this.author = this.issDetail.author.id
+        // this.author = this.issDetail.author.id
         this.assigned = this.issDetail.assigned_to ? this.issDetail.assigned_to.id : '-'
         this.start_date = this.issDetail.start_date ? this.issDetail.start_date : ''
         // console.log('start_date : ' + this.start_date)
@@ -496,6 +498,15 @@ export default {
           this.journals.push({id: journal.id, created_on: journal.created_on, details: details})
         })
         // console.log(this.journals)
+      } else {
+        // this.tracker = this.trackerOptions[0].value
+        // this.issueStatus = this.issueStatuses[0].value
+        // this.issuePriority = this.issuePriorities[0].value
+        this.tracker = 5 // インシデント
+        this.issueStatus = 1 // 新規
+        this.issuePriority = 2 // 通常
+        this.done_ratio = 0
+        // this.author = this.issDetail.author.id
       }
     },
     getProjects: async function () {
