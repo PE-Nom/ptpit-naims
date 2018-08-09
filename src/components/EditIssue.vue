@@ -1,7 +1,7 @@
 <template>
   <div class="content-fulied">
     <b-navbar v-if="showNavbar" type="dark" variant="success">
-      <b-navbar-brand to="/tickets">&lt;&lt; チケット一覧</b-navbar-brand>
+      <b-navbar-brand to="/tickets">&lt;&lt; 指摘一覧</b-navbar-brand>
     </b-navbar>
     <b-container class="table-row header">
       <label class="currentpath-user" >{{this.currentPath}}</label>
@@ -11,7 +11,7 @@
       <!-- 情報アコーディオン -->
       <b-card no-body class="mb-1">
         <b-card-header header-tag="header" class="p-1" role="tab">
-          <b-btn block href="#" v-b-toggle.accordion-issue variant="success">チケット id:#{{this.issId}}</b-btn>
+          <b-btn block href="#" v-b-toggle.accordion-issue variant="success">安全指摘 id:#{{issueId}}</b-btn>
         </b-card-header>
         <b-collapse id="accordion-issue" visible accordion="issue-accordion" role="tabpanel">
           <b-card-body>
@@ -20,8 +20,30 @@
               <div id="summary">
                 <div class="form-group row-top">
                   <div class="col-md-10">
-                    <label for="inputSubject" class="control-label">題名</label>
+                    <label for="inputSubject" class="control-label">件名</label>
                     <input type="text" class="form-control" id="inputSubject" placeholder="題名" v-model="subject">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-10">
+                    <label for="inputProjectName" class="control-label">プロジェクト名</label>
+                    <b-form-select v-model="projectId" :options="projectOptions">
+                    </b-form-select>
+                  </div>
+                </div>
+                <!-- 安全巡視用に　指摘対象場所の選択を追加 -->
+                <div class="form-group">
+                  <div class="col-md-10">
+                    <label for="siteName" class="control-label">指摘対象の現場</label>
+                    <b-form-select v-model="site" :options="siteOptions">
+                    </b-form-select>
+                  </div>
+                </div>
+                <!-- 安全巡視用 ここまで -->
+                <div class="form-group">
+                  <div class="col-md-10">
+                    <label for="inputDescription" class="control-label">指摘内容</label>
+                    <textarea class="form-control" rows="3" id="inputDescription" placeholder="指摘の記述" v-model="description"></textarea>
                   </div>
                 </div>
                 <div class="form-group">
@@ -33,42 +55,62 @@
                 </div>
                 <div class="form-group">
                   <div class="col-md-10">
-                    <label for="inputIssueStatus" class="control-label">ステータス</label>
-                    <b-form-select v-model="issueStatus" :options="issueStatuses">
+                    <label for="inputAssigned" class="control-label">担当者</label>
+                    <b-form-select v-model="assigned" :options="usersOptions">
                     </b-form-select>
                   </div>
                 </div>
               </div>
+              <div class="form-group">
+                <b-container>
+                  <b-row>
+                    <div class="col-md-10">
+                      <label for="inputDueDate" class="control-label">期日</label>
+                    </div>
+                  </b-row>
+                  <b-row>
+                    <div class="col-md-10">
+                      <date-selector :format="dateFormat" :start="minDate" v-bind:default="due_date" :end="maxDate" @date-change="dueDate"></date-selector>
+                    </div>
+                  </b-row>
+                </b-container>
+              </div>
               <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1" role="tab">
-                  <b-btn block href="#" v-b-toggle.accordion-issue-detail variant="success">詳細情報</b-btn>
+                  <b-btn block href="#" v-b-toggle.accordion-issue-detail variant="success">進捗状況</b-btn>
                 </b-card-header>
                 <b-collapse id="accordion-issue-detail" accordion="issue-detail-accordion" role="tabpanel">
                   <b-card-body>
                     <!-- チケット詳細 -->
+                    <!-- For 安全巡視デモ用にコメントアウト
                     <div id="detail">
                       <div class="form-group">
                         <div class="col-md-10">
-                          <label for="inputTracker" class="control-label">トラッカー</label>
+                          <label for="inputTracker" class="control-label">項目</label>
                           <b-form-select v-model="tracker" :options="trackerOptions">
                           </b-form-select>
                         </div>
                       </div>
-                      <div class="form-group row-top">
-                        <div class="col-md-10">
-                          <label for="inputProjectName" class="control-label">プロジェクト名</label>
-                          <b-form-select v-model="projectId" :options="projectOptions">
-                          </b-form-select>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-10">
-                          <label for="inputDescription" class="control-label">説明</label>
-                          <textarea class="form-control" rows="3" id="inputDescription" placeholder="説明の記述" v-model="description"></textarea>
-                        </div>
+                    </div>
+                    -->
+                    <!-- スケジュール -->
+                    <!-- For 安全巡視デモ -->
+                    <div class="form-group">
+                      <div class="col-md-10">
+                        <label for="inputIssueStatus" class="control-label">進捗状況</label>
+                        <b-form-select v-model="issueStatus" :options="issueStatuses">
+                        </b-form-select>
                       </div>
                     </div>
-                    <!-- スケジュール -->
+                    <div class="form-group">
+                      <div class="col-md-10">
+                        <label for="inputDoneRatio" class="control-label">進捗率</label>
+                        <b-form-select v-model="done_ratio" :options="doneRatioOptions">
+                        </b-form-select>
+                      </div>
+                    </div>
+                    <!-- For 安全巡視デモ　ここまで -->
+                    <!-- For 安全巡視デモ
                     <div class="h-divider"></div>
                     <div id="schedule">
                       <div class="form-group">
@@ -85,38 +127,9 @@
                           </b-row>
                         </b-container>
                       </div>
-                      <div class="form-group">
-                        <b-container>
-                          <b-row>
-                            <div class="col-md-10">
-                              <label for="inputDueDate" class="control-label">期日</label>
-                            </div>
-                          </b-row>
-                          <b-row>
-                            <div class="col-md-10">
-                              <date-selector :format="dateFormat" :start="minDate" v-bind:default="due_date" :end="maxDate" @date-change="dueDate"></date-selector>
-                            </div>
-                          </b-row>
-                        </b-container>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-10">
-                          <label for="inputDoneRatio" class="control-label">進捗率</label>
-                          <b-form-select v-model="done_ratio" :options="doneRatioOptions">
-                          </b-form-select>
-                        </div>
-                      </div>
                     </div>
+                    -->
                     <!-- メンバー -->
-                    <div class="h-divider"></div>
-                    <div id="member">
-                      <div class="form-group">
-                        <div class="col-md-10">
-                          <label for="inputAssigned" class="control-label">担当者</label>
-                          <b-form-select v-model="assigned" :options="usersOptions">
-                          </b-form-select>
-                        </div>
-                      </div>
                       <!--
                       <div class="form-group">
                         <div class="col-md-10">
@@ -125,11 +138,12 @@
                           </b-form-select>
                         </div>
                       </div>
-                      -->
                     </div>
+                    -->
                     <!-- 時間の記録と注記 -->
                     <div class="h-divider"></div>
                     <div id="notation">
+　                    <!-- For 安全巡視デモ用にコメントアウト
                       <div class="form-group">
                         <div class="col-md-10">
                           <label for="inputActivities" class="control-label">活動</label>
@@ -149,9 +163,10 @@
                           <input type="text" class="form-control" id="inputComment" v-model="comment">
                         </div>
                       </div>
+                      -->
                       <div class="form-group">
                         <div class="col-md-10">
-                          <label for="inputNotaion" class="control-label">注記</label>
+                          <label for="inputNotaion" class="control-label">コメント</label>
                           <textarea class="form-control" rows="3" id="inputNotation" v-model="notation"></textarea>
                         </div>
                       </div>
@@ -241,6 +256,7 @@ import router from '../router'
 import naim from '../models/naim.js'
 import editstate from '../models/editState.js'
 import dateSelector from './DateSelector.vue'
+import util from '../models/util.js'
 
 export default {
   components: {
@@ -250,11 +266,12 @@ export default {
     return {
       // test_url: 'http://192.168.10.3/JS/data/',
       // test_url: 'http://192.168.1.5/JS/data/', // @ office Ubuntu
-      test_url: 'http://192.168.1.3:8008/JS/data/', // @ office
-      // test_url: 'http://192.168.10.5:8008/JS/data/', // for demo
+      // test_url: 'http://192.168.1.3:8008/JS/data/', // @ office
+      test_url: 'http://192.168.10.5:8008/JS/data/', // for demo
       new: false,
       currentPath: '',
       issId: null,
+      issueId: '',
       issDetail: null,
       projectName: '',
       projectId: '',
@@ -274,6 +291,9 @@ export default {
       priorities: [{id: '', name: ''}],
       issuePriorities: [{value: '', text: ''}],
       issuePriority: '',
+
+      siteOptions: [{value: '', text: ''}],
+      site: '',
 
       users: [{id: '', name: ''}],
       usersOptions: [{value: '', text: ''}],
@@ -389,7 +409,8 @@ export default {
           // activity
           // workingTime
           // comment
-          'notes': this.notation // notation
+          'notes': this.notation, // notation
+          'custom_fields': [{ id: naim.findCustomFieldId('巡視場所'), 'value': this.site }]
         }
       }
       return qstr
@@ -446,6 +467,15 @@ export default {
       })
       return options
     },
+    findValue: function (options, name) {
+      let ret
+      options.forEach(element => {
+        if (element.text === name) {
+          ret = element.value
+        }
+      })
+      return ret
+    },
     getIssueDetail: async function () {
       if (this.issId !== -1) {
         await naim.retrieveIssueDetail(Number(this.issId))
@@ -497,6 +527,7 @@ export default {
           this.journals.push({id: journal.id, created_on: journal.created_on, details: details})
         })
         // console.log(this.journals)
+        this.site = this.issDetail.custom_fields[0].value
       } else {
         // this.tracker = this.trackerOptions[0].value
         // this.issueStatus = this.issueStatuses[0].value
@@ -506,6 +537,10 @@ export default {
         this.issuePriority = 2 // 通常
         this.done_ratio = 0
         // this.author = this.issDetail.author.id
+        this.tracker = this.findValue(this.trackerOptions, '安全指摘事項')
+        console.log(this.tracker)
+        this.start_date = util.getNowYMD()
+        console.log(this.start_date)
       }
     },
     getProjects: async function () {
@@ -518,9 +553,9 @@ export default {
     getTrackerOptions: async function () {
       await naim.retrieveTrackers()
       this.trackers = this.convertProjectObjs(naim.getTrackers(), 'name')
-      // console.log(this.trackers)
+      console.log(this.trackers)
       this.trackerOptions = this.convertOptions(this.trackers, 'name')
-      // console.log(this.trackerOptions)
+      console.log(this.trackerOptions)
     },
     getIssueStatuses: async function () {
       await naim.retrieveIssueStatuses()
@@ -555,6 +590,16 @@ export default {
       this.documentCategries = this.convertOptions(cat, 'name')
       // console.log(this.documentCategries)
     },
+    getSiteOptions: function () {
+      let customFields = naim.getCustomeFileds()
+      customFields.forEach(element => {
+        if (element.name === '巡視場所') {
+          this.siteOptions = util.convertOptions(element.possible_values)
+          console.log('巡視場所')
+          console.log(this.siteOptions)
+        }
+      })
+    },
     getProperties: async function () {
       await this.getProjects()
       await this.getUsers()
@@ -563,6 +608,7 @@ export default {
       await this.getIssuePriorities()
       await this.getTimeEntryActivities()
       await this.getDocumentCategries()
+      await this.getSiteOptions()
     }
   },
   async created () {
@@ -573,10 +619,12 @@ export default {
     editstate.setCurrentIssId(this.issId)
     if (this.issId !== -1) {
       this.new = false
-      this.currentPath = 'チケット更新'
+      this.issueId = this.issId
+      this.currentPath = '指摘 更新'
     } else {
       this.new = true
-      this.currentPath = 'チケット 登録'
+      this.issueId = ''
+      this.currentPath = '指摘 登録'
     }
     await this.getProperties()
     await this.getIssueDetail()
@@ -599,7 +647,7 @@ export default {
     float: right;
   }
   .row-top {
-    margin-top: 1em;
+    margin-top: 0em;
   }
   .control-label {
     margin-bottom: 0.1em;

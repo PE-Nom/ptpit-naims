@@ -6,8 +6,8 @@ import axios from 'axios'
 // const BASE_URL = 'http://localhost:3000/' // @ Office
 // const BASE_URL = 'http://172.20.10.2:3001/' // @ iPhone デザリング
 // const BASE_URL = 'http://192.168.1.5:8080/' // On Ubuntu @ Office
-const BASE_URL = 'http://192.168.1.3:3001/' // @ Office
-// const BASE_URL = 'http://192.168.10.5:3001/' // for demo
+// const BASE_URL = 'http://192.168.1.3:3001/' // @ Office
+const BASE_URL = 'http://192.168.10.5:3001/' // for demo
 
 export default {
   rmc: null,

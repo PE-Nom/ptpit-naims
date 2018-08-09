@@ -3,8 +3,8 @@ import axios from 'axios'
 // const BASE_URL = 'http://192.168.10.3:8081' // @ Home
 // const BASE_URL = 'http://192.168.1.5:8081' // @ Office Ubuntu
 
-const BASE_URL = 'http://192.168.1.3:8081' // @ Office
-// const BASE_URL = 'http://192.168.10.5:8081' // for demo
+// const BASE_URL = 'http://192.168.1.3:8081' // @ Office
+const BASE_URL = 'http://192.168.10.5:8081' // for demo
 
 export default {
   async uploadFile (issId, attachId, file, data, callback) {

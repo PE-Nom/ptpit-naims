@@ -61,6 +61,7 @@ import router from '../router'
 import naim from '../models/naim.js'
 import auth from '../models/auth.js'
 import editstate from '../models/editState.js'
+import util from '../models/util.js'
 
 export default {
   data () {
@@ -146,7 +147,8 @@ export default {
         console.log(err)
         this.errorMessage = err.toString()
       }
-    },
+    }
+    /*
     convertOptions: function (values) {
       let options = []
       values.forEach(el => {
@@ -158,6 +160,7 @@ export default {
       })
       return options
     }
+    */
   },
   created () {
     console.log('EditProject created')
@@ -166,10 +169,10 @@ export default {
     let customFields = naim.getCustomeFileds()
     customFields.forEach(element => {
       if (element.name === '依頼元') {
-        this.customerOptions = this.convertOptions(element.possible_values)
+        this.customerOptions = util.convertOptions(element.possible_values)
         console.log(this.customerOptions)
       } else if (element.name === '調達先') {
-        this.supplierOptions = this.convertOptions(element.possible_values)
+        this.supplierOptions = util.convertOptions(element.possible_values)
         console.log(this.supplierOptions)
       }
     })

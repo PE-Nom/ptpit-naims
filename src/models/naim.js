@@ -3,7 +3,7 @@ import redmine from './redmine.js'
 export default {
 
   projects: [],
-  customeFileds: [],
+  cunstomFields: [],
   issues: [],
   issueDetail: null,
   issueStatuses: null,
@@ -138,14 +138,16 @@ export default {
         })
       }
       // ここで customfields List を更新する。
-      this.customeFileds = customfileds
+      this.cunstomFields = customfileds
+      console.log('### Custome Filed ###')
+      console.log(this.cunstomFields)
     } catch (err) {
       throw err
     }
   },
   findCustomFieldId: function (fieldName) {
     let fieldId
-    this.customeFileds.forEach(element => {
+    this.cunstomFields.forEach(element => {
       if (element.name === fieldName) {
         fieldId = element.id
       }
@@ -153,11 +155,14 @@ export default {
     return fieldId
   },
   getCustomeFileds: function () {
-    return this.customeFileds
+    return this.cunstomFields
   },
   clearCustomFileds: function () {
-    this.customeFileds = []
+    this.cunstomFields = []
   },
+  // ------------------
+  // Ticket Custom Filed
+  // ------------------
 
   // ------------------
   // Issue data
