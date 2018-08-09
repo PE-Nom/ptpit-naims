@@ -4,7 +4,6 @@ import IssuesList from '@/components/IssuesList'
 import ProjectList from '@/components/ProjectList'
 import EditProject from '@/components/EditProject'
 import EditIssue from '@/components/EditIssue'
-import CameraView from '@/components/CameraView'
 import Home from '@/components/Home'
 
 Vue.use(Router)
@@ -35,11 +34,6 @@ export default new Router({
       path: '/editissue',
       name: 'EditIssue',
       component: EditIssue
-    },
-    {
-      path: '/cameraview',
-      name: 'CameraView',
-      component: CameraView
     }
   ]
 })

@@ -81,20 +81,6 @@
                 </b-card-header>
                 <b-collapse id="accordion-issue-detail" accordion="issue-detail-accordion" role="tabpanel">
                   <b-card-body>
-                    <!-- チケット詳細 -->
-                    <!-- For 安全巡視デモ用にコメントアウト
-                    <div id="detail">
-                      <div class="form-group">
-                        <div class="col-md-10">
-                          <label for="inputTracker" class="control-label">項目</label>
-                          <b-form-select v-model="tracker" :options="trackerOptions">
-                          </b-form-select>
-                        </div>
-                      </div>
-                    </div>
-                    -->
-                    <!-- スケジュール -->
-                    <!-- For 安全巡視デモ -->
                     <div class="form-group">
                       <div class="col-md-10">
                         <label for="inputIssueStatus" class="control-label">進捗状況</label>
@@ -109,66 +95,37 @@
                         </b-form-select>
                       </div>
                     </div>
-                    <!-- For 安全巡視デモ　ここまで -->
-                    <!-- For 安全巡視デモ
-                    <div class="h-divider"></div>
-                    <div id="schedule">
-                      <div class="form-group">
-                        <b-container>
-                          <b-row>
-                            <div class="col-md-10">
-                              <label for="inputStartDate" class="control-label">開始日</label>
-                            </div>
-                          </b-row>
-                          <b-row>
-                            <div class="col-md-10">
-                              <date-selector :format="dateFormat" :start="minDate" :default="start_date" :end="maxDate" @date-change="startDate"></date-selector>
-                            </div>
-                          </b-row>
-                        </b-container>
-                      </div>
-                    </div>
-                    -->
-                    <!-- メンバー -->
-                      <!--
-                      <div class="form-group">
-                        <div class="col-md-10">
-                          <label for="inputAuthor" class="control-label">作成者</label>
-                          <b-form-select v-model="author" :options="usersOptions">
-                          </b-form-select>
-                        </div>
-                      </div>
-                    </div>
-                    -->
-                    <!-- 時間の記録と注記 -->
                     <div class="h-divider"></div>
                     <div id="notation">
-　                    <!-- For 安全巡視デモ用にコメントアウト
-                      <div class="form-group">
-                        <div class="col-md-10">
-                          <label for="inputActivities" class="control-label">活動</label>
-                          <b-form-select v-model="activity" :options="activities">
-                          </b-form-select>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-10">
-                          <label for="inputWorkingTime" class="control-label">作業時間</label>
-                          <input type="text" class="form-control" id="inputWorkingTime" v-model="workingTime">
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-md-10">
-                          <label for="inputComment" class="control-label">コメント</label>
-                          <input type="text" class="form-control" id="inputComment" v-model="comment">
-                        </div>
-                      </div>
-                      -->
                       <div class="form-group">
                         <div class="col-md-10">
                           <label for="inputNotaion" class="control-label">コメント</label>
                           <textarea class="form-control" rows="3" id="inputNotation" v-model="notation"></textarea>
                         </div>
+                      </div>
+                    </div>
+                  </b-card-body>
+                </b-collapse>
+              </b-card>
+              <!-- 画像・動画の添付 -->
+              <b-card no-body class="mb-1">
+                <b-card-header header-tag="header" class="p-1" role="tab">
+                  <b-btn block href="#" v-b-toggle.accordion-image-and-vide variant="success">画像・動画の添付</b-btn>
+                </b-card-header>
+                <b-collapse id="accordion-image-and-vide" accordion="issue-detail-accordion" role="tabpanel">
+                  <b-card-body>
+                    <div class="form-group">
+                      <div class="col-md-10">
+                        <!--
+                        <label for="inputImageAndVideo" class="control-label">画像・動画</label>
+                        -->
+                        <input type="file" class="form-control" id="inputImageAndVideo" variant="success" accept="image/*,video/*" capture="camera" @change="onImageAndVideoChanged">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-10">
+                        <label for="inputImageDescription" class="control-label">画像の説明</label>
+                        <textarea class="form-control" rows="3" id="inputImageDescription" placeholder="画像の説明記述" v-model="imageDescription"></textarea>
                       </div>
                     </div>
                   </b-card-body>
@@ -211,15 +168,6 @@
                 </b-list-group-item>
               </b-list-group>
               <div class="h-divider"></div>
-              <!-- 添付ファイル登録-->
-              <div class="button-group attachment">
-                <div class="col-md-8">
-                  <p></p>
-                </div>
-                <div class="col-md-2">
-                  <b-button class="control-button attachment" variant="info" @click='fileAttachment'>添付の登録</b-button>
-                </div>
-              </div>
             </div>
           </b-card-body>
         </b-collapse>
@@ -256,6 +204,7 @@ import router from '../router'
 import naim from '../models/naim.js'
 import editstate from '../models/editState.js'
 import dateSelector from './DateSelector.vue'
+import fileUploader from '../models/fileUploader.js'
 import util from '../models/util.js'
 
 export default {
@@ -330,7 +279,12 @@ export default {
       dateFormat: 'YYYY-MM-DD',
       currentDate: '2018-07-25',
       minDate: '2018-01-01',
-      maxDate: '2030-12-31'
+      maxDate: '2030-12-31',
+      mediaData: null,
+      token: '',
+      image: null,
+      uploading: false,
+      imageDescription: ''
     }
   },
   computed: {
@@ -363,24 +317,6 @@ export default {
     // }
   },
   methods: {
-    previewAttachment: function (file) {
-      console.log('select attachment :')
-      console.log('  filename :' + file.filename)
-      console.log('  content_type : ' + file.content_type)
-      console.log('  content_url : ' + file.content_url)
-      console.log('  id : ' + file.id)
-      this.dummy(file)
-    },
-    dummy: function (file) {
-      let contentUrl = this.test_url + this.issId + '/' + file.id + '_' + file.filename
-      if (file.content_type.indexOf('video') === -1) {
-        // 動画以外はそのまま新しいタブで表示
-        console.log('image')
-      } else {
-        console.log('video')
-      }
-      window.open(contentUrl)
-    },
     startDate: function (date) {
       this.start_date = date.format(this.dateFormat)
       // console.log('開始日' + this.start_date)
@@ -388,6 +324,55 @@ export default {
     dueDate: function (date) {
       this.due_date = date.format(this.dateFormat)
       // console.log('期日' + this.due_date)
+    },
+    onImageAndVideoChanged: function (event) {
+      console.log('onImageAndVideoChanged')
+      if (event.target.files.length) {
+        // 選択されたファイル情報を取得
+        this.mediaData = event.target.files[0]
+        this.image = new Image()
+        let reader = new FileReader()
+        reader.onload = (e) => {
+          this.image = e.target.result
+        }
+        reader.readAsDataURL(this.mediaData)
+      } else {
+        console.log('no file selected')
+      }
+    },
+    async uploadFiles () {
+      if (this.uploading) {
+        this.errorMessage = 'Now uploading'
+      } else {
+        this.uploading = true
+        if (this.mediaData) {
+          try {
+            let res = await naim.uploadFiles(this.mediaData)
+            this.token = res.data.upload.token
+            let attachId = res.data.upload.id
+            console.log('uploaded file')
+            console.log('token : ' + this.token)
+            console.log('id : ' + attachId)
+            let qstr = {
+              'issue': {
+                'uploads': [{
+                  'token': this.token,
+                  'filename': this.mediaData.name,
+                  'description': this.imageDescription,
+                  'content_type': this.mediaData.type
+                }]
+              }
+            }
+            await naim.updateIssue(editstate.currentIssueId, JSON.stringify(qstr))
+            await fileUploader.uploadFile(editstate.currentIssueId, attachId, this.mediaData, this.image)
+            this.uploading = false
+          } catch (err) {
+            console.log('error has occured @ attachingFile')
+            console.log(err)
+            this.errorMessage = err.toString()
+          }
+        }
+      }
     },
     createQueryString: function () {
       let qstr = {
@@ -421,6 +406,9 @@ export default {
       await naim.createIssue(JSON.stringify(qstr))
       await naim.retrieveIssues()
       console.log(qstr)
+      if (this.image !== null) {
+        await this.uploadFiles()
+      }
       router.push('/tickets')
     },
     updateIssue: async function () {
@@ -429,10 +417,25 @@ export default {
       await naim.updateIssue(this.issId, JSON.stringify(qstr))
       await naim.retrieveIssues()
       console.log(qstr)
+      if (this.image !== null) {
+        await this.uploadFiles()
+      }
       router.push('/tickets')
     },
-    fileAttachment: function () {
-      router.push('/cameraview')
+    previewAttachment: function (file) {
+      console.log('select attachment :')
+      console.log('  filename :' + file.filename)
+      console.log('  content_type : ' + file.content_type)
+      console.log('  content_url : ' + file.content_url)
+      console.log('  id : ' + file.id)
+      let contentUrl = this.test_url + this.issId + '/' + file.id + '_' + file.filename
+      if (file.content_type.indexOf('video') === -1) {
+        // 動画以外はそのまま新しいタブで表示
+        console.log('image')
+      } else {
+        console.log('video')
+      }
+      window.open(contentUrl)
     },
     convertOptions: function (values, key) {
       let options = []
