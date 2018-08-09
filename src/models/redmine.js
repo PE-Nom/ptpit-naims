@@ -142,13 +142,16 @@ export default {
   },
   async createIssue (data, callback) {
     console.log('createIssue @ redmine.js')
+    let ret = null
     await this.rmc.post('/issues.json', data, {headers: {'Content-Type': 'application/json'}})
       .then(res => {
         callback(res)
+        ret = res
       })
       .catch(err => {
         throw (err)
       })
+    return ret
   },
   async updateIssue (issId, data, callback) {
     console.log('updateIssue @ redmine.js')

@@ -403,10 +403,11 @@ export default {
     createIssue: async function () {
       console.log('createIssue')
       let qstr = this.createQueryString()
-      await naim.createIssue(JSON.stringify(qstr))
+      let ret = await naim.createIssue(JSON.stringify(qstr))
       await naim.retrieveIssues()
       console.log(qstr)
       if (this.image !== null) {
+        editstate.currentIssueId = ret.data.issue.id
         await this.uploadFiles()
       }
       router.push('/tickets')
@@ -542,7 +543,7 @@ export default {
         // this.author = this.issDetail.author.id
         this.tracker = this.findValue(this.trackerOptions, '安全指摘事項')
         console.log(this.tracker)
-        this.start_date = util.getNowYMD()
+        this.start_date = this.due_date = util.getNowYMD()
         console.log(this.start_date)
       }
     },

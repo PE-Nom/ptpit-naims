@@ -2,7 +2,10 @@
   <div class="banner-title">
     <div>
       <h1>{{ msg }}</h1>
-      <p class="explanation">{{explanation}}</p>
+      <br>
+      <p class="explanation">{{system}}</p>
+      <p class="explanation">{{subname}}</p>
+      <p class="explanation">{{corporate}}</p>
     </div>
   </div>
 </template>
@@ -13,8 +16,10 @@ export default {
   // name: 'Home',
   data () {
     return {
-      msg: 'NAIMS',
-      explanation: 'Nonconforming And Incident Management System by Pitarpit Co.,Ltd.'
+      msg: 'Pit-SAN',
+      system: 'Safety And Nonconforming',
+      subname: 'Management System',
+      corporate: 'by Pitarpit Co.,Ltd.'
     }
   },
   created () {

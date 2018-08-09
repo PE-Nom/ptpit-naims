@@ -200,10 +200,11 @@ export default {
   },
   createIssue: async function (qstr) {
     try {
-      await redmine.createIssue(qstr, res => {
-        // console.log('==== Create Issue @ naim ====')
-        // console.log(res)
+      let ret = await redmine.createIssue(qstr, res => {
+        console.log('==== Create Issue @ naim ====')
+        console.log(res)
       })
+      return ret
     } catch (err) {
       throw err
     }

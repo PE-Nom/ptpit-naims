@@ -2,7 +2,7 @@
   <div id="app">
 
     <b-navbar v-if="showNavbar" toggleable="md" type="dark" variant="success">
-      <b-navbar-brand to="/">NAIMS(login:{{userName}})</b-navbar-brand>
+      <b-navbar-brand to="/">Pit-SAN (login: {{userName}})</b-navbar-brand>
       <!--
         <b-nav-text v-if="tablet" size="sm">{{currentPath}}／ユーザ:{{userName}}</b-nav-text>
       -->
