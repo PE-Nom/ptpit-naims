@@ -12,7 +12,7 @@
           <img :src="icon_new_issue" class="new_issue" width='30px' height='30px' @click="createIssue"/>
         </b-col>
         <b-col cols="1">
-          <img :src="icon_reload_issue" class="reload_issue" width='25px' height='25px' @click="reloadIssue"/>
+          <img :src="icon_refresh_issue" class="refresh_issue" width='25px' height='25px' @click="refreshIssue"/>
         </b-col>
         <b-col cols="12">
         </b-col>
@@ -31,7 +31,7 @@
           <label class="currentpath-user" >チケット一覧</label>
         </b-row>
         <b-row>
-          <b-col cols="6">
+          <b-col cols="4">
             <b-form-input type="text" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
           </b-col>
           <b-col cols="4">
@@ -47,6 +47,9 @@
           </b-col>
           <b-col cols="2">
             <img :src="icon_new_issue" class="new_issue" width='30px' height='30px' @click="createIssue"/>
+          </b-col>
+          <b-col cols="2">
+            <img :src="icon_refresh_issue" class="refresh_issue" width='25px' height='25px' @click="refreshIssue"/>
           </b-col>
         </b-row>
       </b-container>
@@ -74,7 +77,7 @@ import auth from '../models/auth.js'
 import naim from '../models/naim.js'
 import editstate from '../models/editState.js'
 import iconNew from '../assets/new.png'
-import iconReload from '../assets/reload.png'
+import iconRefresh from '../assets/refresh.png'
 import router from '../router'
 
 export default {
@@ -89,7 +92,7 @@ export default {
     return {
       userName: '',
       icon_new_issue: iconNew,
-      icon_reload_issue: iconReload,
+      icon_refresh_issue: iconRefresh,
       columns: columns,
       searchQuery: '',
       sortKey: 'キー',
@@ -157,8 +160,8 @@ export default {
       editstate.currentIssueId = issue.id.slice(1)
       router.push('/editissue')
     },
-    reloadIssue: async function () {
-      console.log('reloadIssues')
+    refreshIssue: async function () {
+      console.log('refreshIssues')
       try {
         await naim.retrieveIssues()
         this.isslist = naim.getIssues()
@@ -227,7 +230,7 @@ export default {
     -webkit-transform: translateY(-50%) translateX(-50%);
     /* float: right; */
   }
-  .reload_issue {
+  .refresh_issue {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -377,7 +380,7 @@ export default {
       -webkit-transform: translateY(-50%) translateX(-50%);
       /* float: right; */
     }
-    .new_issue .reload_issue {
+    .new_issue .refresh_issue {
       position: absolute;
       top: 50%;
       left: 50%;
