@@ -1,18 +1,26 @@
 <template>
   <div class="container-fluid">
     <!-- #### Desktop用 #### -->
-    <div class="desktop">
-      <div id="query-box">
-        <form id="search">
-          <input name="query" v-model="searchQuery" placeholder="フィルタ文字列">
-        </form>
-      </div>
-      <div class="table-row header">
-        <div class="wrapper attributes header">
-          <div v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="[{ active: sortKey == val }, val]">
-            {{ val }}
-            <span class="arrow" :class="sortOrders[val] > 0 ? 'asc' : 'dsc'"></span>
-          </div>
+    <div class="desktop table-row header">
+      <b-row class='query-box'>
+        <b-col cols="2">
+          <form id="search">
+            <input name="query" class="filter" v-model="searchQuery" placeholder="フィルタ文字列">
+          </form>
+        </b-col>
+        <b-col cols="1">
+          <img :src="icon_new_issue" class="new_issue" width='30px' height='30px' @click="createIssue"/>
+        </b-col>
+        <b-col cols="1">
+          <img :src="icon_reload_issue" class="reload_issue" width='25px' height='25px' @click="reloadIssue"/>
+        </b-col>
+        <b-col cols="12">
+        </b-col>
+      </b-row>
+      <div class="wrapper attributes header">
+        <div v-for="(val, idx) in columns" v-bind:key=idx @click="sortBy(val)" :class="[{ active: sortKey == val }, val]">
+          {{ val }}
+          <span class="arrow" :class="sortOrders[val] > 0 ? 'asc' : 'dsc'"></span>
         </div>
       </div>
     </div>
@@ -66,6 +74,7 @@ import auth from '../models/auth.js'
 import naim from '../models/naim.js'
 import editstate from '../models/editState.js'
 import iconNew from '../assets/new.png'
+import iconReload from '../assets/reload.png'
 import router from '../router'
 
 export default {
@@ -80,17 +89,20 @@ export default {
     return {
       userName: '',
       icon_new_issue: iconNew,
+      icon_reload_issue: iconReload,
       columns: columns,
       searchQuery: '',
       sortKey: 'キー',
-      sortOrders: sortOrders
+      sortOrders: sortOrders,
+      isslist: null
     }
   },
   computed: {
     issues: function () {
       // console.log('### issues computes propery in IssuesList.vue ###')
       let ret = []
-      let isss = naim.getIssues()
+      // let isss = naim.getIssues()
+      let isss = this.isslist
       isss.forEach(el => {
         let assignedName = el.assigned_to ? el.assigned_to.name : ''
         let dueRatio = el.done_ratio ? el.done_ratio : '0'
@@ -145,6 +157,15 @@ export default {
       editstate.currentIssueId = issue.id.slice(1)
       router.push('/editissue')
     },
+    reloadIssue: async function () {
+      console.log('reloadIssues')
+      try {
+        await naim.retrieveIssues()
+        this.isslist = naim.getIssues()
+      } catch (err) {
+        console.log(err)
+      }
+    },
     createIssue: function () {
       console.log('createIssue')
       editstate.currentIssueId = -1
@@ -154,6 +175,7 @@ export default {
   created () {
     console.log('/tickets created')
     editstate.setCurrentPath('/tickets')
+    this.isslist = naim.getIssues()
   },
   mounted () {
     this.userName = auth.getUser().userName
@@ -193,6 +215,28 @@ export default {
   }
   .wrapper.attributes.header {
     height: 50px;
+  }
+  .filter {
+    width: 100%;
+  }
+  .new_issue {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    -webkit-transform: translateY(-50%) translateX(-50%);
+    /* float: right; */
+  }
+  .reload_issue {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    -webkit-transform: translateY(-50%) translateX(-50%);
+    /* float: right; */
+  }
+  .query-box {
+    margin-bottom: 1em
   }
 
   .data-field {
@@ -333,7 +377,7 @@ export default {
       -webkit-transform: translateY(-50%) translateX(-50%);
       /* float: right; */
     }
-    .new_issue {
+    .new_issue .reload_issue {
       position: absolute;
       top: 50%;
       left: 50%;
