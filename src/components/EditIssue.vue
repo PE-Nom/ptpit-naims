@@ -216,8 +216,13 @@ export default {
       // test_url: 'http://192.168.10.3/JS/data/',
       // test_url: 'http://192.168.10.100/JS/data/', // for demo home let's note
       // test_url: 'http://192.168.1.5/JS/data/', // @ office Ubuntu
-      // test_url: 'http://192.168.1.3:8008/JS/data/', // @ office
-      test_url: 'http://192.168.10.5:8008/JS/data/', // for demo pitarpit dell
+      // test_url: 'http://192.168.1.3/JS/data/', // @ office
+      // test_url: 'http://192.168.10.5:8008/JS/data/', // for demo pitarpit dell
+
+      // test_url: 'http://192.168.1.3/data/', // @ office
+      // test_url: 'http://192.168.10.9/data/',
+      test_url: 'https://192.168.10.9/data/',
+
       new: false,
       currentPath: '',
       issId: null,

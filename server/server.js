@@ -1,11 +1,17 @@
 var express = require('express')
 var app = express()
 var fs = require('fs')
+var https = require('https')
 var bodyParser = require('body-parser')
 var multer = require('multer')
 var path = require('path')
 
-const folderPath = 'C:/home/apache/htdocs/JS/data/'
+const options = {
+  key: fs.readFileSync('C:/Bitnami/redmine-3.4.5-0/apache2/conf/server.key'),
+  cert: fs.readFileSync('C:/Bitnami/redmine-3.4.5-0/apache2/conf/server.crt')
+}
+const folderPath = 'C:/Bitnami/redmine-3.4.5-0/apache2/htdocs/data'
+// const folderPath = 'C:/home/apache/htdocs/JS/data/'
 // const folderPath = '/var/www/html/JS/data/'
 // CORSを許可する
 app.use(function (req, res, next) {
@@ -68,9 +74,11 @@ app.post('/file_upload', function (req, res) {
 })
 
 const port = 8081
-var server = app.listen(port, function () {
-  var host = server.address().address
-  var port = server.address().port
-  console.log(path.join(__dirname, '/public/images'))
-  console.log('listening at http://%s:%s', host, port)
-})
+// var server = app.listen(port, function () {
+//   var host = server.address().address
+//   var port = server.address().port
+//   console.log(path.join(__dirname, '/public/images'))
+//   console.log('listening at http://%s:%s', host, port)
+// })
+var server = https.createServer(options, app)
+server.listen(port)
