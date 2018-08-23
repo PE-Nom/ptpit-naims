@@ -7,8 +7,8 @@ import axios from 'axios'
 // const BASE_URL = 'http://172.20.10.2:3001/' // @ iPhone デザリング
 // const BASE_URL = 'http://192.168.1.5:8080/' // On Ubuntu @ Office
 // const BASE_URL = 'http://192.168.1.3:3001/' // @ Office
-// const BASE_URL = 'http://192.168.10.5:3001/' // for demo pitarpit dell
-const BASE_URL = 'http://192.168.10.100:3001/' // for demo home let's note
+const BASE_URL = 'http://192.168.10.5:3001/' // for demo pitarpit dell
+// const BASE_URL = 'http://192.168.10.100:3001/' // for demo home let's note
 
 export default {
   rmc: null,

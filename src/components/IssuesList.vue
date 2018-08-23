@@ -32,7 +32,10 @@
         </b-row>
         <b-row>
           <b-col cols="4">
+            <!--
             <b-form-input type="text" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
+            -->
+            <input name="query" class="filter" v-model="searchQuery" placeholder="フィルタ文字列">
           </b-col>
           <b-col cols="4">
             <b-dropdown id="ddown-buttons" split right variant="success" size="sm" class="sorter">
@@ -398,6 +401,11 @@ export default {
     .data-field {
       height: 600px;
       overflow-y: auto;
+    }
+    .filter {
+      width: 100%;
+      font-size: 16px;
+      /* transform: scale(0.8); */
     }
     .ReviewComment {
       overflow: visible;

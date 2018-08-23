@@ -4,7 +4,10 @@
     <div class="desktop">
       <div id="query-box">
         <form id="search">
+          <input name="query" class="filter" v-model="searchQuery" placeholder="フィルタ文字列">
+          <!--
           <input name="query" v-model="searchQuery" placeholder="フィルタ文字列">
+          -->
         </form>
       </div>
       <div class="table-row header">
@@ -25,7 +28,10 @@
         </b-row>
         <b-row>
           <b-col cols="6">
+            <!--
             <b-form-input type="text" v-model="searchQuery" placeholder="フィルタ文字列"></b-form-input>
+            -->
+            <input name="query" class="filter" v-model="searchQuery" placeholder="フィルタ文字列">
           </b-col>
           <b-col cols="4">
             <b-dropdown id="ddown-buttons" split right variant="success" size="sm" class="sorter">
@@ -206,6 +212,9 @@ export default {
   .wrapper.attributes.header {
     height: 50px;
   }
+  .filter {
+    width: 100%;
+  }
 
   .data-field {
     height: 100vh;
@@ -314,6 +323,11 @@ export default {
     .data-field {
       height: 600px;
       overflow-y: auto;
+    }
+    .filter {
+      width: 100%;
+      font-size: 16px;
+      /* transform: scale(0.8); */
     }
     .ReviewComment {
       overflow: visible;
